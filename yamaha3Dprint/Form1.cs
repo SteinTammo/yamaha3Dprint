@@ -11,6 +11,7 @@ using System.Windows.Forms;
 
 namespace yamaha3Dprint
 {
+
     public partial class Yamaha3DPrint : Form
     {
         string[] fileContent = null;
@@ -20,6 +21,15 @@ namespace yamaha3Dprint
         public Serial ControllinoSerial;
         public processGCode gcode = new processGCode();
         Task printTask;
+        public void WriteYamaha( string value)
+        {
+            TeBox_SerialYamaha.AppendText(value + Environment.NewLine);            
+        }
+        public void WriteControllino(string value)
+        {
+            TeBox_SerialYamaha.AppendText(value + Environment.NewLine);
+        }
+        
         public Yamaha3DPrint()
         {
             InitializeComponent();
@@ -40,7 +50,6 @@ namespace yamaha3Dprint
                 {
                     //Get the path of specified file
                     filePath = openFileDialog.FileName;
-
                     fileContent = File.ReadAllLines(filePath);
                 }
             }
@@ -70,8 +79,8 @@ namespace yamaha3Dprint
                 LblConnectDevice.Text = "Bitte Port Auswählen";
                 return;
             }
-            YamahaSerial = new Serial(cBoxYamaha.Text, 9600);
-            ControllinoSerial = new Serial(cBoxControllino.Text, 9600);
+            YamahaSerial = new Serial(cBoxYamaha.Text, 9600,this);
+            ControllinoSerial = new Serial(cBoxControllino.Text, 9600,this);
             try
             {
                 YamahaSerial.ConnectToPort();
@@ -99,7 +108,7 @@ namespace yamaha3Dprint
                 TeBox_SerialYamaha.AppendText("Nicht Verbunden" + Environment.NewLine);
                 return;
             }
-            YamahaSerial.SendData(TeBox_SendYamaha.Text);
+            YamahaSerial.SendYamahaData(TeBox_SendYamaha.Text);
         }
 
         private void CmdSendControllino_Click(object sender, EventArgs e)
@@ -109,7 +118,7 @@ namespace yamaha3Dprint
                 TeBox_SerialControllino.AppendText("Nicht Verbunden" + Environment.NewLine);
                 return;
             }
-            ControllinoSerial.SendData(TeBox_SendControllino.Text);
+            ControllinoSerial.SendControllinoData(TeBox_SendControllino.Text);
         }
 
         private void CmdClearSerialYamaha_Click(object sender, EventArgs e)
@@ -135,15 +144,27 @@ namespace yamaha3Dprint
         {
             string[] writelines;
             writelines = new string[2];
-            bool firstmove = true;
             for (int i=0;i<fileContent.Length;i++)
-            {
-                if (firstmove==true || YamahaSerial.getData()!="OK")
-                {
-                    firstmove = false;
-                }                    
+            {                                   
                 writelines = gcode.writeLines(fileContent[i]);
-                YamahaSerial.SendData(writelines[0]);
+                if(writelines[0]!="")
+                {
+                    TeBox_SerialYamaha.Invoke(new Action(() =>
+                    {
+                        YamahaSerial.SendYamahaData(writelines[0]);
+                    }));
+                }
+                if (writelines[1] != "")
+                {
+                    TeBox_SerialControllino.Invoke(new Action(() =>
+                    {
+                        TeBox_SerialControllino.AppendText("Send: " + writelines[1] + Environment.NewLine);
+                    }));
+                }
+                while (YamahaSerial.getYamahaData() != "OK")
+                {
+
+                }
             }
         }
         public bool CheckReady()
@@ -156,6 +177,11 @@ namespace yamaha3Dprint
                 return false;
             }            
             return true;
+        }
+
+        private void CmdReadYamaha_Click(object sender, EventArgs e)
+        {
+            YamahaSerial.getYamahaData();
         }
     }
 }

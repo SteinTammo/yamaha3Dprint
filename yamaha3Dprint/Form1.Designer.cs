@@ -49,6 +49,7 @@
             this.CmdClearSerialControllino = new System.Windows.Forms.Button();
             this.progressBarDruck = new System.Windows.Forms.ProgressBar();
             this.LblDruckStatus = new System.Windows.Forms.Label();
+            this.CmdReadYamaha = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // CmdReadGCode
@@ -268,11 +269,22 @@
             this.LblDruckStatus.TabIndex = 24;
             this.LblDruckStatus.Text = "label3";
             // 
+            // CmdReadYamaha
+            // 
+            this.CmdReadYamaha.Location = new System.Drawing.Point(479, 150);
+            this.CmdReadYamaha.Name = "CmdReadYamaha";
+            this.CmdReadYamaha.Size = new System.Drawing.Size(75, 23);
+            this.CmdReadYamaha.TabIndex = 25;
+            this.CmdReadYamaha.Text = "Read";
+            this.CmdReadYamaha.UseVisualStyleBackColor = true;
+            this.CmdReadYamaha.Click += new System.EventHandler(this.CmdReadYamaha_Click);
+            // 
             // Yamaha3DPrint
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1240, 537);
+            this.Controls.Add(this.CmdReadYamaha);
             this.Controls.Add(this.LblDruckStatus);
             this.Controls.Add(this.progressBarDruck);
             this.Controls.Add(this.CmdClearSerialControllino);
@@ -306,7 +318,6 @@
         private System.Windows.Forms.Label Lbl_Gcode;
         private System.Windows.Forms.Button CmdConnectDevice;
         private System.Windows.Forms.Label LblConnectDevice;
-        private System.Windows.Forms.TextBox TeBox_SerialYamaha;
         private System.Windows.Forms.TextBox TeBox_SerialControllino;
         private System.Windows.Forms.Label Lbl_SerialYamaha;
         private System.Windows.Forms.Label Lbl_Serial_Yamaha;
@@ -323,6 +334,8 @@
         private System.Windows.Forms.Button CmdClearSerialControllino;
         private System.Windows.Forms.ProgressBar progressBarDruck;
         private System.Windows.Forms.Label LblDruckStatus;
+        public System.Windows.Forms.TextBox TeBox_SerialYamaha;
+        private System.Windows.Forms.Button CmdReadYamaha;
     }
 }
 
