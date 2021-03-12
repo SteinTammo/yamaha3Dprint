@@ -318,7 +318,6 @@
         private System.Windows.Forms.Label Lbl_Gcode;
         private System.Windows.Forms.Button CmdConnectDevice;
         private System.Windows.Forms.Label LblConnectDevice;
-        private System.Windows.Forms.TextBox TeBox_SerialControllino;
         private System.Windows.Forms.Label Lbl_SerialYamaha;
         private System.Windows.Forms.Label Lbl_Serial_Yamaha;
         private System.Windows.Forms.Button CmdSendYamaha;
@@ -336,6 +335,7 @@
         private System.Windows.Forms.Label LblDruckStatus;
         public System.Windows.Forms.TextBox TeBox_SerialYamaha;
         private System.Windows.Forms.Button CmdReadYamaha;
+        public System.Windows.Forms.TextBox TeBox_SerialControllino;
     }
 }
 

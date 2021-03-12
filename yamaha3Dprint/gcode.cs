@@ -38,34 +38,34 @@ namespace yamaha3Dprint
         }
 
         // create and modify write command for serial communication 
-        public string[] writeLines(string gcodeline)
+        public string writeLines(string gcodeline,int i)
         {
             writeline[0] = "";
             writeline[1] = "";
             if (gcodeline == "")
             {
-                return writeline;
+                return writeline[0];
             }
             var parameters = gcodeline.Split(' ');
             if (parameters[0]=="G1")
             {
-                G1(parameters);
+                G1(parameters,i);
             }
-            return writeline;
+            return writeline[0];
         }
-        public void G1(string[] Parameters)
+        public void G1(string[] Parameters, int i)
         {
             if(Parameters.Length==4)
             {
-                Parameters[1]=Parameters[1].Replace("X", "");
-                Parameters[2]=Parameters[2].Replace("Y", "");
+                Parameters[1] = Parameters[1].Replace("X", "");
+                Parameters[2] = Parameters[2].Replace("Y", "");
                 int index1 = Parameters[1].IndexOf(".");
                 int index2 = Parameters[2].IndexOf(".");
                 Parameters[1] = Parameters[1].Remove(index1 + 3);
                 Parameters[2] = Parameters[2].Remove(index2 + 3);
                 coordinates[0] = Parameters[1];
                 coordinates[1] = Parameters[2];
-                writeline[0] = "@MOVE L," + coordinates[0] + " " + coordinates[1] + " " + coordinates[2] + " " + "0.0 0.0 0.0";
+                writeline[0] = "@P"+ i +"="+ coordinates[0] + " " + coordinates[1] + " " + coordinates[2] + " " + "0.0 0.0 0.0";
             }
         }
     }

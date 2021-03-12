@@ -22,13 +22,17 @@ namespace yamaha3Dprint
             _SerialPort = new SerialPort();
             _SerialPort.PortName = portname;
             _SerialPort.BaudRate = Bautrate;
-            _SerialPort.ReadTimeout = 500;
+            _SerialPort.ReadTimeout = 200;
             send = "";
             recieve = "";
             this.form = form;
         }    
         public void ConnectToPort()
         {
+            if (_SerialPort.IsOpen)
+            {
+                return;
+            }
             _SerialPort.Open();
         }
         public void SendYamahaData(string data)
@@ -36,14 +40,10 @@ namespace yamaha3Dprint
             {
                 send = data;
                 _SerialPort.Write(data);
-                _SerialPort.Write(eol, 0, 2);
-                form.TeBox_SerialYamaha.Invoke(new Action(() =>
-                {
-                    form.TeBox_SerialYamaha.AppendText("Write: " + send + Environment.NewLine);
-                }));
-                
+                _SerialPort.Write(eol, 0, 2);                
             }
         }
+        
         public string getYamahaData()
         {
             try
@@ -53,13 +53,9 @@ namespace yamaha3Dprint
             }
             catch (Exception MS)
             {
-                recieve = "Not Data in ReadBuffer";
+                recieve = "No Data in ReadBuffer";
             }
-            _SerialPort.DiscardInBuffer(); 
-            form.TeBox_SerialYamaha.Invoke(new Action(() =>
-            {
-                form.TeBox_SerialYamaha.AppendText("Read: " + recieve + Environment.NewLine);
-            }));
+            _SerialPort.DiscardInBuffer();            
             
             return recieve;
         }
@@ -72,10 +68,9 @@ namespace yamaha3Dprint
             }
             catch (Exception MS)
             {
-                recieve = "Not Data in ReadBuffer";
+                recieve = "No Data in ReadBuffer";
             }
-            _SerialPort.DiscardInBuffer();
-            form.TeBox_SerialYamaha.AppendText("Read: " + recieve + Environment.NewLine);
+            //_SerialPort.DiscardInBuffer();            
             return recieve;
         }
         public void SendControllinoData(string data)
@@ -87,6 +82,10 @@ namespace yamaha3Dprint
 
                 form.TeBox_SerialYamaha.AppendText("Write: " + send + Environment.NewLine);
             }
+        }
+        public void DiscardInBuffer()
+        {
+            _SerialPort.DiscardInBuffer();
         }
     }
 }

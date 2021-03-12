@@ -8,6 +8,7 @@ using System.Text;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace yamaha3Dprint
 {
@@ -73,14 +74,14 @@ namespace yamaha3Dprint
 
         private void CmdConnectDevice_Click(object sender, EventArgs e)
         {
-            if (cBoxYamaha.Text == "" || cBoxControllino.Text == "")
-            {
-                LblConnectDevice.Visible = true;
-                LblConnectDevice.Text = "Bitte Port Auswählen";
-                return;
-            }
-            YamahaSerial = new Serial(cBoxYamaha.Text, 9600,this);
-            ControllinoSerial = new Serial(cBoxControllino.Text, 9600,this);
+            //if (cBoxYamaha.Text == "" || cBoxControllino.Text == "")
+            //{
+            //    LblConnectDevice.Visible = true;
+            //    LblConnectDevice.Text = "Bitte Port Auswählen";
+            //    return;
+            //}
+            YamahaSerial = new Serial("COM3", 9600,this);
+            ControllinoSerial = new Serial("COM5", 9600,this);
             try
             {
                 YamahaSerial.ConnectToPort();
@@ -142,29 +143,49 @@ namespace yamaha3Dprint
         }
         public void Print()
         {
-            string[] writelines;
-            writelines = new string[2];
-            for (int i=0;i<fileContent.Length;i++)
-            {                                   
-                writelines = gcode.writeLines(fileContent[i]);
-                if(writelines[0]!="")
+            List<string> PointsToWrite = new List<string>();
+            List<string> writetest = new List<string>();
+            for(int i = 0; i<fileContent.Length;i++)
+            {
+                
+                if (i % 48 == 0)
                 {
-                    TeBox_SerialYamaha.Invoke(new Action(() =>
+                    writetest.Clear();
+                    for (int j = 0; j < 7; j++)
                     {
-                        YamahaSerial.SendYamahaData(writelines[0]);
-                    }));
-                }
-                if (writelines[1] != "")
-                {
-                    TeBox_SerialControllino.Invoke(new Action(() =>
+                        writetest.Add("@MOVE L");
+                        for (int k = 0; k < 7; k++)
+                        {
+                            PointsToWrite.Add(gcode.writeLines(fileContent[i + j * 7 + k], (j * 7 + k)));
+                            writetest[j] = writetest[j] + ",P" + (k + j * 7);
+                        }
+                    }
+                    WritePointsToYamaha(PointsToWrite);
+                    PointsToWrite.Clear();
+                    if (i==0)
                     {
-                        TeBox_SerialControllino.AppendText("Send: " + writelines[1] + Environment.NewLine);
-                    }));
-                }
-                while (YamahaSerial.getYamahaData() != "OK")
-                {
+                        continue;
+                    }
+                    for(int j=0;j<7;j++)
+                    {
+                        TeBox_SerialYamaha.Invoke(new Action(() =>
+                        {
+                            YamahaSerial.SendYamahaData(writetest[j] + ",S=30");
+                            TeBox_SerialYamaha.AppendText("Send: " + writetest[j] + Environment.NewLine);
+                        }));
 
+                        while (YamahaSerial.getYamahaData() != "OK\r")
+                        {
+
+                        }
+                        TeBox_SerialYamaha.Invoke(new Action(() =>
+                        {
+                            TeBox_SerialYamaha.AppendText("Step " + (i + 1) + ": Read: " + YamahaSerial.recieve + Environment.NewLine);
+                        }));
+                    }                  
+                    
                 }
+               
             }
         }
         public bool CheckReady()
@@ -181,7 +202,17 @@ namespace yamaha3Dprint
 
         private void CmdReadYamaha_Click(object sender, EventArgs e)
         {
-            YamahaSerial.getYamahaData();
+            string data=YamahaSerial.getYamahaData();
+            TeBox_SerialYamaha.AppendText("Read: " + data + Environment.NewLine);
+        }
+        public void WritePointsToYamaha(List<string> points)
+        {
+            foreach (string i in points)
+            {
+                YamahaSerial.SendYamahaData(i);
+                Thread.Sleep(20);
+                YamahaSerial.DiscardInBuffer();
+            }
         }
     }
 }
