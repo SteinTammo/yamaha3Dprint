@@ -144,49 +144,62 @@ namespace yamaha3Dprint
         public void Print()
         {
             List<string> PointsToWrite = new List<string>();
-            List<string> writetest = new List<string>();
+            List<string> WriteMove = new List<string>();
             for(int i = 0; i<fileContent.Length;i++)
             {
-                
-                if (i % 48 == 0)
+                if(i%7==0)
                 {
-                    writetest.Clear();
-                    for (int j = 0; j < 7; j++)
-                    {
-                        writetest.Add("@MOVE L");
-                        for (int k = 0; k < 7; k++)
-                        {
-                            PointsToWrite.Add(gcode.writeLines(fileContent[i + j * 7 + k], (j * 7 + k)));
-                            writetest[j] = writetest[j] + ",P" + (k + j * 7);
-                        }
-                    }
+                    WriteMove.Add("@MOVE L");
+                }
+                WriteMove[(i%98)/7]= WriteMove[(i%98)/7] + ",P" + (i%98);
+                PointsToWrite.Add(gcode.writeLines(fileContent[i], i%7));
+                if(i%98==0 && i>0)
+                {
                     WritePointsToYamaha(PointsToWrite);
                     PointsToWrite.Clear();
-                    if (i==0)
-                    {
-                        continue;
-                    }
-                    for(int j=0;j<7;j++)
-                    {
-                        TeBox_SerialYamaha.Invoke(new Action(() =>
-                        {
-                            YamahaSerial.SendYamahaData(writetest[j] + ",S=30");
-                            TeBox_SerialYamaha.AppendText("Send: " + writetest[j] + Environment.NewLine);
-                        }));
-
-                        while (YamahaSerial.getYamahaData() != "OK\r")
-                        {
-
-                        }
-                        TeBox_SerialYamaha.Invoke(new Action(() =>
-                        {
-                            TeBox_SerialYamaha.AppendText("Step " + (i + 1) + ": Read: " + YamahaSerial.recieve + Environment.NewLine);
-                        }));
-                    }                  
-                    
+                    WriteMoveToYamaha(WriteMove);
+                    WriteMove.Clear();
+                    WriteMove.Add("@MOVE L");
                 }
+
+                //if (i % 48 == 0)
+                //{
+                //    for (int j = 0; j < 7; j++)
+                //    {
+                //        for (int k = 0; k < 7; k++)
+                //        {
+                //            PointsToWrite.Add(gcode.writeLines(fileContent[i + j * 7 + k], (j * 7 + k)));
+                //            writetest[j] = writetest[j] + ",P" + (k + j * 7);
+                //        }
+                //    }
+                //    WritePointsToYamaha(PointsToWrite);
+                //    PointsToWrite.Clear();
+                //    if (i==0)
+                //    {
+                //        continue;
+                //    }
+                //    for(int j=0;j<7;j++)
+                //    {
+                //        TeBox_SerialYamaha.Invoke(new Action(() =>
+                //        {
+                //            YamahaSerial.SendYamahaData(writetest[j] + ",S=30");
+                //            TeBox_SerialYamaha.AppendText("Send: " + writetest[j] + Environment.NewLine);
+                //        }));
+
+                //        while (YamahaSerial.getYamahaData() != "OK\r")
+                //        {
+
+                //        }
+                //        TeBox_SerialYamaha.Invoke(new Action(() =>
+                //        {
+                //            TeBox_SerialYamaha.AppendText("Step " + (i + 1) + ": Read: " + YamahaSerial.recieve + Environment.NewLine);
+                //        }));
+                //    }                  
+                    
+                //}
                
             }
+
         }
         public bool CheckReady()
         {
@@ -212,6 +225,23 @@ namespace yamaha3Dprint
                 YamahaSerial.SendYamahaData(i);
                 Thread.Sleep(20);
                 YamahaSerial.DiscardInBuffer();
+            }
+        }
+        public void WriteMoveToYamaha(List<string> input)
+        {
+            foreach (var line in input)
+            {
+                TeBox_SerialYamaha.Invoke(new Action(() =>
+                {
+                    YamahaSerial.SendYamahaData(line + ",S=30");
+                    TeBox_SerialYamaha.AppendText("Send: " + line + Environment.NewLine);
+                    YamahaSerial.DiscardInBuffer();
+                }));
+
+                while (YamahaSerial.getYamahaData() != "OK\r")
+                {
+                    Thread.Sleep(20);
+                }
             }
         }
     }
