@@ -52,6 +52,14 @@ namespace yamaha3Dprint
                     //Get the path of specified file
                     filePath = openFileDialog.FileName;
                     fileContent = File.ReadAllLines(filePath);
+                    var test = new GcodeIO();
+                    Yamaha yamaha = new Yamaha();
+                    var commands=test.ReadFile(filePath);
+                    foreach(var i in commands)
+                    {
+                        i.ExecuteCommand(yamaha,null);
+                    }
+                    
                 }
             }
         }

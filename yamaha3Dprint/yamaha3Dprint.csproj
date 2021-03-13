@@ -48,6 +48,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Arduino.cs" />
+    <Compile Include="Commands\G1MoveZ.cs" />
+    <Compile Include="Commands\G1SetFlow.cs" />
+    <Compile Include="Commands\G1MoveCollection.cs" />
+    <Compile Include="Position.cs" />
+    <Compile Include="Yamaha.cs" />
     <Compile Include="Comunication.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -55,7 +61,10 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Commands\G1Move.cs" />
     <Compile Include="gcode.cs" />
+    <Compile Include="Commands\GcodeCommand.cs" />
+    <Compile Include="GcodeIO.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
