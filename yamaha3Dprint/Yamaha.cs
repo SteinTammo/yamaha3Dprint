@@ -12,12 +12,12 @@ namespace yamaha3Dprint
         public Position CurrentPosition { get; private set; }
         public int CurrentSpeed { get; private set; }
         private int SendCount { get;  set; } // Todo Implement
-        private int OkCount { get; set; } // Todo implement
-        readonly Position?[] positions = new Position?[40];
+        private int OkCount { get; set; } 
+        readonly Position?[] positions = new Position?[63];
         public Yamaha()
         {
             serialPort = new SerialPort();
-            CurrentSpeed = 20;
+            CurrentSpeed = 100;
         }
         public void Connect(string portname, int bautrate)
         {
@@ -29,7 +29,38 @@ namespace yamaha3Dprint
                 return;
             }
             serialPort.Open();
+            serialPort.DiscardInBuffer();
         }
+
+        internal void ExecuteMoves(int MoveCount)
+        {
+            List<string> writeCommand = new List<string>(MoveCount%7);
+            if (MoveCount == 0)
+            {
+                return;
+            }
+            for (int i = 0; i<MoveCount;i++)
+            {
+               
+                if (i % 7 == 0)
+                {                    
+                    writeCommand.Add("@MOVE L");                    
+                }
+                writeCommand[(i % 63) / 7] = writeCommand[(i % 63) / 7] + ",P" + (i % 63);
+            }
+            for ( int i = 0;i<writeCommand.Count;i++)
+            {
+                writeCommand[i] += ",S=" + CurrentSpeed.ToString();
+            }
+            foreach ( var moveCommand in writeCommand)
+            {                
+                SendCommand(moveCommand);
+            }
+            SendCount += writeCommand.Count;
+            WaitForOk(SendCount);
+            SendCount = 0;
+        }
+
         public void SetFlow(double flow)
         {
             
@@ -47,13 +78,15 @@ namespace yamaha3Dprint
 
         internal void Move(int index)
         {
-            SendCommand("@MOVE P"+index+",S="+this.CurrentSpeed);
+            SendCommand("@MOVE P,P"+index+",S="+this.CurrentSpeed);
+            WaitForOk(SendCount+1);
+            SendCount = 0;
         }
-
+        
         private void SendCommand(string data)
         {
-            //serialPort.Write(data);
-            //serialPort.Write(eol, 0, 2);
+            serialPort.Write(data);
+            serialPort.Write(eol, 0, 2);
             Console.WriteLine(data);
         }
         public Position SetPosition(int index, double x, double y)
@@ -62,9 +95,35 @@ namespace yamaha3Dprint
             string strx = position.X.ToString("0.00", new CultureInfo("en-us"));
             string stry = position.Y.ToString("0.00", new CultureInfo("en-us"));
             string strz = position.Z.ToString("0.00", new CultureInfo("en-us"));
+            
             positions[index] = position;
             SendCommand($"@P{index}={strx} {stry} {strz} 0.0 0.0 0.0");
+            SendCount++;
             return position;
+        }
+        public bool WaitForOk(int OkCounts)
+        {
+            while(OkCounts!=OkCount)
+            {                
+                if (ReadLine() == "OK\r")
+                    OkCount++;
+            }
+            OkCount = 0;
+            return true;
+        }
+
+        private string ReadLine()
+        {
+            var recieve = "";
+            try
+            {
+                recieve = serialPort.ReadLine();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("nothing in Buffer: Readtimeout triggered");
+            }
+            return recieve;
         }
     }
 }

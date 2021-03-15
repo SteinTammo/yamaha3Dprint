@@ -21,6 +21,8 @@ namespace yamaha3Dprint
         public Serial YamahaSerial;
         public Serial ControllinoSerial;
         public processGCode gcode = new processGCode();
+        public Yamaha yamaha;
+        public Arduino arduino;
         Task printTask;
         public void WriteYamaha( string value)
         {
@@ -53,13 +55,9 @@ namespace yamaha3Dprint
                     filePath = openFileDialog.FileName;
                     fileContent = File.ReadAllLines(filePath);
                     var test = new GcodeIO();
-                    Yamaha yamaha = new Yamaha();
-                    var commands=test.ReadFile(filePath);
-                    foreach(var i in commands)
-                    {
-                        i.ExecuteCommand(yamaha,null);
-                    }
-                    
+                    yamaha = new Yamaha();
+                    arduino = new Arduino();
+                                        
                 }
             }
         }
@@ -75,7 +73,7 @@ namespace yamaha3Dprint
                 return;
             }
             Lbl_Gcode.Text = "Ready \nZeilenanzahl: " + fileContent.Length + "\nProcessing GCode";
-            fileContent = gcode.ProcessFile(fileContent);
+            //fileContent = gcode.ProcessFile(fileContent);
             progressBarDruck.Maximum = fileContent.Length;
             Lbl_Gcode.Text += "\nGCodeProcesses";
         }
@@ -88,26 +86,8 @@ namespace yamaha3Dprint
             //    LblConnectDevice.Text = "Bitte Port Auswählen";
             //    return;
             //}
-            YamahaSerial = new Serial("COM3", 9600,this);
-            ControllinoSerial = new Serial("COM5", 9600,this);
-            try
-            {
-                YamahaSerial.ConnectToPort();
-                SerialConnection[0] = true;
-            }
-            catch (Exception ex)
-            {
-                TeBox_SerialYamaha.AppendText(ex.Message + Environment.NewLine);
-            }
-            try
-            {
-                ControllinoSerial.ConnectToPort();
-                SerialConnection[1] = true;
-            }
-            catch (Exception ex)
-            {
-                TeBox_SerialControllino.AppendText(ex.Message + Environment.NewLine);
-            }
+            yamaha.Connect("COM3", 9600);            
+            //ControllinoSerial = new Serial("COM5", 9600,this);            
         }
 
         private void CmdSendYamaha_Click(object sender, EventArgs e)
@@ -142,73 +122,18 @@ namespace yamaha3Dprint
 
         private void CmdStartPrint_Click(object sender, EventArgs e)
         {
-            if(!CheckReady())
-            {
-                return;
-            }
             printTask = Task.Run(()=>Print());
-            ;
         }
         public void Print()
         {
-            List<string> PointsToWrite = new List<string>();
-            List<string> WriteMove = new List<string>();
-            for(int i = 0; i<fileContent.Length;i++)
+            var test = new GcodeIO();
+            var commands = test.ReadFile(filePath);
+            foreach (var i in commands)
             {
-                if(i%7==0)
-                {
-                    WriteMove.Add("@MOVE L");
-                }
-                WriteMove[(i%98)/7]= WriteMove[(i%98)/7] + ",P" + (i%98);
-                PointsToWrite.Add(gcode.writeLines(fileContent[i], i%7));
-                if(i%98==0 && i>0)
-                {
-                    WritePointsToYamaha(PointsToWrite);
-                    PointsToWrite.Clear();
-                    WriteMoveToYamaha(WriteMove);
-                    WriteMove.Clear();
-                    WriteMove.Add("@MOVE L");
-                }
-
-                //if (i % 48 == 0)
-                //{
-                //    for (int j = 0; j < 7; j++)
-                //    {
-                //        for (int k = 0; k < 7; k++)
-                //        {
-                //            PointsToWrite.Add(gcode.writeLines(fileContent[i + j * 7 + k], (j * 7 + k)));
-                //            writetest[j] = writetest[j] + ",P" + (k + j * 7);
-                //        }
-                //    }
-                //    WritePointsToYamaha(PointsToWrite);
-                //    PointsToWrite.Clear();
-                //    if (i==0)
-                //    {
-                //        continue;
-                //    }
-                //    for(int j=0;j<7;j++)
-                //    {
-                //        TeBox_SerialYamaha.Invoke(new Action(() =>
-                //        {
-                //            YamahaSerial.SendYamahaData(writetest[j] + ",S=30");
-                //            TeBox_SerialYamaha.AppendText("Send: " + writetest[j] + Environment.NewLine);
-                //        }));
-
-                //        while (YamahaSerial.getYamahaData() != "OK\r")
-                //        {
-
-                //        }
-                //        TeBox_SerialYamaha.Invoke(new Action(() =>
-                //        {
-                //            TeBox_SerialYamaha.AppendText("Step " + (i + 1) + ": Read: " + YamahaSerial.recieve + Environment.NewLine);
-                //        }));
-                //    }                  
-                    
-                //}
-               
+                i.ExecuteCommand(yamaha, null);
             }
-
         }
+        
         public bool CheckReady()
         {
             if(SerialConnection[0]==false) //|| SerialConnection[1]== false)

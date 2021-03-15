@@ -24,42 +24,81 @@ namespace yamaha3Dprint
 
         private void SimplifyCommands(List<GcodeCommand> commands)
         {
-            int currentmoveindex = -1;
-            G1Move current = null;
+            // Simplify Positiv
+            int currentmoveindexpositiv = -1;
+            G1MovePositiv currentpositiv = null;
             for (int i = 0; i < commands.Count; i++)
             {
-                if (commands[i] is G1Move g1move)
+                if (commands[i] is G1MovePositiv g1movepositiv)
                 {
-                    if (current == null)
+                    if (currentpositiv == null)
                     {
-                        current = g1move;
-                        currentmoveindex = i;
+                        currentpositiv = g1movepositiv;
+                        currentmoveindexpositiv = i;
                     }
 
                 }
-                else if (current != null)
+                else if (currentpositiv != null)
                 {
-                    if (i - currentmoveindex > 1)
+                    if (i - currentmoveindexpositiv > 1)
                     {
                         // Zusammenfassen
-                        List<G1Move> moves = new List<G1Move>();
-                        for (int j = currentmoveindex; j < i; j++)
+                        List<G1MovePositiv> moves = new List<G1MovePositiv>();
+                        for (int j = currentmoveindexpositiv; j < i; j++)
                         {
-                            moves.Add((G1Move)commands[j]);
+                            moves.Add((G1MovePositiv)commands[j]);
                         }
                         foreach (var move in moves)
                         {
                             commands.Remove(move);
                         }
-                        var movecollection = new G1MoveCollection(moves);
-                        commands.Insert(currentmoveindex, movecollection);
-                        i = currentmoveindex + 1;
+                        var movecollection = new G1MoveCollectionPositiv(moves);
+                        commands.Insert(currentmoveindexpositiv, movecollection);
+                        i = currentmoveindexpositiv + 1;
                     }
-                    current = null;
-                    currentmoveindex = -1;
+                    currentpositiv = null;
+                    currentmoveindexpositiv = -1;
 
                 }
             }
+            // Simplify negative
+            int currentmoveindexnegativ = -1;
+            G1MoveNegativ currentnegativ = null;
+            for (int i = 0; i < commands.Count; i++)
+            {
+                if (commands[i] is G1MoveNegativ g1movenegativ)
+                {
+                    if (currentnegativ == null)
+                    {
+                        currentnegativ = g1movenegativ;
+                        currentmoveindexnegativ = i;
+                    }
+
+                }
+                else if (currentnegativ != null)
+                {
+                    if (i - currentmoveindexnegativ > 1)
+                    {
+                        // Zusammenfassen
+                        List<G1MoveNegativ> moves = new List<G1MoveNegativ>();
+                        for (int j = currentmoveindexnegativ; j < i; j++)
+                        {
+                            moves.Add((G1MoveNegativ)commands[j]);
+                        }
+                        foreach (var move in moves)
+                        {
+                            commands.Remove(move);
+                        }
+                        var movecollection = new G1MoveCollectionNegativ(moves);
+                        commands.Insert(currentmoveindexnegativ, movecollection);
+                        i = currentmoveindexnegativ + 1;
+                    }
+                    currentnegativ = null;
+                    currentmoveindexnegativ = -1;
+
+                }
+            }
+            
         }
 
         private List<GcodeCommand> ReadLine(string line)
@@ -90,13 +129,22 @@ namespace yamaha3Dprint
                         {
                             var setflow = G1SetFlow.Parse($"{parameters[0]} {parameters[3]}");
                             commands.Add(setflow);
-                            var move = G1Move.Parse($"{parameters[0]} {parameters[1]} {parameters[2]}");
+                            var move = G1MovePositiv.Parse($"{parameters[0]} {parameters[1]} {parameters[2]}");
                             commands.Add(move);
                         }
                         if (parameters[3].StartsWith("E"))
                         {
-                            var move = G1Move.Parse($"{parameters[0]} {parameters[1]} {parameters[2]} {parameters[3]}");
-                            commands.Add(move);
+                            if(parameters[3].IndexOf("-")!=-1)
+                            {
+                                var move = G1MoveNegativ.Parse($"{parameters[0]} {parameters[1]} {parameters[2]} {parameters[3]}");
+                                commands.Add(move);
+                            }
+                            else
+                            {
+                                var move = G1MovePositiv.Parse($"{parameters[0]} {parameters[1]} {parameters[2]} {parameters[3]}");
+                                commands.Add(move);
+                            }
+                            
                         }
                     }
                 }
