@@ -104,6 +104,7 @@ namespace yamaha3Dprint
         private List<GcodeCommand> ReadLine(string line)
         {
             List<GcodeCommand> commands = new List<GcodeCommand>();
+            bool behandelt = false;
             // Remove Comments
             if (line.Contains(";"))
             {
@@ -111,6 +112,7 @@ namespace yamaha3Dprint
                 if (index == 0)
                 {
                     line = string.Empty;
+                    behandelt=true;
                 }
                 else
                 {
@@ -118,49 +120,134 @@ namespace yamaha3Dprint
                 }
             }
             line = line.Trim();
-            if (line.StartsWith("G1"))
+            if (line.StartsWith("G1 "))
             {
                 var parameters = line.Split(' ');
                 if (parameters.Length == 4)
                 {
+
+                    //G1 X117.477 Y124.252 E0.01235
+                    //G1 X117.545 Y124.623 F10800.000
+                    //G1 X109.866 Y42.627 E - 0.18749
                     if (parameters[1].StartsWith("X") && parameters[2].StartsWith("Y"))
                     {
+                        //G1 X117.545 Y124.623 F10800.000
                         if (parameters[3].StartsWith("F"))
                         {
                             var setflow = G1SetFlow.Parse($"{parameters[0]} {parameters[3]}");
                             commands.Add(setflow);
                             var move = G1MovePositiv.Parse($"{parameters[0]} {parameters[1]} {parameters[2]}");
                             commands.Add(move);
+                            behandelt = true;
                         }
+                        //G1 X117.477 Y124.252 E0.01235
+                        //G1 X109.866 Y42.627 E - 0.18749
                         if (parameters[3].StartsWith("E"))
                         {
-                            if(parameters[3].IndexOf("-")!=-1)
+                            //G1 X109.866 Y42.627 E - 0.18749
+                            if (parameters[3].IndexOf("-")!=-1)
                             {
                                 var move = G1MoveNegativ.Parse($"{parameters[0]} {parameters[1]} {parameters[2]} {parameters[3]}");
                                 commands.Add(move);
+                                behandelt = true;
                             }
+                            //G1 X117.477 Y124.252 E0.01235
                             else
                             {
                                 var move = G1MovePositiv.Parse($"{parameters[0]} {parameters[1]} {parameters[2]} {parameters[3]}");
                                 commands.Add(move);
+                                behandelt = true;
                             }                            
                         }
                     }
                 }
+                 //G1 Z0.400 F10800.000
+                 //G1 X109.128 Y42.788
+                 //G1 E-0.04000 F2100.00000
                 if (parameters.Length == 3)
                 {
-                    if(parameters[1].StartsWith("Z") && parameters[2].StartsWith("F"))
+                    //G1 Z0.400 F10800.000
+                    if (parameters[1].StartsWith("Z") && parameters[2].StartsWith("F"))
                     {
                         var setflow = G1SetFlow.Parse($"{parameters[0]} {parameters[2]}");
                         commands.Add(setflow);
                         var moveZ = G1MoveZ.Parse($"{parameters[0]} {parameters[1]}");
                         commands.Add(moveZ);
+                        behandelt = true;
                     }
+
+                    //G1 X109.128 Y42.788
+                    if (parameters[1].StartsWith("X") && parameters[2].StartsWith("Y"))
+                    {
+                        var move = G1MovePositiv.Parse($"{parameters[0]} {parameters[1]} {parameters[2]}" + " 0");
+                        commands.Add(move);
+                        behandelt = true;
+                    }
+
+                    //G1 E-0.04000 F2100.00000
+                    //G1 E0.04000 F2100.00000
+                    if (parameters[1].StartsWith("E") && parameters[2].StartsWith("F"))
+                    {
+                        //G1 E-0.04000 F2100.00000
+                        if (parameters[1].IndexOf("-") != -1)
+                        {
+                            var setflow = G1SetFlow.Parse($"{parameters[0]} {parameters[2]}");
+                            commands.Add(setflow);
+                            var extrudeNegative = G1MoveExtruderNegativ.Parse(parameters[1]);
+                            commands.Add(extrudeNegative);
+                            behandelt = true;
+                        }
+                        //G1 E0.04000 F2100.00000
+                        else
+                        {
+                            var setflow = G1SetFlow.Parse($"{parameters[0]} {parameters[2]}");
+                            commands.Add(setflow);
+                            var extruderPositiv = G1MoveExtruderPositiv.Parse(parameters[1]);
+                            commands.Add(extruderPositiv);
+                            behandelt = true;
+
+                        }
+                    }
+
+                    
                 }
                 if (parameters.Length == 2)
                 {
-
+                    if(parameters[1].StartsWith("F"))
+                    {
+                        var setflow = G1SetFlow.Parse($"{parameters[0]} {parameters[1]}");
+                        commands.Add(setflow);
+                        behandelt = true;
+                    }
+                    if(parameters[1].StartsWith("Z"))
+                    {
+                        var movez = G1MoveZ.Parse($"{parameters[0]} {parameters[1]}");
+                        commands.Add(movez);
+                        behandelt = true;
+                    }
+                    
                 }
+            }
+            if (line.StartsWith("M204"))
+            {
+                behandelt = true;
+                // Accelarationchange 
+            }
+            if (line.StartsWith("M73"))
+            {
+                var parameters = line.Split(' ');
+                var percentage = M73.Parse($"{parameters[0]} {parameters[1]} {parameters[2]}");
+                commands.Add(percentage);
+                behandelt = true;
+            }
+            if (line.StartsWith("G28"))
+            {
+                var setOrigin = G28.Parse("G28");
+                commands.Add(setOrigin);
+            }
+            if(!behandelt)
+            {
+                Console.WriteLine(line);
             }
             return commands;
         }

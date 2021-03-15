@@ -14,7 +14,8 @@ namespace yamaha3Dprint
         byte[] eol = new byte[] { 0x0D, 0x0A };
         public Position CurrentPosition { get; private set; }
         public int CurrentSpeed { get; private set; }
-        private int SendCount { get;  set; } // Todo Implement
+        public int MaxSpeed { get; private set; } = 20000;
+        private int SendCount { get;  set; } 
         private int OkCount { get; set; } 
         readonly Position?[] positions = new Position?[63];
         public Yamaha()
@@ -68,11 +69,15 @@ namespace yamaha3Dprint
 
         public void SetFlow(double flow)
         {
-            
+            CurrentSpeed = 100*((int)flow) / MaxSpeed;
+            if(CurrentSpeed>=100)
+            {
+                Console.WriteLine("Speedlimit Exceeded");
+                CurrentSpeed = 100;
+            }
         }
         public Position SetPosition(int index, double x, double y, double z)
-        {
-            z = 100.0 - z;
+        {            
             if (z < 0)
             {
                 z = 0;
@@ -83,7 +88,8 @@ namespace yamaha3Dprint
             string strz = position.Z.ToString("0.00", new CultureInfo("en-us"));
             CurrentPosition = position;
             positions[index] = position;
-            SendCommand($"P{index}={strx} {stry} {strz} 0.0 0.0 0.0");
+            SendCommand($"@P{index}={strx} {stry} {strz} 0.0 0.0 0.0");
+            SendCount++;
             return position;
         }
         public Position SetPosition(int index, double z)
@@ -99,7 +105,8 @@ namespace yamaha3Dprint
             string strz = position.Z.ToString("0.00", new CultureInfo("en-us"));
             CurrentPosition = position;
             positions[index] = position;
-            SendCommand($"P{index}={strx} {stry} {strz} 0.0 0.0 0.0");
+            SendCommand($"@P{index}={strx} {stry} {strz} 0.0 0.0 0.0"); 
+            SendCount++;
             return position;
         }
 
@@ -151,6 +158,31 @@ namespace yamaha3Dprint
                 Console.WriteLine("nothing in Buffer: Readtimeout triggered");
             }
             return recieve;
+        }
+        public void SetOrigin()
+        {
+            SendCommand("@?ORIGIN");
+            if(WaitForOrigin()!=true)
+            {
+                SendCommand("@ABSRST");
+                WaitForOk(1);
+            }            
+        }
+
+        private bool WaitForOrigin()
+        {
+            string recieve = "";
+            while (recieve!="Complete" && recieve!="Incomplete")
+            {
+                if (ReadLine() == "COMPLETE\r")
+                    recieve = "Complete";
+                if (ReadLine() == "INCOMPLETE\r")
+                    recieve = "Incomplete";
+            }
+            if (recieve == "Complete")
+                return true;
+            else
+                return false;
         }
     }
 }

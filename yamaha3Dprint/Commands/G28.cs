@@ -6,9 +6,18 @@ namespace yamaha3Dprint.Commands
     {
         public override void ExecuteCommand(Yamaha yamaha, Arduino arduino)
         {
-            
-            yamaha.SetPosition(0, 0.0, 0.0, 100.0);
+            yamaha.SetOrigin();
+            yamaha.SetPosition(0, 0.0, 0.0, 0.0);
             yamaha.Move(0);
+        }
+
+        public static G28 Parse(string parameter)
+        {
+            if(parameter!="G28")
+            {
+                throw new ArgumentException("Falsche Parameter: " + parameter);
+            }
+            return new G28();
         }
     }
 }
