@@ -132,50 +132,13 @@ namespace yamaha3Dprint
             {
                 i.ExecuteCommand(yamaha, null);
             }
-        }
+        }      
         
-        public bool CheckReady()
-        {
-            if(SerialConnection[0]==false) //|| SerialConnection[1]== false)
-            {
-                LblDruckStatus.Text = "";
-                
-                LblDruckStatus.Text = "Check Communication";
-                return false;
-            }            
-            return true;
-        }
 
         private void CmdReadYamaha_Click(object sender, EventArgs e)
         {
             string data=YamahaSerial.getYamahaData();
             TeBox_SerialYamaha.AppendText("Read: " + data + Environment.NewLine);
-        }
-        public void WritePointsToYamaha(List<string> points)
-        {
-            foreach (string i in points)
-            {
-                YamahaSerial.SendYamahaData(i);
-                Thread.Sleep(20);
-                YamahaSerial.DiscardInBuffer();
-            }
-        }
-        public void WriteMoveToYamaha(List<string> input)
-        {
-            foreach (var line in input)
-            {
-                TeBox_SerialYamaha.Invoke(new Action(() =>
-                {
-                    YamahaSerial.SendYamahaData(line + ",S=30");
-                    TeBox_SerialYamaha.AppendText("Send: " + line + Environment.NewLine);
-                    YamahaSerial.DiscardInBuffer();
-                }));
-
-                while (YamahaSerial.getYamahaData() != "OK\r")
-                {
-                    Thread.Sleep(20);
-                }
-            }
         }
     }
 }

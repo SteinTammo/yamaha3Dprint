@@ -8,6 +8,9 @@ namespace yamaha3Dprint
     public class Yamaha
     {
         private readonly SerialPort serialPort;
+
+        
+
         byte[] eol = new byte[] { 0x0D, 0x0A };
         public Position CurrentPosition { get; private set; }
         public int CurrentSpeed { get; private set; }
@@ -18,6 +21,7 @@ namespace yamaha3Dprint
         {
             serialPort = new SerialPort();
             CurrentSpeed = 100;
+            CurrentPosition = new Position(0, 0, 100);
         }
         public void Connect(string portname, int bautrate)
         {
@@ -30,6 +34,7 @@ namespace yamaha3Dprint
             }
             serialPort.Open();
             serialPort.DiscardInBuffer();
+
         }
 
         internal void ExecuteMoves(int MoveCount)
@@ -65,12 +70,34 @@ namespace yamaha3Dprint
         {
             
         }
+        public Position SetPosition(int index, double x, double y, double z)
+        {
+            z = 100.0 - z;
+            if (z < 0)
+            {
+                z = 0;
+            }
+            Position position = new Position(x, y, z);
+            string strx = position.X.ToString("0.00", new CultureInfo("en-us"));
+            string stry = position.Y.ToString("0.00", new CultureInfo("en-us"));
+            string strz = position.Z.ToString("0.00", new CultureInfo("en-us"));
+            CurrentPosition = position;
+            positions[index] = position;
+            SendCommand($"P{index}={strx} {stry} {strz} 0.0 0.0 0.0");
+            return position;
+        }
         public Position SetPosition(int index, double z)
         {
+            z = 100.0 - z;
+            if(z<0)
+            {
+                z=0;
+            }
             Position position = new Position(CurrentPosition.X, CurrentPosition.Y, z);
             string strx = position.X.ToString("0.00", new CultureInfo("en-us"));
             string stry = position.Y.ToString("0.00", new CultureInfo("en-us"));
             string strz = position.Z.ToString("0.00", new CultureInfo("en-us"));
+            CurrentPosition = position;
             positions[index] = position;
             SendCommand($"P{index}={strx} {stry} {strz} 0.0 0.0 0.0");
             return position;
@@ -95,7 +122,7 @@ namespace yamaha3Dprint
             string strx = position.X.ToString("0.00", new CultureInfo("en-us"));
             string stry = position.Y.ToString("0.00", new CultureInfo("en-us"));
             string strz = position.Z.ToString("0.00", new CultureInfo("en-us"));
-            
+            CurrentPosition = position;
             positions[index] = position;
             SendCommand($"@P{index}={strx} {stry} {strz} 0.0 0.0 0.0");
             SendCount++;

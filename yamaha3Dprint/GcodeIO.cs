@@ -143,14 +143,19 @@ namespace yamaha3Dprint
                             {
                                 var move = G1MovePositiv.Parse($"{parameters[0]} {parameters[1]} {parameters[2]} {parameters[3]}");
                                 commands.Add(move);
-                            }
-                            
+                            }                            
                         }
                     }
                 }
                 if (parameters.Length == 3)
                 {
-
+                    if(parameters[1].StartsWith("Z") && parameters[2].StartsWith("F"))
+                    {
+                        var setflow = G1SetFlow.Parse($"{parameters[0]} {parameters[2]}");
+                        commands.Add(setflow);
+                        var moveZ = G1MoveZ.Parse($"{parameters[0]} {parameters[1]}");
+                        commands.Add(moveZ);
+                    }
                 }
                 if (parameters.Length == 2)
                 {

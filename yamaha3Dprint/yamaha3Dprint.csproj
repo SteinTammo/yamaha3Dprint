@@ -54,6 +54,7 @@
     <Compile Include="Commands\G1MoveZ.cs" />
     <Compile Include="Commands\G1SetFlow.cs" />
     <Compile Include="Commands\G1MoveCollectionPositiv.cs" />
+    <Compile Include="Commands\G28.cs" />
     <Compile Include="Position.cs" />
     <Compile Include="Yamaha.cs" />
     <Compile Include="Comunication.cs" />
