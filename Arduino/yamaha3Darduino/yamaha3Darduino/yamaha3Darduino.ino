@@ -4,9 +4,15 @@
  Author:	stein
 */
 
-// the setup function runs once when you press reset or power the board
+#include <AccelStepper.h>
+int PulsePin=2;
+int DirPin=3;
+int ENBLPin=4;
+AccelStepper Stepper();
 void setup() {
-
+	pinMode(PulsePin, OUTPUT);
+	pinMode(DirPin, OUTPUT);
+	pinMode(ENBLPin, OUTPUT);
 }
 
 // the loop function runs over and over again until power down or reset
