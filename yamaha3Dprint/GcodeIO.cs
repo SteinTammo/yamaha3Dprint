@@ -125,7 +125,7 @@ namespace yamaha3Dprint
                 var parameters = line.Split(' ');
                 if (parameters.Length == 4)
                 {
-
+                    //G1 X60.0 E9.0 F1000.0
                     //G1 X117.477 Y124.252 E0.01235
                     //G1 X117.545 Y124.623 F10800.000
                     //G1 X109.866 Y42.627 E - 0.18749
@@ -159,6 +159,14 @@ namespace yamaha3Dprint
                                 behandelt = true;
                             }                            
                         }
+                    }
+                    if(parameters[1].StartsWith("X") && parameters[2].StartsWith("E") && parameters[3].StartsWith("F"))
+                    {
+                        var setflow = G1SetFlow.Parse($"{parameters[0]} {parameters[3]}");
+                        commands.Add(setflow);
+                        var move = G1MoveXE.Parse($"{parameters[0]} {parameters[1]} {parameters[2]}");
+                        commands.Add(move);
+                        behandelt = true;
                     }
                 }
                  //G1 Z0.400 F10800.000
@@ -205,11 +213,16 @@ namespace yamaha3Dprint
                             var extruderPositiv = G1MoveExtruderPositiv.Parse(parameters[1]);
                             commands.Add(extruderPositiv);
                             behandelt = true;
-
                         }
                     }
-
-                    
+                    //G1 Y-3.0 F1000.0
+                    if(parameters[1].StartsWith("Y") && parameters[2].StartsWith("F"))
+                    {
+                        var setflow = G1SetFlow.Parse($"{parameters[0]} {parameters[2]}");
+                        commands.Add(setflow);
+                        var move = G1MoveY.Parse($"{parameters[0]} {parameters[1]}");
+                        commands.Add(move);
+                    }
                 }
                 if (parameters.Length == 2)
                 {
@@ -236,14 +249,19 @@ namespace yamaha3Dprint
             if (line.StartsWith("M73"))
             {
                 var parameters = line.Split(' ');
-                var percentage = M73.Parse($"{parameters[0]} {parameters[1]} {parameters[2]}");
-                commands.Add(percentage);
-                behandelt = true;
+                if(parameters[0].StartsWith("M73") && parameters[1].StartsWith("P") && parameters[2].StartsWith("R"))
+                {
+                    var percentage = M73.Parse($"{parameters[0]} {parameters[1]} {parameters[2]}");
+                    commands.Add(percentage);
+                    behandelt = true;
+                }
+                
             }
             if (line.StartsWith("G28"))
             {
                 var setOrigin = G28.Parse("G28");
                 commands.Add(setOrigin);
+                behandelt = true;
             }
             if(!behandelt)
             {

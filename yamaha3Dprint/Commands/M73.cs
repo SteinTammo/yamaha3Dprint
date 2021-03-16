@@ -1,30 +1,38 @@
 ﻿using System;
+using System.Globalization;
 
 namespace yamaha3Dprint.Commands
 {
     public class M73 : GcodeCommand
     {
         private readonly int percentage;
+        private readonly int time;
 
-        public M73(int v)
+        public M73(int percentage, int time)
         {
-            this.percentage = v;
+            this.percentage = percentage;
+            this.time = time;
         }
 
         public override void ExecuteCommand(Yamaha yamaha, Arduino arduino)
         {
-            throw new NotImplementedException();
+            yamaha.SetProgress(percentage);
+            yamaha.UpdateProgressTime(time);
         }
 
         public static M73 Parse(string parameters)
         {
             var split = parameters.Split(' ');
-            if(!split[0].StartsWith("M73"))
+            if(!split[0].StartsWith("M73") || !split[1].StartsWith("P") || !split[2].StartsWith("R"))
             {
                 throw new ArgumentException("Falsche Parameter: " + parameters);
             }
-            int v = 10;
-            return new M73(v);
+
+            split[1] = split[1].Replace("P", "");
+            split[2] = split[2].Replace("R", "");
+            int percentage = int.Parse(split[1], new CultureInfo("en-us"));
+            int time = int.Parse(split[2], new CultureInfo("en-us"));
+            return new M73(percentage,time);
         }
     }
 }

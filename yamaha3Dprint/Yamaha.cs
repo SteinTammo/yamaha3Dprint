@@ -8,22 +8,28 @@ namespace yamaha3Dprint
     public class Yamaha
     {
         private readonly SerialPort serialPort;
-
         
 
         byte[] eol = new byte[] { 0x0D, 0x0A };
+        private Yamaha3DPrint yamaha3DPrintform;
+
+        
+
         public Position CurrentPosition { get; private set; }
         public int CurrentSpeed { get; private set; }
-        public int MaxSpeed { get; private set; } = 20000;
+        public int MaxSpeed { get; private set; } = 8000;
         private int SendCount { get;  set; } 
         private int OkCount { get; set; } 
-        readonly Position?[] positions = new Position?[63];
-        public Yamaha()
+        readonly Position?[] positions = new Position?[63];        
+
+        public Yamaha(Yamaha3DPrint yamaha3DPrint)
         {
+            this.yamaha3DPrintform = yamaha3DPrint;
             serialPort = new SerialPort();
             CurrentSpeed = 100;
             CurrentPosition = new Position(0, 0, 100);
         }
+
         public void Connect(string portname, int bautrate)
         {
             serialPort.PortName = portname;
@@ -92,22 +98,53 @@ namespace yamaha3Dprint
             SendCount++;
             return position;
         }
-        public Position SetPosition(int index, double z)
+        public Position SetPosition(int index, double z,string xyz)
         {
-            z = 100.0 - z;
-            if(z<0)
+            if(xyz=="z")
             {
-                z=0;
+                z = 100.0 - z;
+                if (z < 0)
+                {
+                    z = 0;
+                }
+                Position position = new Position(CurrentPosition.X, CurrentPosition.Y, z);
+                string strx = position.X.ToString("0.00", new CultureInfo("en-us"));
+                string stry = position.Y.ToString("0.00", new CultureInfo("en-us"));
+                string strz = position.Z.ToString("0.00", new CultureInfo("en-us"));
+                CurrentPosition = position;
+                positions[index] = position;
+                SendCommand($"@P{index}={strx} {stry} {strz} 0.0 0.0 0.0");
+                SendCount++;
+                return position;
             }
-            Position position = new Position(CurrentPosition.X, CurrentPosition.Y, z);
-            string strx = position.X.ToString("0.00", new CultureInfo("en-us"));
-            string stry = position.Y.ToString("0.00", new CultureInfo("en-us"));
-            string strz = position.Z.ToString("0.00", new CultureInfo("en-us"));
-            CurrentPosition = position;
-            positions[index] = position;
-            SendCommand($"@P{index}={strx} {stry} {strz} 0.0 0.0 0.0"); 
-            SendCount++;
-            return position;
+            else if (xyz == "x")
+            {
+                Position position = new Position(z, CurrentPosition.Y, CurrentPosition.Z);
+                string strx = position.X.ToString("0.00", new CultureInfo("en-us"));
+                string stry = position.Y.ToString("0.00", new CultureInfo("en-us"));
+                string strz = position.Z.ToString("0.00", new CultureInfo("en-us"));
+                CurrentPosition = position;
+                positions[index] = position;
+                SendCommand($"@P{index}={strx} {stry} {strz} 0.0 0.0 0.0");
+                SendCount++;
+                return position;
+            }
+            else if (xyz == "y")
+            {
+                Position position = new Position(CurrentPosition.X, z, CurrentPosition.Z);
+                string strx = position.X.ToString("0.00", new CultureInfo("en-us"));
+                string stry = position.Y.ToString("0.00", new CultureInfo("en-us"));
+                string strz = position.Z.ToString("0.00", new CultureInfo("en-us"));
+                CurrentPosition = position;
+                positions[index] = position;
+                SendCommand($"@P{index}={strx} {stry} {strz} 0.0 0.0 0.0");
+                SendCount++;
+                return position;
+            }
+            else
+            {
+                throw new ArgumentException("no X, Y or Z");
+            }
         }
 
         internal void Move(int index)
@@ -153,7 +190,7 @@ namespace yamaha3Dprint
             {
                 recieve = serialPort.ReadLine();
             }
-            catch (Exception)
+            catch (TimeoutException)
             {
                 Console.WriteLine("nothing in Buffer: Readtimeout triggered");
             }
@@ -174,15 +211,30 @@ namespace yamaha3Dprint
             string recieve = "";
             while (recieve!="Complete" && recieve!="Incomplete")
             {
-                if (ReadLine() == "COMPLETE\r")
+                string readLine = ReadLine();
+                if (readLine == "COMPLETE\r")
                     recieve = "Complete";
-                if (ReadLine() == "INCOMPLETE\r")
+                if (readLine == "INCOMPLETE\r")
                     recieve = "Incomplete";
             }
             if (recieve == "Complete")
                 return true;
             else
                 return false;
+        }
+        public void SetProgress(int percentage)
+        {
+            yamaha3DPrintform.Invoke(new Action(() =>
+            {
+                yamaha3DPrintform.UpdateProgessbar(percentage);
+            }));
+        }
+        public void UpdateProgressTime(int time)
+        {
+            yamaha3DPrintform.Invoke(new Action(() =>
+            {
+                yamaha3DPrintform.UpdateRemaindingTime(time);
+            }));
         }
     }
 }

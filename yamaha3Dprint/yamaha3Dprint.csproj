@@ -52,6 +52,8 @@
     <Compile Include="Commands\G1MoveCollectionNegativ.cs" />
     <Compile Include="Commands\G1MoveExtruderNegativ.cs" />
     <Compile Include="Commands\G1MoveNegativ.cs" />
+    <Compile Include="Commands\G1MoveXE.cs" />
+    <Compile Include="Commands\G1MoveY.cs" />
     <Compile Include="Commands\G1MoveZ.cs" />
     <Compile Include="Commands\G1SetFlow.cs" />
     <Compile Include="Commands\G1MoveCollectionPositiv.cs" />

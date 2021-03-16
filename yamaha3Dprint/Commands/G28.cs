@@ -8,6 +8,8 @@ namespace yamaha3Dprint.Commands
         {
             yamaha.SetOrigin();
             yamaha.SetPosition(0, 0.0, 0.0, 0.0);
+            yamaha.Move(0); 
+            yamaha.SetPosition(0, 0.0, 0.0, 98.0);
             yamaha.Move(0);
         }
 

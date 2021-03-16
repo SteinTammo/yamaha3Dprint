@@ -259,6 +259,7 @@
             this.progressBarDruck.Name = "progressBarDruck";
             this.progressBarDruck.Size = new System.Drawing.Size(232, 23);
             this.progressBarDruck.TabIndex = 23;
+            this.progressBarDruck.Click += new System.EventHandler(this.progressBarDruck_Click);
             // 
             // LblDruckStatus
             // 

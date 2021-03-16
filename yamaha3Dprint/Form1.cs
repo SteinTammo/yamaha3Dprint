@@ -55,8 +55,8 @@ namespace yamaha3Dprint
                     filePath = openFileDialog.FileName;
                     fileContent = File.ReadAllLines(filePath);
                     var test = new GcodeIO();
-                    yamaha = new Yamaha();
-                    arduino = new Arduino();
+                    yamaha = new Yamaha(this);
+                    arduino = new Arduino(this);
                                         
                 }
             }
@@ -122,7 +122,19 @@ namespace yamaha3Dprint
 
         private void CmdStartPrint_Click(object sender, EventArgs e)
         {
+            progressBarDruck.Maximum = 100;
+            progressBarDruck.Step = 1;
+            progressBarDruck.Value = 0;
             printTask = Task.Run(()=>Print());
+        }
+        public void UpdateProgessbar(int percentage)
+        {
+            progressBarDruck.Value = percentage;
+        }
+        public void UpdateRemaindingTime(int time)
+        {
+
+            LblDruckStatus.Text = "Verbleibende Druckzeit laut Slicer: " + time + "min";
         }
         public void Print()
         {
@@ -139,6 +151,11 @@ namespace yamaha3Dprint
         {
             string data=YamahaSerial.getYamahaData();
             TeBox_SerialYamaha.AppendText("Read: " + data + Environment.NewLine);
+        }
+
+        private void progressBarDruck_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

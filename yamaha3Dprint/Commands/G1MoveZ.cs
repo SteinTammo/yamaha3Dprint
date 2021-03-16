@@ -14,7 +14,7 @@ namespace yamaha3Dprint.Commands
 
         public override void ExecuteCommand(Yamaha yamaha, Arduino arduino)
         {
-            var position = yamaha.SetPosition(0,z);
+            yamaha.SetPosition(0,z,"z");
             yamaha.Move(0);
         }
 
