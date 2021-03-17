@@ -86,7 +86,8 @@ namespace yamaha3Dprint
             //    LblConnectDevice.Text = "Bitte Port Auswählen";
             //    return;
             //}
-            yamaha.Connect("COM3", 9600);            
+            yamaha.Connect("COM3", 9600);
+            arduino.Connect("COM5", 9600);
             //ControllinoSerial = new Serial("COM5", 9600,this);            
         }
 
@@ -142,7 +143,7 @@ namespace yamaha3Dprint
             var commands = test.ReadFile(filePath);
             foreach (var i in commands)
             {
-                i.ExecuteCommand(yamaha, null);
+                i.ExecuteCommand(yamaha, arduino);
             }
         }      
         

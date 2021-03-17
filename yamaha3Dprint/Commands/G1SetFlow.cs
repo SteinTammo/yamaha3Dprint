@@ -25,6 +25,7 @@ namespace yamaha3Dprint.Commands
         public override void ExecuteCommand(Yamaha yamaha, Arduino arduino)
         {
             yamaha.SetFlow(flow);
+            arduino.SetFlow(flow);
         }
     }
 }
