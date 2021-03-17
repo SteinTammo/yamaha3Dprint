@@ -61,8 +61,6 @@ void SetMoveE(float amount)
 {
 	Stepper.move(amount);
 	newPostion = true;
-	Serial.print("Move: ");
-	Serial.println(amount);
 }
 
 void Checkfinish(bool move)

@@ -41,7 +41,11 @@ namespace yamaha3Dprint.Commands
         {
             
             var position = yamaha.SetPosition(0, x, y);
+            arduino.Move(e);
             yamaha.Move(0);
+            yamaha.WaitForOk(yamaha.SendCount + 1);
+            yamaha.SendCount = 0;
+            arduino.WaitForOk(1);
         }
     }
 }

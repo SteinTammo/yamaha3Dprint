@@ -17,6 +17,13 @@ namespace yamaha3Dprint
             serialPort = new SerialPort();
             CurrentSpeed = 100;
         }
+
+        internal void Move(double? e)
+        {
+            if(e!=null)
+            serialPort.Write("G1E&" + e + "&");
+        }
+
         public void Connect(string portname, int bautrate)
         {
             serialPort.PortName = portname;

@@ -18,8 +18,8 @@ namespace yamaha3Dprint
         public Position CurrentPosition { get; private set; }
         public int CurrentSpeed { get; private set; }
         public int MaxSpeed { get; private set; } = 8000;
-        private int SendCount { get;  set; } 
-        private int OkCount { get; set; } 
+        public int SendCount { get;  set; } 
+        public int OkCount { get; set; } 
         readonly Position?[] positions = new Position?[63];        
 
         public Yamaha(Yamaha3DPrint yamaha3DPrint)
@@ -149,9 +149,7 @@ namespace yamaha3Dprint
 
         internal void Move(int index)
         {
-            SendCommand("@MOVE P,P"+index+",S="+this.CurrentSpeed);
-            WaitForOk(SendCount+1);
-            SendCount = 0;
+            SendCommand("@MOVE P,P"+index+",S="+this.CurrentSpeed);            
         }
         
         private void SendCommand(string data)
