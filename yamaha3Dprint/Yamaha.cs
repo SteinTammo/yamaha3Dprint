@@ -69,8 +69,6 @@ namespace yamaha3Dprint
                 SendCommand(moveCommand);
             }
             SendCount += writeCommand.Count;
-            WaitForOk(SendCount);
-            SendCount = 0;
         }
 
         public void SetFlow(double flow)

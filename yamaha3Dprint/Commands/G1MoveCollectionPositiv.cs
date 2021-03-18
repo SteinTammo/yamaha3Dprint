@@ -27,11 +27,21 @@ namespace yamaha3Dprint.Commands
                 {
                     yamaha.ExecuteMoves(i);
                     arduino.Move(extruder);
+                    yamaha.WaitForOk(yamaha.SendCount);
+                    arduino.WaitForOk(1);
+                    yamaha.SendCount = 0;
                     i = 0;
                     extruder = 0;
                 }                                    
             }
-            yamaha.ExecuteMoves(i);
+            if (i!=0 && extruder !=0)
+            {
+                yamaha.ExecuteMoves(i);
+                arduino.Move(extruder);
+                yamaha.WaitForOk(yamaha.SendCount);
+                arduino.WaitForOk(1);
+            }            
+            yamaha.SendCount = 0;
         }
     }
 }
