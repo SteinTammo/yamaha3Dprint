@@ -48,6 +48,7 @@ namespace yamaha3Dprint
             try
             {
                 recieve = serialPort.ReadLine();
+                Console.WriteLine(recieve);
             }
             catch (TimeoutException)
             {

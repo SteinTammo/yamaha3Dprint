@@ -25,16 +25,18 @@ bool setDruckbett = false;
 bool setExtruderheizen = false;
 
 // Set to 16x microstepping
-AccelStepper Stepper(1,PulsePin,DirPin);
+AccelStepper mystepper(1,PulsePin,DirPin);
 
 void setup() 
 {
 	pinMode(PulsePin, OUTPUT);
 	pinMode(DirPin, OUTPUT);
 	pinMode(ENBLPin, OUTPUT);	
-	Stepper.setEnablePin(ENBLPin);
+	mystepper.setEnablePin(ENBLPin);
 	pinMode(A0, OUTPUT);
 	Serial.begin(9600);
+	mystepper.setAcceleration(5000*409);
+	mystepper.setSpeed(100);
 }
 
 // the loop function runs over and over again until power down or reset
@@ -50,22 +52,22 @@ void loop()
 			newCommand(choise, data);
 		}
 	}	
-	Stepper.run();
+	mystepper.run();
 	bool inBewegung = false;
-	inBewegung = Stepper.isRunning();
+	inBewegung = mystepper.isRunning();
 	Checkfinish(inBewegung);
 
 }
 void setSpeed(float flow)
 {
-	Stepper.setSpeed(flow);
+	mystepper.setSpeed(flow);
 	delay(20);
 	setOk();
 }
 void SetMoveE(float amount)
 {
 	int Steps = amount * 409;
-	Stepper.move(amount);
+	mystepper.move(Steps);
 	newPostion = true;
 }
 
