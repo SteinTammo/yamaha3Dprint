@@ -4,6 +4,7 @@
  Author:	stein
 */
 
+#include <MultiStepper.h>
 #include <AccelStepper.h>
 #include <string.h>
 
@@ -22,6 +23,8 @@ int ENBLPin=4;		// Anschalten des Drivers
 bool newPostion = false;
 bool setDruckbett = false;
 bool setExtruderheizen = false;
+
+// Set to 16x microstepping
 AccelStepper Stepper(1,PulsePin,DirPin);
 
 void setup() 
@@ -47,18 +50,21 @@ void loop()
 			newCommand(choise, data);
 		}
 	}	
+	Stepper.run();
 	bool inBewegung = false;
-	inBewegung=Stepper.run();
+	inBewegung = Stepper.isRunning();
 	Checkfinish(inBewegung);
 
 }
 void setSpeed(float flow)
 {
 	Stepper.setSpeed(flow);
+	delay(20);
 	setOk();
 }
 void SetMoveE(float amount)
 {
+	int Steps = amount * 409;
 	Stepper.move(amount);
 	newPostion = true;
 }
