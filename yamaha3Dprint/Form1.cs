@@ -86,9 +86,8 @@ namespace yamaha3Dprint
             //    LblConnectDevice.Text = "Bitte Port Auswählen";
             //    return;
             //}
-            yamaha.Connect("COM3", 9600);
-            arduino.Connect("COM5", 9600);
-            //ControllinoSerial = new Serial("COM5", 9600,this);            
+            yamaha.Connect("COM6", 9600);
+            arduino.Connect("COM5", 9600);   
         }
 
         private void CmdSendYamaha_Click(object sender, EventArgs e)

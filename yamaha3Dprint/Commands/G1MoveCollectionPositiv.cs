@@ -26,9 +26,9 @@ namespace yamaha3Dprint.Commands
                 if(i==63)
                 {
                     yamaha.ExecuteMoves(i);
-                    arduino.Move(extruder);
+                    // arduino.Move(extruder);
                     yamaha.WaitForOk(yamaha.SendCount);
-                    arduino.WaitForOk(1);
+                    //arduino.WaitForOk(1);
                     yamaha.SendCount = 0;
                     i = 0;
                     extruder = 0;
@@ -37,9 +37,9 @@ namespace yamaha3Dprint.Commands
             if (i!=0 && extruder !=0)
             {
                 yamaha.ExecuteMoves(i);
-                arduino.Move(extruder);
+                // arduino.Move(extruder);
                 yamaha.WaitForOk(yamaha.SendCount);
-                arduino.WaitForOk(1);
+                // arduino.WaitForOk(1);
             }            
             yamaha.SendCount = 0;
         }

@@ -3,7 +3,7 @@
  Created:	16.03.2021 15:34:44
  Author:	stein
 */
-
+#include <Controllino.h>
 #include <MultiStepper.h>
 #include <AccelStepper.h>
 #include <string.h>
@@ -16,10 +16,11 @@ float UpdateExtruderTemperatur();
 
 
 
-int PulsePin=2;		// Pin fuer stepper
-int DirPin=3;		// Richtungspin
-int ENBLPin=4;		// Anschalten des Drivers
-
+int PulsePin=CONTROLLINO_D1;		// Pin fuer stepper
+int DirPin=CONTROLLINO_D2;		// Richtungspin
+int ENBLPin=CONTROLLINO_D3;		// Anschalten des Drivers
+int TestPin1=CONTROLLINO_D4;
+int TestPin2=CONTROLLINO_DI0;
 bool newPostion = false;
 bool setDruckbett = false;
 bool setExtruderheizen = false;
@@ -31,12 +32,16 @@ void setup()
 {
 	pinMode(PulsePin, OUTPUT);
 	pinMode(DirPin, OUTPUT);
+  digitalWrite(DirPin,LOW);
 	pinMode(ENBLPin, OUTPUT);	
+  pinMode(TestPin1,OUTPUT);
+  pinMode(TestPin2,INPUT);
+  digitalWrite(TestPin1,HIGH);
 	mystepper.setEnablePin(ENBLPin);
-	pinMode(A0, OUTPUT);
 	Serial.begin(9600);
 	mystepper.setAcceleration(5000*409);
 	mystepper.setSpeed(100);
+  checkdigital();
 }
 
 // the loop function runs over and over again until power down or reset
@@ -108,4 +113,12 @@ void newCommand(String choise, String data)
 	{
 
 	}
+}
+void checkdigital()
+{
+  if(digitalRead(TestPin2)==true)
+  {
+    mystepper.runSpeed();
+    Serial.println("true");
+  }
 }
