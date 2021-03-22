@@ -19,11 +19,12 @@ float UpdateExtruderTemperatur();
 int PulsePin=CONTROLLINO_D1;		// Pin fuer stepper
 int DirPin=CONTROLLINO_D2;		// Richtungspin
 int ENBLPin=CONTROLLINO_D3;		// Anschalten des Drivers
-int TestPin1=CONTROLLINO_D4;
-int TestPin2=CONTROLLINO_DI0;
+float ExtruderTemperatur = 0;
 bool newPostion = false;
 bool setDruckbett = false;
 bool setExtruderheizen = false;
+bool runspeed=false;
+String recieve;
 
 // Set to 16x microstepping
 AccelStepper mystepper(1,PulsePin,DirPin);
@@ -32,36 +33,34 @@ void setup()
 {
 	pinMode(PulsePin, OUTPUT);
 	pinMode(DirPin, OUTPUT);
-  digitalWrite(DirPin,LOW);
+	digitalWrite(DirPin,LOW);
 	pinMode(ENBLPin, OUTPUT);	
-  pinMode(TestPin1,OUTPUT);
-  pinMode(TestPin2,INPUT);
-  digitalWrite(TestPin1,HIGH);
-	mystepper.setEnablePin(ENBLPin);
+	digitalWrite(ENBLPin, HIGH);
 	Serial.begin(9600);
+	mystepper.setMaxSpeed(20000);
 	mystepper.setAcceleration(5000*409);
-	mystepper.setSpeed(100);
-  checkdigital();
+	mystepper.setSpeed(200);
+	//Serial.setTimeout(100);
 }
 
 // the loop function runs over and over again until power down or reset
 void loop() 
 {
 	if (Serial.available() > 0)
-	{	
-		String choise = Serial.readStringUntil('&');		
+	{
+		String choise = Serial.readStringUntil('&');
 		String data = Serial.readStringUntil('&');
-		
+
 		if (data != "" && choise != "")
 		{
 			newCommand(choise, data);
 		}
-	}	
+	}
 	mystepper.run();
 	bool inBewegung = false;
 	inBewegung = mystepper.isRunning();
 	Checkfinish(inBewegung);
-
+	ExtruderRegelung();
 }
 void setSpeed(float flow)
 {
@@ -105,20 +104,22 @@ void newCommand(String choise, String data)
 	{
 		setSpeed(data.toFloat());
 	}
-	else if (choise == "")
+	else if (choise == "M104")
 	{
-
+		setExtruderTemp(data.toFloat());
 	}
 	else if (choise == "")
 	{
 
 	}
 }
-void checkdigital()
+
+void setExtruderTemp(float Temperatur)
 {
-  if(digitalRead(TestPin2)==true)
-  {
-    mystepper.runSpeed();
-    Serial.println("true");
-  }
+	ExtruderTemperatur = Temperatur;
+}
+
+void ExtruderRegelung()
+{
+	
 }
