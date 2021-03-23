@@ -5,7 +5,13 @@ VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "yamaha3Darduino", "yamaha3Darduino\yamaha3Darduino.vcxproj", "{C5F80730-F44F-4478-BDAE-6634EFC2CA88}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CONTROLLINO-3.0.5", "Libraries\CONTROLLINO\3.0.5\CONTROLLINO\CONTROLLINO-3.0.5.vcxitems", "{E716976B-BB30-4A30-A555-A46B01D99CF8}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Libraries\CONTROLLINO\3.0.5\CONTROLLINO\CONTROLLINO-3.0.5.vcxitems*{c5f80730-f44f-4478-bdae-6634efc2ca88}*SharedItemsImports = 4
+		Libraries\CONTROLLINO\3.0.5\CONTROLLINO\CONTROLLINO-3.0.5.vcxitems*{e716976b-bb30-4a30-a555-a46b01d99cf8}*SharedItemsImports = 9
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
 		Release|x86 = Release|x86
