@@ -8,18 +8,19 @@ ArduinoIO::ArduinoIO()
 	this->enblPin = CONTROLLINO_D3;		// Anschalten des Drivers
 	this->ExtruderHeizPin = CONTROLLINO_R5;
 	this->ExtruderTempVoltagePin = CONTROLLINO_D4;
-	this->SetExtruderFanPin = CONTROLLINO_DO1;
+	this->SetExtruderFanPin = CONTROLLINO_DO0;
 	this->ExtruderTempPin = CONTROLLINO_A6;
 	this->aktuelleExtruderTemperatur = 0;
 	this->newPostion = false;
 	this->setDruckbett = false;
 	this->setExtruderheizen = false;
 	mystepper = AccelStepper(1,pulsePin,dirPin);
+	mystepper.setAcceleration(1000);
 }
 
 void ArduinoIO::SetSpeed(float speed)
 {
-	mystepper.setSpeed(speed);
+	mystepper.setMaxSpeed(speed);
 	delay(20);
 	SetOk();
 }
@@ -128,7 +129,7 @@ float ArduinoIO::GetExtruderTemperatur()
 {
 	float Temperatur=0;
 	int inputValue = analogRead(ExtruderTempPin);
-	float Voltage = inputValue * 5/ 1024;
-	Serial.println(Voltage);
-	return Temperatur;
+	float Voltage = ((float)inputValue)/1023 * 5/4.85*5;
+	Serial.println(inputValue);
+	return inputValue;
 }
