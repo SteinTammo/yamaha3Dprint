@@ -9,8 +9,9 @@ ArduinoIO::ArduinoIO()
 	this->ExtruderHeizPin = CONTROLLINO_R5;
 	this->ExtruderTempVoltagePin = CONTROLLINO_D4;
 	this->SetExtruderFanPin = CONTROLLINO_DO0;
-	this->ExtruderTempPin = CONTROLLINO_A6;
+	this->ExtruderTempPin = CONTROLLINO_A0;
 	this->aktuelleExtruderTemperatur = 0;
+	this->zielExtruderTemperatur = 30;
 	this->newPostion = false;
 	this->setDruckbett = false;
 	this->setExtruderheizen = false;
@@ -50,11 +51,11 @@ void ArduinoIO::ExtruderTemperaturRegelung()
 	this->aktuelleExtruderTemperatur = GetExtruderTemperatur();
 	if (zielExtruderTemperatur >= aktuelleExtruderTemperatur+1)
 	{
-		digitalWrite(ExtruderHeizPin, LOW);
+		digitalWrite(ExtruderHeizPin, HIGH);
 	}
 	if (zielExtruderTemperatur <= aktuelleExtruderTemperatur-1)
 	{
-		digitalWrite(ExtruderHeizPin, HIGH);
+		digitalWrite(ExtruderHeizPin, LOW);
 	}
 }
 
@@ -126,10 +127,34 @@ void ArduinoIO::SetExtruderTemperatur(float Temperatur)
 }
 
 float ArduinoIO::GetExtruderTemperatur()
-{
-	float Temperatur=0;
-	int inputValue = analogRead(ExtruderTempPin);
-	float Voltage = ((float)inputValue)/1023 * 5/4.85*5;
-	Serial.println(inputValue);
-	return inputValue;
+{	
+	double bWert = 4267; 
+	double widerstand1 = 100000.0;
+	double widerstandNTC = 0;
+	double kelvintemp = 273.15;                
+	double Tn = kelvintemp + 25;                 
+	double TKelvin = 0;                        
+	double T = 0;                              
+	double* tempfeld = new double[100];
+	/*for (int i = 0; i < 100; i++)
+	{
+		tempfeld[i] = (double)analogRead(ExtruderTempPin);
+	}
+	double bitwertNTC = 0;
+	for (int i = 0; i < 100; i++)
+	{
+		bitwertNTC += tempfeld[i];
+	}
+	bitwertNTC = bitwertNTC / 100;*/
+	double bitwertNTC = (double)analogRead(ExtruderTempPin);
+	widerstandNTC = widerstand1 * (bitwertNTC/1024)/(1-bitwertNTC/1024);
+
+	// berechne den Widerstandswert vom NTC
+	TKelvin = 1 / ((1 / Tn) + (1.0 / bWert) * log(widerstandNTC / widerstand1));
+
+	// ermittle die Temperatur in Kelvin
+	T = TKelvin - kelvintemp;                    // ermittle die Temperatur in °C
+
+	Serial.println(bitwertNTC);
+	return T;
 }
