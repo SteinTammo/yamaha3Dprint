@@ -87,7 +87,7 @@ namespace yamaha3Dprint
             //    return;
             //}
             yamaha.Connect("COM7", 9600);
-            arduino.Connect("COM3", 9600);   
+            arduino.Connect("COM5", 9600);   
         }
 
         private void CmdSendYamaha_Click(object sender, EventArgs e)

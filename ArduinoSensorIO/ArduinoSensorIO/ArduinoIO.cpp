@@ -3,20 +3,17 @@
 
 ArduinoIO::ArduinoIO()
 {
-	this->pulsePin = CONTROLLINO_D1;		// Pin fuer stepper
-	this->dirPin = CONTROLLINO_D2;		// Richtungspin
-	this->enblPin = CONTROLLINO_D3;		// Anschalten des Drivers
-	this->ExtruderHeizPin = CONTROLLINO_R5;
-	this->ExtruderTempVoltagePin = CONTROLLINO_D4;
-	this->SetExtruderFanPin = CONTROLLINO_DO0;
-	this->ExtruderTempPin = CONTROLLINO_A1;
+	this->pulsePin = 2;		// Pin fuer stepper
+	this->dirPin = 3;		// Richtungspin
+	this->enblPin = 4;		// Anschalten des Drivers
+	this->ExtruderHeizPin = 5;
+	this->ExtruderTempPin = 0;
 	this->aktuelleExtruderTemperatur = 0;
 	this->zielExtruderTemperatur = 30;
 	this->newPostion = false;
 	this->setDruckbett = false;
 	this->setExtruderheizen = false;
-	mystepper = AccelStepper(1,pulsePin,dirPin);
-	mystepper.setAcceleration(1000);
+	mystepper = AccelStepper(1, pulsePin, dirPin);
 }
 
 void ArduinoIO::SetSpeed(float speed)
@@ -49,11 +46,11 @@ void ArduinoIO::Checkfinish(bool move)
 void ArduinoIO::ExtruderTemperaturRegelung()
 {
 	this->aktuelleExtruderTemperatur = GetExtruderTemperatur();
-	if (zielExtruderTemperatur >= aktuelleExtruderTemperatur+1)
+	if (zielExtruderTemperatur >= aktuelleExtruderTemperatur + 1)
 	{
 		digitalWrite(ExtruderHeizPin, HIGH);
 	}
-	if (zielExtruderTemperatur <= aktuelleExtruderTemperatur-1)
+	if (zielExtruderTemperatur <= aktuelleExtruderTemperatur - 1)
 	{
 		digitalWrite(ExtruderHeizPin, LOW);
 	}
@@ -69,7 +66,7 @@ void ArduinoIO::Initialisieren()
 	pinMode(ExtruderTempPin, INPUT);
 	pinMode(SetExtruderFanPin, OUTPUT);
 	digitalWrite(ExtruderTempVoltagePin, HIGH);
-	digitalWrite(enblPin, LOW);
+	digitalWrite(enblPin, HIGH);
 	digitalWrite(dirPin, LOW);
 	digitalWrite(SetExtruderFanPin, LOW);
 	Serial.begin(9600);
@@ -127,34 +124,28 @@ void ArduinoIO::SetExtruderTemperatur(float Temperatur)
 }
 
 float ArduinoIO::GetExtruderTemperatur()
-{	
-	double bWert = 4267; 
+{
+	double bWert = 4267;
 	double widerstand1 = 100000.0;
 	double widerstandNTC = 0;
-	double kelvintemp = 273.15;                
-	double Tn = kelvintemp + 25;                 
-	double TKelvin = 0;                        
-	double T = 0;                              
-	double* tempfeld = new double[100];
-	/*for (int i = 0; i < 100; i++)
+	double kelvintemp = 273.15;
+	double Tn = kelvintemp + 25;
+	double TKelvin = 0;
+	double T = 0;
+	double* tempfeld = new double[10];
+	for (int i = 0; i < 10; i++)
 	{
-		tempfeld[i] = (double)analogRead(ExtruderTempPin);
+		//tempfeld[]
 	}
-	double bitwertNTC = 0;
-	for (int i = 0; i < 100; i++)
-	{
-		bitwertNTC += tempfeld[i];
-	}
-	bitwertNTC = bitwertNTC / 100;*/
 	double bitwertNTC = (double)analogRead(ExtruderTempPin);
-	widerstandNTC = widerstand1 * (bitwertNTC/1024)/(1-bitwertNTC/1024);
+	widerstandNTC = widerstand1 * (bitwertNTC / 1024) / (1 - bitwertNTC / 1024);
 
 	// berechne den Widerstandswert vom NTC
 	TKelvin = 1 / ((1 / Tn) + (1.0 / bWert) * log(widerstandNTC / widerstand1));
 
 	// ermittle die Temperatur in Kelvin
-	T = TKelvin - kelvintemp;                    // ermittle die Temperatur in ï¿½C
+	T = TKelvin - kelvintemp;                    // ermittle die Temperatur in °C
 
-	Serial.println(widerstandNTC);
+	//Serial.println(T);
 	return T;
 }
