@@ -21,7 +21,9 @@ namespace yamaha3Dprint
         internal void Move(double? e)
         {
             if(e!=null)
-            serialPort.Write("G1E&" + e + "&");
+            {
+                serialPort.Write("G1E&" + e + "&");
+            }
         }
 
         public void Connect(string portname, int bautrate)
