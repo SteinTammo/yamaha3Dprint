@@ -30,7 +30,7 @@ namespace yamaha3Dprint
         {
             serialPort.PortName = portname;
             serialPort.BaudRate = bautrate;
-            serialPort.ReadTimeout = 200;
+            serialPort.ReadTimeout = 300;
             if (serialPort.IsOpen)
             {
                 return;
@@ -42,7 +42,7 @@ namespace yamaha3Dprint
         internal void SetFlow(double flow)
         {
             serialPort.Write("G1F&" + flow + "&");
-            WaitForOk(1);
+            //WaitForOk(1);
         }
         private string ReadLine()
         {
@@ -50,11 +50,11 @@ namespace yamaha3Dprint
             try
             {
                 recieve = serialPort.ReadLine();
-                Console.WriteLine(recieve);
+                //Console.WriteLine(recieve);
             }
             catch (TimeoutException)
             {
-                Console.WriteLine("nothing in Buffer: Readtimeout triggered");
+                //Console.WriteLine("nothing in Buffer: Readtimeout triggered");
             }
             return recieve;
         }
@@ -67,6 +67,11 @@ namespace yamaha3Dprint
             }
             OkCount = 0;
             return true;
+        }
+
+        internal void Write(string text)
+        {
+            serialPort.Write(text);
         }
     }
 }

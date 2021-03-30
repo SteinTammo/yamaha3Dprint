@@ -35,7 +35,7 @@ public:
 	void UpdateSerial();
 	void NewCommand(String, String);
 	void Checkfinish(bool);
-	
+	void SetZero();
 
 };
 

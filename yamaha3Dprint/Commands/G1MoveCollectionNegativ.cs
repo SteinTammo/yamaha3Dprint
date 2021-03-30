@@ -20,7 +20,7 @@ namespace yamaha3Dprint.Commands
             {
                 yamaha.SetPosition(i, move.x, move.y);
                 i++;
-                if (i == 63)
+                if (i == 7)
                 {
                     yamaha.ExecuteMoves(i);
                     i = 0;

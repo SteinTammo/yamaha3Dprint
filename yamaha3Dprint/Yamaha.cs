@@ -17,7 +17,7 @@ namespace yamaha3Dprint
 
         public Position CurrentPosition { get; private set; }
         public int CurrentSpeed { get; private set; }
-        public int MaxSpeed { get; private set; } = 8000;
+        public int MaxSpeed { get; private set; } = 2000;
         public int SendCount { get;  set; } 
         public int OkCount { get; set; } 
         readonly Position?[] positions = new Position?[63];        
@@ -68,7 +68,9 @@ namespace yamaha3Dprint
             {                
                 SendCommand(moveCommand);
             }
-            SendCount += writeCommand.Count;
+            SendCount += writeCommand.Count; 
+            WaitForOk(SendCount);
+            SendCount = 0;
         }
 
         public void SetFlow(double flow)
@@ -154,7 +156,6 @@ namespace yamaha3Dprint
         {
             serialPort.Write(data);
             serialPort.Write(eol, 0, 2);
-            Console.WriteLine(data);
         }
         public Position SetPosition(int index, double x, double y)
         {
@@ -185,11 +186,11 @@ namespace yamaha3Dprint
             try
             {
                 recieve = serialPort.ReadLine();
-                Console.WriteLine(recieve);
+                Console.Write(recieve);
             }
             catch (TimeoutException)
             {
-                Console.WriteLine("nothing in Buffer: Readtimeout triggered");
+                //Console.WriteLine("nothing in Buffer: Readtimeout triggered");
             }
             return recieve;
         }

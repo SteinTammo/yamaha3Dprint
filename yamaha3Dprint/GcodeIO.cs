@@ -263,6 +263,13 @@ namespace yamaha3Dprint
                 commands.Add(setOrigin);
                 behandelt = true;
             }
+            if (line.StartsWith("G92"))
+            {
+                var parameters = line.Split(' ');
+                var setzero = G92.Parse($"{parameters[0]} {parameters[1]}");
+                commands.Add(setzero);
+                behandelt = true;
+            }
             if(!behandelt)
             {
                 Console.WriteLine(line);

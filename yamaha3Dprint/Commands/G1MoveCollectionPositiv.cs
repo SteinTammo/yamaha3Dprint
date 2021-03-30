@@ -23,25 +23,19 @@ namespace yamaha3Dprint.Commands
                 yamaha.SetPosition(i,move.x,move.y);
                 extruder = extruder + move.e;
                 i++;
-                if(i==63)
+                if(i==7)
                 {
+
+                    arduino.Move(extruder);
                     yamaha.ExecuteMoves(i);
-                    // arduino.Move(extruder);
-                    yamaha.WaitForOk(yamaha.SendCount);
-                    //arduino.WaitForOk(1);
-                    yamaha.SendCount = 0;
+                    arduino.WaitForOk(1);
                     i = 0;
                     extruder = 0;
-                }                                    
-            }
-            if (i!=0 && extruder !=0)
-            {
+                }
+                arduino.Move(extruder);
                 yamaha.ExecuteMoves(i);
-                // arduino.Move(extruder);
-                yamaha.WaitForOk(yamaha.SendCount);
-                // arduino.WaitForOk(1);
-            }            
-            yamaha.SendCount = 0;
+                arduino.WaitForOk(1);
+            }
         }
     }
 }

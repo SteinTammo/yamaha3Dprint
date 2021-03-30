@@ -86,28 +86,18 @@ namespace yamaha3Dprint
             //    LblConnectDevice.Text = "Bitte Port Auswählen";
             //    return;
             //}
-            yamaha.Connect("COM7", 9600);
-            arduino.Connect("COM5", 9600);   
+            yamaha.Connect("COM8", 9600);
+            arduino.Connect("COM5", 56000);   
         }
 
         private void CmdSendYamaha_Click(object sender, EventArgs e)
-        {
-            if (!SerialConnection[0])
-            {
-                TeBox_SerialYamaha.AppendText("Nicht Verbunden" + Environment.NewLine);
-                return;
-            }
+        {            
             YamahaSerial.SendYamahaData(TeBox_SendYamaha.Text);
         }
 
         private void CmdSendControllino_Click(object sender, EventArgs e)
-        {
-            if (!SerialConnection[1])
-            {
-                TeBox_SerialControllino.AppendText("Nicht Verbunden" + Environment.NewLine);
-                return;
-            }
-            ControllinoSerial.SendControllinoData(TeBox_SendControllino.Text);
+        {            
+            arduino.Write(TeBox_SendControllino.Text);
         }
 
         private void CmdClearSerialYamaha_Click(object sender, EventArgs e)
@@ -142,7 +132,12 @@ namespace yamaha3Dprint
             var commands = test.ReadFile(filePath);
             foreach (var i in commands)
             {
-                i.ExecuteCommand(yamaha, arduino);
+                Console.WriteLine(i);
+                TeBox_SerialControllino.Invoke(new Action(() =>
+                {
+                    TeBox_SerialControllino.AppendText(i.ToString() + Environment.NewLine);
+                }));
+                i.ExecuteCommand(yamaha, arduino);                             
             }
         }      
         

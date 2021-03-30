@@ -18,6 +18,8 @@ ArduinoIO::ArduinoIO()
 
 void ArduinoIO::SetSpeed(float speed)
 {
+	float umrechnung;
+	umrechnung = speed / 60*409;
 	mystepper.setMaxSpeed(speed);
 	delay(20);
 	SetOk();
@@ -26,7 +28,7 @@ void ArduinoIO::SetSpeed(float speed)
 void ArduinoIO::SetMoveE(float amount)
 {
 	int Steps = amount * 409;
-	mystepper.move(Steps);
+	mystepper.moveTo(Steps);
 	newPostion = true;
 }
 
@@ -69,7 +71,7 @@ void ArduinoIO::Initialisieren()
 	digitalWrite(enblPin, HIGH);
 	digitalWrite(dirPin, LOW);
 	digitalWrite(SetExtruderFanPin, LOW);
-	Serial.begin(9600);
+	Serial.begin(56000);
 	mystepper.setMaxSpeed(20000);
 	mystepper.setAcceleration(5000 * 409);
 }
@@ -112,12 +114,18 @@ void ArduinoIO::NewCommand(String choise, String data)
 	{
 		SetExtruderTemperatur(data.toFloat());
 	}
-	else if (choise == "")
+	else if (choise == "G92")
 	{
-
+		SetZero();
 	}
 }
 
+void ArduinoIO::SetZero()
+{
+	mystepper.setCurrentPosition(0);
+	delay(20);
+	SetOk();
+}
 void ArduinoIO::SetExtruderTemperatur(float Temperatur)
 {
 	this->zielExtruderTemperatur = Temperatur;

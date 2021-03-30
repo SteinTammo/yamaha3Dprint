@@ -15,7 +15,8 @@ namespace yamaha3Dprint
 
         public override void ExecuteCommand(Yamaha yamaha, Arduino arduino)
         {
-            
+            arduino.Move(e);
+            arduino.WaitForOk(1);
         }
 
         public static G1MoveExtruderPositiv Parse(string parameters)
