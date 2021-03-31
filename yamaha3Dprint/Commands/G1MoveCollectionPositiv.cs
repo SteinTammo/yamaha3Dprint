@@ -26,13 +26,13 @@ namespace yamaha3Dprint.Commands
                 if(i==7)
                 {
 
-                    arduino.Move(extruder);
+                    arduino.Move(move.e);
                     yamaha.ExecuteMoves(i);
                     arduino.WaitForOk(1);
                     i = 0;
                     extruder = 0;
                 }
-                arduino.Move(extruder);
+                arduino.Move(move.e);
                 yamaha.ExecuteMoves(i);
                 arduino.WaitForOk(1);
             }

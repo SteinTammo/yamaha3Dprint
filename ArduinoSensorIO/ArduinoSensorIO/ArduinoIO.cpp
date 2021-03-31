@@ -20,8 +20,8 @@ void ArduinoIO::SetSpeed(float speed)
 {
 	float umrechnung;
 	umrechnung = speed / 60*409;
-	mystepper.setMaxSpeed(speed);
-	delay(20);
+	mystepper.setMaxSpeed(umrechnung);
+	delay(100);
 	SetOk();
 }
 

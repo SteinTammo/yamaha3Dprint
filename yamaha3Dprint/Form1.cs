@@ -92,7 +92,7 @@ namespace yamaha3Dprint
 
         private void CmdSendYamaha_Click(object sender, EventArgs e)
         {            
-            YamahaSerial.SendYamahaData(TeBox_SendYamaha.Text);
+            yamaha.SendCommand(TeBox_SendYamaha.Text);
         }
 
         private void CmdSendControllino_Click(object sender, EventArgs e)
@@ -133,9 +133,9 @@ namespace yamaha3Dprint
             foreach (var i in commands)
             {
                 Console.WriteLine(i);
-                TeBox_SerialControllino.Invoke(new Action(() =>
+                TeBox_SerialYamaha.Invoke(new Action(() =>
                 {
-                    TeBox_SerialControllino.AppendText(i.ToString() + Environment.NewLine);
+                    TeBox_SerialYamaha.AppendText(i.ToString() + Environment.NewLine);
                 }));
                 i.ExecuteCommand(yamaha, arduino);                             
             }
@@ -144,7 +144,7 @@ namespace yamaha3Dprint
 
         private void CmdReadYamaha_Click(object sender, EventArgs e)
         {
-            string data=YamahaSerial.getYamahaData();
+            string data = yamaha.ReadLine();
             TeBox_SerialYamaha.AppendText("Read: " + data + Environment.NewLine);
         }
 

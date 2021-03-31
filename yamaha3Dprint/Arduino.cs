@@ -22,7 +22,7 @@ namespace yamaha3Dprint
         {
             if(e!=null)
             {
-                serialPort.Write("G1E&" + e + "&");
+                Write("G1E&" + e + "&");
             }
         }
 
@@ -41,8 +41,8 @@ namespace yamaha3Dprint
 
         internal void SetFlow(double flow)
         {
-            serialPort.Write("G1F&" + flow + "&");
-            //WaitForOk(1);
+            Write("G1F&" + flow + "&");
+            WaitForOk(1);
         }
         private string ReadLine()
         {
@@ -70,7 +70,11 @@ namespace yamaha3Dprint
         }
 
         internal void Write(string text)
-        {
+        {            
+            yamaha3DPrint.TeBox_SerialControllino.Invoke(new Action(() =>
+            {
+                yamaha3DPrint.TeBox_SerialControllino.AppendText(text + Environment.NewLine);
+            }));
             serialPort.Write(text);
         }
     }

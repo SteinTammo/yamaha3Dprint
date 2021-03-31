@@ -17,7 +17,7 @@ namespace yamaha3Dprint
 
         public Position CurrentPosition { get; private set; }
         public int CurrentSpeed { get; private set; }
-        public int MaxSpeed { get; private set; } = 2000;
+        public int MaxSpeed { get; private set; } = 8000;
         public int SendCount { get;  set; } 
         public int OkCount { get; set; } 
         readonly Position?[] positions = new Position?[63];        
@@ -35,6 +35,10 @@ namespace yamaha3Dprint
             serialPort.PortName = portname;
             serialPort.BaudRate = bautrate;
             serialPort.ReadTimeout = 200;
+            serialPort.Handshake=Handshake.XOnXOff;
+            serialPort.Parity = Parity.Odd;
+            serialPort.StopBits = StopBits.One;
+            serialPort.DataBits = 8;
             if (serialPort.IsOpen)
             {
                 return;
@@ -76,6 +80,7 @@ namespace yamaha3Dprint
         public void SetFlow(double flow)
         {
             CurrentSpeed = 100*((int)flow) / MaxSpeed;
+            CurrentSpeed = 30;
             if(CurrentSpeed>=100)
             {
                 Console.WriteLine("Speedlimit Exceeded");
@@ -152,7 +157,7 @@ namespace yamaha3Dprint
             SendCommand("@MOVE P,P"+index+",S="+this.CurrentSpeed);            
         }
         
-        private void SendCommand(string data)
+        public void SendCommand(string data)
         {
             serialPort.Write(data);
             serialPort.Write(eol, 0, 2);
@@ -180,7 +185,7 @@ namespace yamaha3Dprint
             return true;
         }
 
-        private string ReadLine()
+        public string ReadLine()
         {
             var recieve = "";
             try
