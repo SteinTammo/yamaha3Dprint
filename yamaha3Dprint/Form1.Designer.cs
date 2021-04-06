@@ -51,6 +51,7 @@
             this.LblDruckStatus = new System.Windows.Forms.Label();
             this.CmdReadYamaha = new System.Windows.Forms.Button();
             this.TeBox_SerialArduinoRead = new System.Windows.Forms.TextBox();
+            this.Cmd_YamahaMove = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // CmdReadGCode
@@ -291,11 +292,22 @@
             this.TeBox_SerialArduinoRead.Size = new System.Drawing.Size(255, 316);
             this.TeBox_SerialArduinoRead.TabIndex = 6;
             // 
+            // Cmd_YamahaMove
+            // 
+            this.Cmd_YamahaMove.Location = new System.Drawing.Point(398, 121);
+            this.Cmd_YamahaMove.Name = "Cmd_YamahaMove";
+            this.Cmd_YamahaMove.Size = new System.Drawing.Size(75, 23);
+            this.Cmd_YamahaMove.TabIndex = 26;
+            this.Cmd_YamahaMove.Text = "Measure";
+            this.Cmd_YamahaMove.UseVisualStyleBackColor = true;
+            this.Cmd_YamahaMove.Click += new System.EventHandler(this.Cmd_YamahaMove_Click);
+            // 
             // Yamaha3DPrint
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1240, 537);
+            this.Controls.Add(this.Cmd_YamahaMove);
             this.Controls.Add(this.TeBox_SerialArduinoRead);
             this.Controls.Add(this.CmdReadYamaha);
             this.Controls.Add(this.LblDruckStatus);
@@ -350,6 +362,7 @@
         private System.Windows.Forms.Button CmdReadYamaha;
         public System.Windows.Forms.TextBox TeBox_SerialControllino;
         public System.Windows.Forms.TextBox TeBox_SerialArduinoRead;
+        private System.Windows.Forms.Button Cmd_YamahaMove;
     }
 }
 

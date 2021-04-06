@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO.Ports;
 
@@ -8,7 +9,6 @@ namespace yamaha3Dprint
     public class Yamaha
     {
         private readonly SerialPort serialPort;
-        
 
         byte[] eol = new byte[] { 0x0D, 0x0A };
         private Yamaha3DPrint yamaha3DPrintform;        
@@ -77,14 +77,17 @@ namespace yamaha3Dprint
 
         public void SetFlow(double flow)
         {
-            CurrentSpeed = 100*((int)flow) / MaxSpeed;
-            CurrentSpeed = 25;
+
+            CurrentSpeed = (int)(Math.Pow(10, -2) - (18 * Math.Pow(flow, 5)) + Math.Pow(10, 6) - 14 * Math.Pow(flow, 4) - Math.Pow(10, 7) - 10 * Math.Pow(flow, 3) + Math.Pow(10, 4) - 6 * Math.Pow(flow, 2) - 0.0008 * flow + 5.7909);
+            
             if(CurrentSpeed>=100)
             {
                 Console.WriteLine("Speedlimit Exceeded");
                 CurrentSpeed = 100;
             }
         }
+
+
         public Position SetPosition(int index, double x, double y, double z)
         {            
             if (z < 0)
@@ -158,7 +161,7 @@ namespace yamaha3Dprint
         public void SendCommand(string data)
         {
             serialPort.Write(data);
-            serialPort.Write(eol, 0, 2);
+            serialPort.Write(eol, 0, 2);     
         }
         public Position SetPosition(int index, double x, double y)
         {

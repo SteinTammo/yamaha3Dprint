@@ -9,6 +9,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
+using System.Diagnostics;
 
 namespace yamaha3Dprint
 {
@@ -158,6 +159,37 @@ namespace yamaha3Dprint
         private void progressBarDruck_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Command "+ commandcounter + " von "+ progressBarDruck.Maximum);
-        }        
+        }
+
+        private void Cmd_YamahaMove_Click(object sender, EventArgs e)
+        {
+            for (int i = 10; i <= 100; i += 10)
+            {
+                Stopwatch stopwatch = new Stopwatch();
+                yamaha.SendCommand("@MOVE L,500.0 0.0 0.0 0.0 0.0 0.0,S=" + i);
+                stopwatch.Start();
+                yamaha.WaitForOk(1);
+                stopwatch.Stop();
+                TeBox_SerialYamaha.AppendText(i + stopwatch.Elapsed.ToString() + Environment.NewLine);
+                stopwatch = Stopwatch.StartNew();
+                yamaha.SendCommand("@MOVE L,0.0 0.0 0.0 0.0 0.0 0.0,S=" + i);
+                stopwatch.Start();
+                yamaha.WaitForOk(1);
+                stopwatch.Stop();
+                TeBox_SerialYamaha.AppendText(i + stopwatch.Elapsed.ToString() + Environment.NewLine);
+                stopwatch = Stopwatch.StartNew();
+                yamaha.SendCommand("@MOVE L,500.0 0.0 0.0 0.0 0.0 0.0,S=" + i);
+                stopwatch.Start();
+                yamaha.WaitForOk(1);
+                stopwatch.Stop();
+                TeBox_SerialYamaha.AppendText(i + stopwatch.Elapsed.ToString() + Environment.NewLine);
+                stopwatch = Stopwatch.StartNew();
+                yamaha.SendCommand("@MOVE L,0.0 0.0 0.0 0.0 0.0 0.0,S=" + i);
+                stopwatch.Start();
+                yamaha.WaitForOk(1);
+                stopwatch.Stop();
+                TeBox_SerialYamaha.AppendText(i + stopwatch.Elapsed.ToString() + Environment.NewLine);
+            }            
+        }
     }
 }

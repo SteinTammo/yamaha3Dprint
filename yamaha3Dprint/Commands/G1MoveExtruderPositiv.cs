@@ -2,7 +2,7 @@
 using System.Globalization;
 using yamaha3Dprint.Commands;
 
-namespace yamaha3Dprint
+namespace yamaha3Dprint.Commands
 {
     public class G1MoveExtruderPositiv : GcodeCommand
     {
