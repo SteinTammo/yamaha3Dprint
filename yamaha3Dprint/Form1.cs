@@ -18,6 +18,7 @@ namespace yamaha3Dprint
         string[] fileContent = null;
         string filePath;
         bool[] SerialConnection;
+        int commandcounter;
         public Serial YamahaSerial;
         public Serial ControllinoSerial;
         public processGCode gcode = new processGCode();
@@ -130,11 +131,17 @@ namespace yamaha3Dprint
         {
             var test = new GcodeIO();
             var commands = test.ReadFile(filePath);
+            progressBarDruck.Invoke(new Action(() =>
+            {
+                progressBarDruck.Maximum = commands.Count();
+            }));
             foreach (var i in commands)
             {
                 Console.WriteLine(i);
                 TeBox_SerialYamaha.Invoke(new Action(() =>
                 {
+                    commandcounter = commands.IndexOf(i);
+                    progressBarDruck.PerformStep();
                     TeBox_SerialYamaha.AppendText(i.ToString() + Environment.NewLine);
                 }));
                 i.ExecuteCommand(yamaha, arduino);                             
@@ -150,7 +157,7 @@ namespace yamaha3Dprint
 
         private void progressBarDruck_Click(object sender, EventArgs e)
         {
-
-        }
+            MessageBox.Show("Command "+ commandcounter + " von "+ progressBarDruck.Maximum);
+        }        
     }
 }

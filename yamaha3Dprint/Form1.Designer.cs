@@ -50,6 +50,7 @@
             this.progressBarDruck = new System.Windows.Forms.ProgressBar();
             this.LblDruckStatus = new System.Windows.Forms.Label();
             this.CmdReadYamaha = new System.Windows.Forms.Button();
+            this.TeBox_SerialArduinoRead = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // CmdReadGCode
@@ -108,7 +109,7 @@
             this.TeBox_SerialControllino.Multiline = true;
             this.TeBox_SerialControllino.Name = "TeBox_SerialControllino";
             this.TeBox_SerialControllino.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.TeBox_SerialControllino.Size = new System.Drawing.Size(600, 316);
+            this.TeBox_SerialControllino.Size = new System.Drawing.Size(343, 316);
             this.TeBox_SerialControllino.TabIndex = 6;
             // 
             // Lbl_SerialYamaha
@@ -280,11 +281,22 @@
             this.CmdReadYamaha.UseVisualStyleBackColor = true;
             this.CmdReadYamaha.Click += new System.EventHandler(this.CmdReadYamaha_Click);
             // 
+            // TeBox_SerialArduinoRead
+            // 
+            this.TeBox_SerialArduinoRead.Location = new System.Drawing.Point(968, 178);
+            this.TeBox_SerialArduinoRead.MaxLength = 65000;
+            this.TeBox_SerialArduinoRead.Multiline = true;
+            this.TeBox_SerialArduinoRead.Name = "TeBox_SerialArduinoRead";
+            this.TeBox_SerialArduinoRead.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.TeBox_SerialArduinoRead.Size = new System.Drawing.Size(255, 316);
+            this.TeBox_SerialArduinoRead.TabIndex = 6;
+            // 
             // Yamaha3DPrint
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1240, 537);
+            this.Controls.Add(this.TeBox_SerialArduinoRead);
             this.Controls.Add(this.CmdReadYamaha);
             this.Controls.Add(this.LblDruckStatus);
             this.Controls.Add(this.progressBarDruck);
@@ -337,6 +349,7 @@
         public System.Windows.Forms.TextBox TeBox_SerialYamaha;
         private System.Windows.Forms.Button CmdReadYamaha;
         public System.Windows.Forms.TextBox TeBox_SerialControllino;
+        public System.Windows.Forms.TextBox TeBox_SerialArduinoRead;
     }
 }
 

@@ -56,6 +56,13 @@ namespace yamaha3Dprint
             {
                 //Console.WriteLine("nothing in Buffer: Readtimeout triggered");
             }
+            if(recieve!="")
+            {
+                yamaha3DPrint.TeBox_SerialArduinoRead.Invoke(new Action(() =>
+                {
+                    yamaha3DPrint.TeBox_SerialArduinoRead.AppendText(recieve + Environment.NewLine);
+                }));
+            }
             return recieve;
         }
         public bool WaitForOk(int OkCounts)

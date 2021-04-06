@@ -13,7 +13,9 @@ ArduinoIO::ArduinoIO()
 	this->newPostion = false;
 	this->setDruckbett = false;
 	this->setExtruderheizen = false;
+	this->previousMillis = 0;
 	mystepper = AccelStepper(1, pulsePin, dirPin);
+	mystepper.setPinsInverted(true, false, false);
 }
 
 void ArduinoIO::SetSpeed(float speed)
@@ -27,7 +29,7 @@ void ArduinoIO::SetSpeed(float speed)
 
 void ArduinoIO::SetMoveE(float amount)
 {
-	int Steps = amount * 409;
+	long Steps = amount * 409;
 	mystepper.moveTo(Steps);
 	newPostion = true;
 }
@@ -77,13 +79,13 @@ void ArduinoIO::Initialisieren()
 }
 
 void ArduinoIO::Run()
-{
+{	
 	UpdateSerial();
 	mystepper.run();
 	bool inBewegung = false;
 	inBewegung = mystepper.isRunning();
 	Checkfinish(inBewegung);
-	ExtruderTemperaturRegelung();
+	ExtruderTemperaturRegelung(); 
 }
 
 void ArduinoIO::UpdateSerial()
@@ -104,6 +106,7 @@ void ArduinoIO::NewCommand(String choise, String data)
 {
 	if (choise == "G1E")
 	{
+		Serial.println(choise+data);
 		SetMoveE(data.toFloat());
 	}
 	else if (choise == "G1F")
@@ -123,6 +126,7 @@ void ArduinoIO::NewCommand(String choise, String data)
 void ArduinoIO::SetZero()
 {
 	mystepper.setCurrentPosition(0);
+	Serial.println("SetZero");
 	delay(20);
 	SetOk();
 }

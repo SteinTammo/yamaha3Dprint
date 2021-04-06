@@ -11,9 +11,7 @@ namespace yamaha3Dprint
         
 
         byte[] eol = new byte[] { 0x0D, 0x0A };
-        private Yamaha3DPrint yamaha3DPrintform;
-
-        
+        private Yamaha3DPrint yamaha3DPrintform;        
 
         public Position CurrentPosition { get; private set; }
         public int CurrentSpeed { get; private set; }
@@ -80,7 +78,7 @@ namespace yamaha3Dprint
         public void SetFlow(double flow)
         {
             CurrentSpeed = 100*((int)flow) / MaxSpeed;
-            CurrentSpeed = 30;
+            CurrentSpeed = 25;
             if(CurrentSpeed>=100)
             {
                 Console.WriteLine("Speedlimit Exceeded");
