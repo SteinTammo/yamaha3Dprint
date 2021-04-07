@@ -14,6 +14,7 @@ ArduinoIO::ArduinoIO()
 	this->setDruckbett = false;
 	this->setExtruderheizen = false;
 	this->previousMillis = 0;
+	this->turn = false;
 	mystepper = AccelStepper(1, pulsePin, dirPin);
 	mystepper.setPinsInverted(true, false, false);
 }
@@ -22,16 +23,29 @@ void ArduinoIO::SetSpeed(float speed)
 {
 	float umrechnung;
 	umrechnung = speed / 60*409;
-	mystepper.setMaxSpeed(umrechnung);
+	mystepper.setSpeed(umrechnung);
 	delay(100);
 	SetOk();
 }
 
 void ArduinoIO::SetMoveE(float amount)
 {
-	long Steps = amount * 409;
+	if (amount > 0)
+	{
+		this->turn = true;
+	}
+	else if (amount < 0)
+	{
+		this->turn = true;
+		mystepper.setSpeed(mystepper.speed() * -1);
+	}
+	else
+	{
+		this->turn = false;
+	}
+	/*long Steps = amount * 409;
 	mystepper.moveTo(Steps);
-	newPostion = true;
+	newPostion = true;*/
 }
 
 void ArduinoIO::SetOk()
@@ -81,7 +95,10 @@ void ArduinoIO::Initialisieren()
 void ArduinoIO::Run()
 {	
 	UpdateSerial();
-	mystepper.run();
+	if (turn == true)
+	{
+		mystepper.runSpeed();
+	}
 	bool inBewegung = false;
 	inBewegung = mystepper.isRunning();
 	Checkfinish(inBewegung);

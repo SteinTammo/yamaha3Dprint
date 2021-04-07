@@ -78,7 +78,7 @@ namespace yamaha3Dprint
         public void SetFlow(double flow)
         {
 
-            CurrentSpeed = (int)(Math.Pow(10, -2) - (18 * Math.Pow(flow, 5)) + Math.Pow(10, 6) - 14 * Math.Pow(flow, 4) - Math.Pow(10, 7) - 10 * Math.Pow(flow, 3) + Math.Pow(10, 4) - 6 * Math.Pow(flow, 2) - 0.0008 * flow + 5.7909);
+            CurrentSpeed = (int)(-2*Math.Pow(10, -20) * Math.Pow(flow, 5) + 6 * Math.Pow(10, -16) * Math.Pow(flow, 4) - 7 * Math.Pow(10, -12) * Math.Pow(flow, 3) + 6 * Math.Pow(10, -8) * Math.Pow(flow, 2) + 0.0068 * flow + 0.097);
             
             if(CurrentSpeed>=100)
             {

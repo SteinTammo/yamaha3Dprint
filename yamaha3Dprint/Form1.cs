@@ -163,29 +163,20 @@ namespace yamaha3Dprint
 
         private void Cmd_YamahaMove_Click(object sender, EventArgs e)
         {
+            yamaha.SetPosition(0, 500.0, 0.0, 0.0);
+            yamaha.SetPosition(1, 0.0, 0.0, 0.0);
+            yamaha.SetPosition(2, 500.0, 0.0, 0.0);
+            yamaha.SetPosition(3, 0.0, 0.0, 0.0);
+            yamaha.SetPosition(4, 500.0, 0.0, 0.0);
+            yamaha.SetPosition(5, 0.0, 0.0, 0.0);
+            yamaha.SetPosition(6, 500.0, 0.0, 0.0);
+            yamaha.SetPosition(7, 0.0, 0.0, 0.0);
+            yamaha.WaitForOk(8);
             for (int i = 10; i <= 100; i += 10)
             {
                 Stopwatch stopwatch = new Stopwatch();
-                yamaha.SendCommand("@MOVE L,500.0 0.0 0.0 0.0 0.0 0.0,S=" + i);
                 stopwatch.Start();
-                yamaha.WaitForOk(1);
-                stopwatch.Stop();
-                TeBox_SerialYamaha.AppendText(i + stopwatch.Elapsed.ToString() + Environment.NewLine);
-                stopwatch = Stopwatch.StartNew();
-                yamaha.SendCommand("@MOVE L,0.0 0.0 0.0 0.0 0.0 0.0,S=" + i);
-                stopwatch.Start();
-                yamaha.WaitForOk(1);
-                stopwatch.Stop();
-                TeBox_SerialYamaha.AppendText(i + stopwatch.Elapsed.ToString() + Environment.NewLine);
-                stopwatch = Stopwatch.StartNew();
-                yamaha.SendCommand("@MOVE L,500.0 0.0 0.0 0.0 0.0 0.0,S=" + i);
-                stopwatch.Start();
-                yamaha.WaitForOk(1);
-                stopwatch.Stop();
-                TeBox_SerialYamaha.AppendText(i + stopwatch.Elapsed.ToString() + Environment.NewLine);
-                stopwatch = Stopwatch.StartNew();
-                yamaha.SendCommand("@MOVE L,0.0 0.0 0.0 0.0 0.0 0.0,S=" + i);
-                stopwatch.Start();
+                yamaha.SendCommand("@MOVE L,P0,P1,P2,P3,P4,P5,P6,P7,S="+i);               
                 yamaha.WaitForOk(1);
                 stopwatch.Stop();
                 TeBox_SerialYamaha.AppendText(i + stopwatch.Elapsed.ToString() + Environment.NewLine);

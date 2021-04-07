@@ -22,11 +22,15 @@ namespace yamaha3Dprint.Commands
                 i++;
                 if (i == 7)
                 {
+                    arduino.Move(-1);
                     yamaha.ExecuteMoves(i);
                     i = 0;
+                    arduino.Move(0);
                 }
             }
+            arduino.Move(-1);
             yamaha.ExecuteMoves(i);
+            arduino.Move(0);
         }
     }
 }
