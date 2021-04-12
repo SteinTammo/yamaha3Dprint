@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Yamaha3DPrint));
             this.CmdReadGCode = new System.Windows.Forms.Button();
             this.Lbl_Gcode = new System.Windows.Forms.Label();
             this.CmdConnectDevice = new System.Windows.Forms.Button();
@@ -337,6 +338,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(1240, 537);
             this.Controls.Add(this.Lbl_Progressbar);
             this.Controls.Add(this.CmdReadControllino);
@@ -364,6 +366,7 @@
             this.Controls.Add(this.CmdConnectDevice);
             this.Controls.Add(this.Lbl_Gcode);
             this.Controls.Add(this.CmdReadGCode);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Yamaha3DPrint";
             this.Text = "Yamaha3DPrint";
             this.ResumeLayout(false);
