@@ -25,6 +25,26 @@ namespace yamaha3Dprint
                 Write("G1E&" + e + "&");
             }
         }
+        public float GetExtruderTemp()
+        {
+            float temp=0;
+            for(int i=0;i<10;i++)
+            {
+                Write("GETTEMP&0&");
+                string read;
+                do
+                {
+                    read = ReadLine();
+                }
+                while (read == "");
+                read.Replace(@"\", "");
+                read.Replace("r", "");
+                    
+                temp += float.Parse(read);
+            }
+            temp /= 10;
+            return temp;
+        }
 
         public void Connect(string portname, int bautrate)
         {
@@ -43,6 +63,11 @@ namespace yamaha3Dprint
         {
             Write("G1F&" + flow + "&");
             WaitForOk(1);
+        }
+        internal string Read()
+        {
+            string recieve = ReadLine();
+            return recieve;
         }
         private string ReadLine()
         {

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
 using System.Diagnostics;
+using System.IO.Ports;
 
 namespace yamaha3Dprint
 {
@@ -40,7 +41,12 @@ namespace yamaha3Dprint
             InitializeComponent();
             filePath = string.Empty;
             Lbl_Gcode.Visible = false;
-            SerialConnection = new bool[2];
+            string[] names = SerialPort.GetPortNames();
+            for(int i = 0; i<names.Length;i++)
+            {
+                cBoxYamaha.Items.Add(names[i]);
+                cBoxControllino.Items.Add(names[i]);
+            }
         }
         public void Readfile()
         {
@@ -56,10 +62,6 @@ namespace yamaha3Dprint
                     //Get the path of specified file
                     filePath = openFileDialog.FileName;
                     fileContent = File.ReadAllLines(filePath);
-                    var test = new GcodeIO();
-                    yamaha = new Yamaha(this);
-                    arduino = new Arduino(this);
-                                        
                 }
             }
         }
@@ -75,26 +77,37 @@ namespace yamaha3Dprint
                 return;
             }
             Lbl_Gcode.Text = "Ready \nZeilenanzahl: " + fileContent.Length + "\nProcessing GCode";
-            //fileContent = gcode.ProcessFile(fileContent);
             progressBarDruck.Maximum = fileContent.Length;
             Lbl_Gcode.Text += "\nGCodeProcesses";
         }
 
         private void CmdConnectDevice_Click(object sender, EventArgs e)
         {
-            //if (cBoxYamaha.Text == "" || cBoxControllino.Text == "")
-            //{
-            //    LblConnectDevice.Visible = true;
-            //    LblConnectDevice.Text = "Bitte Port Auswählen";
-            //    return;
-            //}
-            yamaha.Connect("COM8", 9600);
-            arduino.Connect("COM5", 56000);   
+            if (cBoxYamaha.Text == "" || cBoxControllino.Text == "")
+            {
+                LblConnectDevice.Visible = true;
+                LblConnectDevice.Text = "Bitte Port Auswählen";
+                return;
+            }
+            if (yamaha == null && arduino == null)
+            {
+                yamaha = new Yamaha(this);
+                arduino = new Arduino(this);
+                yamaha.Connect(cBoxYamaha.Text, 9600);
+                arduino.Connect(cBoxControllino.Text, 56000);
+                LblConnectDevice.Text = "Connected";
+                LblConnectDevice.Visible = true;
+                CmdReadYamaha.Visible = true;
+                CmdSendControllino.Visible = true;
+                CmdSendYamaha.Visible = true;
+                CmdReadControllino.Visible = true;
+            }                 
         }
 
         private void CmdSendYamaha_Click(object sender, EventArgs e)
         {            
             yamaha.SendCommand(TeBox_SendYamaha.Text);
+            TeBox_SerialYamaha.AppendText(TeBox_SendYamaha.Text + Environment.NewLine);
         }
 
         private void CmdSendControllino_Click(object sender, EventArgs e)
@@ -130,11 +143,24 @@ namespace yamaha3Dprint
         }
         public void Print()
         {
+            if(filePath=="")
+            {
+                LblDruckStatus.Invoke(new Action(() =>
+                {
+                    LblDruckStatus.Text = "Bitte zuerst Gcode einlesen";
+                    LblDruckStatus.Visible = true;
+                }));
+                return;
+            }
             var test = new GcodeIO();
             var commands = test.ReadFile(filePath);
             progressBarDruck.Invoke(new Action(() =>
             {
                 progressBarDruck.Maximum = commands.Count();
+                LblDruckStatus.Text = "printing...";
+                LblDruckStatus.Visible = true;
+                Lbl_Progressbar.Text = "0 von "+ commands.Count()+ " Commands";
+                Lbl_Progressbar.Visible = true;
             }));
             foreach (var i in commands)
             {
@@ -143,6 +169,7 @@ namespace yamaha3Dprint
                 {
                     commandcounter = commands.IndexOf(i);
                     progressBarDruck.PerformStep();
+                    Lbl_Progressbar.Text = commandcounter + " von " + commands.Count();
                     TeBox_SerialYamaha.AppendText(i.ToString() + Environment.NewLine);
                 }));
                 i.ExecuteCommand(yamaha, arduino);                             
@@ -181,6 +208,14 @@ namespace yamaha3Dprint
                 stopwatch.Stop();
                 TeBox_SerialYamaha.AppendText(i + stopwatch.Elapsed.ToString() + Environment.NewLine);
             }            
+        }
+
+        private void CmdReadControllino_Click(object sender, EventArgs e)
+        {
+            TeBox_SerialControllino.Invoke(new Action(() =>
+            {
+                TeBox_SerialControllino.AppendText(arduino.Read() + Environment.NewLine);
+            }));
         }
     }
 }

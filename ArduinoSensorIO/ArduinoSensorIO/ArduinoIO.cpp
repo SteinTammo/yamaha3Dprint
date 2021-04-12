@@ -102,7 +102,7 @@ void ArduinoIO::Run()
 	bool inBewegung = false;
 	inBewegung = mystepper.isRunning();
 	Checkfinish(inBewegung);
-	ExtruderTemperaturRegelung(); 
+	ExtruderTemperaturRegelung();
 }
 
 void ArduinoIO::UpdateSerial()
@@ -138,6 +138,10 @@ void ArduinoIO::NewCommand(String choise, String data)
 	{
 		SetZero();
 	}
+	else if (choise == "GETTEMP")
+	{
+		Serial.println(String(GetExtruderTemperatur()));
+	}
 }
 
 void ArduinoIO::SetZero()
@@ -152,7 +156,7 @@ void ArduinoIO::SetExtruderTemperatur(float Temperatur)
 	this->zielExtruderTemperatur = Temperatur;
 }
 
-float ArduinoIO::GetExtruderTemperatur()
+double ArduinoIO::GetExtruderTemperatur()
 {
 	double bWert = 4267;
 	double widerstand1 = 100000.0;
@@ -162,10 +166,14 @@ float ArduinoIO::GetExtruderTemperatur()
 	double TKelvin = 0;
 	double T = 0;
 	double* tempfeld = new double[10];
-	for (int i = 0; i < 10; i++)
+	double tempsumme=0;
+	/*for (int i = 0; i < 10; i++)
 	{
-		//tempfeld[]
+		tempfeld[i] = analogRead(ExtruderTempPin);
+		delay(10);
+		tempsumme += tempfeld[i];
 	}
+	tempsumme = tempsumme / 10.0;*/
 	double bitwertNTC = (double)analogRead(ExtruderTempPin);
 	widerstandNTC = widerstand1 * (bitwertNTC / 1024) / (1 - bitwertNTC / 1024);
 
@@ -175,6 +183,5 @@ float ArduinoIO::GetExtruderTemperatur()
 	// ermittle die Temperatur in Kelvin
 	T = TKelvin - kelvintemp;                    // ermittle die Temperatur in °C
 
-	//Serial.println(T);
 	return T;
 }

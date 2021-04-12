@@ -52,6 +52,8 @@
             this.CmdReadYamaha = new System.Windows.Forms.Button();
             this.TeBox_SerialArduinoRead = new System.Windows.Forms.TextBox();
             this.Cmd_YamahaMove = new System.Windows.Forms.Button();
+            this.CmdReadControllino = new System.Windows.Forms.Button();
+            this.Lbl_Progressbar = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // CmdReadGCode
@@ -95,6 +97,9 @@
             // 
             // TeBox_SerialYamaha
             // 
+            this.TeBox_SerialYamaha.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.TeBox_SerialYamaha.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.TeBox_SerialYamaha.Location = new System.Drawing.Point(12, 178);
             this.TeBox_SerialYamaha.Multiline = true;
@@ -105,6 +110,9 @@
             // 
             // TeBox_SerialControllino
             // 
+            this.TeBox_SerialControllino.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.TeBox_SerialControllino.Location = new System.Drawing.Point(619, 178);
             this.TeBox_SerialControllino.MaxLength = 65000;
             this.TeBox_SerialControllino.Multiline = true;
@@ -268,9 +276,10 @@
             this.LblDruckStatus.AutoSize = true;
             this.LblDruckStatus.Location = new System.Drawing.Point(616, 83);
             this.LblDruckStatus.Name = "LblDruckStatus";
-            this.LblDruckStatus.Size = new System.Drawing.Size(35, 13);
+            this.LblDruckStatus.Size = new System.Drawing.Size(30, 13);
             this.LblDruckStatus.TabIndex = 24;
-            this.LblDruckStatus.Text = "label3";
+            this.LblDruckStatus.Text = "(leer)";
+            this.LblDruckStatus.Visible = false;
             // 
             // CmdReadYamaha
             // 
@@ -284,6 +293,9 @@
             // 
             // TeBox_SerialArduinoRead
             // 
+            this.TeBox_SerialArduinoRead.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.TeBox_SerialArduinoRead.Location = new System.Drawing.Point(968, 178);
             this.TeBox_SerialArduinoRead.MaxLength = 65000;
             this.TeBox_SerialArduinoRead.Multiline = true;
@@ -302,11 +314,32 @@
             this.Cmd_YamahaMove.UseVisualStyleBackColor = true;
             this.Cmd_YamahaMove.Click += new System.EventHandler(this.Cmd_YamahaMove_Click);
             // 
+            // CmdReadControllino
+            // 
+            this.CmdReadControllino.Location = new System.Drawing.Point(1086, 147);
+            this.CmdReadControllino.Name = "CmdReadControllino";
+            this.CmdReadControllino.Size = new System.Drawing.Size(75, 23);
+            this.CmdReadControllino.TabIndex = 27;
+            this.CmdReadControllino.Text = "Read";
+            this.CmdReadControllino.UseVisualStyleBackColor = true;
+            // 
+            // Lbl_Progressbar
+            // 
+            this.Lbl_Progressbar.AutoSize = true;
+            this.Lbl_Progressbar.Location = new System.Drawing.Point(857, 67);
+            this.Lbl_Progressbar.Name = "Lbl_Progressbar";
+            this.Lbl_Progressbar.Size = new System.Drawing.Size(30, 13);
+            this.Lbl_Progressbar.TabIndex = 28;
+            this.Lbl_Progressbar.Text = "(leer)";
+            this.Lbl_Progressbar.Visible = false;
+            // 
             // Yamaha3DPrint
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1240, 537);
+            this.Controls.Add(this.Lbl_Progressbar);
+            this.Controls.Add(this.CmdReadControllino);
             this.Controls.Add(this.Cmd_YamahaMove);
             this.Controls.Add(this.TeBox_SerialArduinoRead);
             this.Controls.Add(this.CmdReadYamaha);
@@ -363,6 +396,8 @@
         public System.Windows.Forms.TextBox TeBox_SerialControllino;
         public System.Windows.Forms.TextBox TeBox_SerialArduinoRead;
         private System.Windows.Forms.Button Cmd_YamahaMove;
+        private System.Windows.Forms.Button CmdReadControllino;
+        private System.Windows.Forms.Label Lbl_Progressbar;
     }
 }
 

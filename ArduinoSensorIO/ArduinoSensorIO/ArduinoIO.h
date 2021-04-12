@@ -28,7 +28,7 @@ public:
 	void SetSpeed(float);
 	void SetMoveE(float);
 	void SetOk();
-	float GetExtruderTemperatur();
+	double GetExtruderTemperatur();
 	void SetExtruderTemperatur(float);
 	void ExtruderTemperaturRegelung();
 	void Initialisieren();
