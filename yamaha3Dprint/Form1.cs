@@ -216,6 +216,6 @@ namespace yamaha3Dprint
             {
                 TeBox_SerialControllino.AppendText(arduino.Read() + Environment.NewLine);
             }));
-        }
+        }        
     }
 }
