@@ -3,6 +3,7 @@
  Created:	26.03.2021 10:27:17
  Author:	stein
 */
+#include <ResponsiveAnalogRead.h>
 #include <MultiStepper.h>
 #include <AccelStepper.h>
 #include <string.h>

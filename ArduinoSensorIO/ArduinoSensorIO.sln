@@ -7,10 +7,14 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ArduinoSensorIO", "ArduinoS
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AccelStepper-1.61", "Libraries\AccelStepper\1.61\AccelStepper\AccelStepper-1.61.vcxitems", "{4A4DB7E7-B646-44E7-8235-BBBAA4E7865A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ResponsiveAnalogRead-1.2.1", "Libraries\ResponsiveAnalogRead\1.2.1\ResponsiveAnalogRead\ResponsiveAnalogRead-1.2.1.vcxitems", "{8C7F6CBC-CFCF-4FBB-988D-71A52CFBB1A0}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Libraries\AccelStepper\1.61\AccelStepper\AccelStepper-1.61.vcxitems*{4a4db7e7-b646-44e7-8235-bbbaa4e7865a}*SharedItemsImports = 9
+		Libraries\ResponsiveAnalogRead\1.2.1\ResponsiveAnalogRead\ResponsiveAnalogRead-1.2.1.vcxitems*{8c7f6cbc-cfcf-4fbb-988d-71a52cfbb1a0}*SharedItemsImports = 9
 		Libraries\AccelStepper\1.61\AccelStepper\AccelStepper-1.61.vcxitems*{c5f80730-f44f-4478-bdae-6634efc2ca88}*SharedItemsImports = 4
+		Libraries\ResponsiveAnalogRead\1.2.1\ResponsiveAnalogRead\ResponsiveAnalogRead-1.2.1.vcxitems*{c5f80730-f44f-4478-bdae-6634efc2ca88}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86

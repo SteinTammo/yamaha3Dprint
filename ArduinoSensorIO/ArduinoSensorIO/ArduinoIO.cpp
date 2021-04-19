@@ -9,6 +9,7 @@ ArduinoIO::ArduinoIO()
 	this->ExtruderHeizPin = 5;
 	this->ExtruderTempPin = 0;
 	this->aktuelleExtruderTemperatur = 0;
+	this->DruckbettTempPin = 1;
 	this->zielExtruderTemperatur = 30;
 	this->newPostion = false;
 	this->setDruckbett = false;
@@ -17,6 +18,7 @@ ArduinoIO::ArduinoIO()
 	this->turn = false;
 	mystepper = AccelStepper(1, pulsePin, dirPin);
 	mystepper.setPinsInverted(true, false, false);
+	analog1 = ResponsiveAnalogRead(ExtruderTempPin, true);
 }
 
 void ArduinoIO::SetSpeed(float speed)
@@ -83,11 +85,12 @@ void ArduinoIO::Initialisieren()
 	pinMode(ExtruderTempVoltagePin, OUTPUT);
 	pinMode(ExtruderTempPin, INPUT);
 	pinMode(SetExtruderFanPin, OUTPUT);
+	pinMode(DruckbettTempPin, INPUT);
 	digitalWrite(ExtruderTempVoltagePin, HIGH);
 	digitalWrite(enblPin, HIGH);
 	digitalWrite(dirPin, LOW);
 	digitalWrite(SetExtruderFanPin, LOW);
-	Serial.begin(56000);
+	Serial.begin(57600);
 	mystepper.setMaxSpeed(20000);
 	mystepper.setAcceleration(5000 * 409);
 }
@@ -103,6 +106,8 @@ void ArduinoIO::Run()
 	inBewegung = mystepper.isRunning();
 	Checkfinish(inBewegung);
 	ExtruderTemperaturRegelung();
+	analog1.update();
+	Serial.println(GetExtruderTemperatur());
 }
 
 void ArduinoIO::UpdateSerial()
@@ -174,7 +179,7 @@ double ArduinoIO::GetExtruderTemperatur()
 		tempsumme += tempfeld[i];
 	}
 	tempsumme = tempsumme / 10.0;*/
-	double bitwertNTC = (double)analogRead(ExtruderTempPin);
+	double bitwertNTC = (double)analog1.getValue();
 	widerstandNTC = widerstand1 * (bitwertNTC / 1024) / (1 - bitwertNTC / 1024);
 
 	// berechne den Widerstandswert vom NTC
