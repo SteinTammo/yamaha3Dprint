@@ -17,6 +17,7 @@ ArduinoIO::ArduinoIO()
 	this->setExtruderheizen = false;
 	mystepper = AccelStepper(1,pulsePin,dirPin);
 	mystepper.setAcceleration(10000);
+  
 }
 
 void ArduinoIO::SetSpeed(float speed)

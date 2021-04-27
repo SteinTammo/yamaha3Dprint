@@ -4,6 +4,7 @@
 #include <Controllino.h>
 #include <MultiStepper.h>
 #include <AccelStepper.h>
+#include <Filters.h>
 #include <string.h>
 class ArduinoIO 
 {
@@ -23,7 +24,7 @@ private:
 	bool setDruckbett;
 	bool setExtruderheizen;
   AccelStepper mystepper;
-
+  FilterOnePole lowpassFilter;
 public:
 	ArduinoIO();
 	void SetSpeed(float);

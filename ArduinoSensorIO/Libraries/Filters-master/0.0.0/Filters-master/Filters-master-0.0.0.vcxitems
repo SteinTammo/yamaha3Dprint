@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding ="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" >
+  <PropertyGroup Label="Globals" >
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{f2f74b8e-ec68-463b-8c3b-190ed2a347ea}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)FilterDerivative.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)FilterOnePole.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)FilterTwoPole.cpp" />
+<ClCompile Include="$(MSBuildThisFileDirectory)RunningStatistics.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)FilterDerivative.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)FilterOnePole.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)Filters.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)FilterTwoPole.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)FloatDefine.h" />
+<ClInclude Include="$(MSBuildThisFileDirectory)RunningStatistics.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="$(MSBuildThisFileDirectory)keywords.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    
+  </ItemGroup>
+</Project>

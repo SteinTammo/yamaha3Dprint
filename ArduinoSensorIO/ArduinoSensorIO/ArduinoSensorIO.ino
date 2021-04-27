@@ -3,6 +3,12 @@
  Created:	26.03.2021 10:27:17
  Author:	stein
 */
+#include <FloatDefine.h>
+#include <RunningStatistics.h>
+#include <Filters.h>
+#include <FilterTwoPole.h>
+#include <FilterOnePole.h>
+#include <FilterDerivative.h>
 #include <ResponsiveAnalogRead.h>
 #include <MultiStepper.h>
 #include <AccelStepper.h>
