@@ -86,6 +86,7 @@ void ArduinoIO::Run()
 	inBewegung = mystepper.isRunning();
 	Checkfinish(inBewegung);
 	ExtruderTemperaturRegelung();
+ Serial.println(analogRead(ExtruderTempPin));
 }
 
 void ArduinoIO::UpdateSerial()

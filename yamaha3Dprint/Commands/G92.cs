@@ -7,7 +7,7 @@ namespace yamaha3Dprint.Commands
         public override void ExecuteCommand(Yamaha yamaha, Arduino arduino)
         {
             arduino.Write("G92&E&");
-            arduino.WaitForOk(1);
+            //arduino.WaitForOk(1);
         }
 
         public static G92 Parse(string parameters)

@@ -31,9 +31,9 @@ namespace yamaha3Dprint.Commands
                     i = 0;
                     extruder = 0;
                 }
-                arduino.Move(1);
+                //arduino.Move(1);
                 yamaha.ExecuteMoves(i);
-                arduino.Move(0);
+                //arduino.Move(0);
             }
         }
     }

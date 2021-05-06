@@ -15,7 +15,7 @@ ArduinoIO::ArduinoIO()
 	this->setDruckbett = false;
 	this->setExtruderheizen = false;
 	this->previousMillis = 0;
-	this->filterFrequency = 0.3;
+	this->filterFrequency = 0.1;
 	this->turn = false;
 	mystepper = AccelStepper(1, pulsePin, dirPin);
 	mystepper.setPinsInverted(true, false, false);
@@ -191,7 +191,7 @@ double ArduinoIO::GetExtruderTemperatur()
 	TKelvin = 1 / ((1 / Tn) + (1.0 / bWert) * log(widerstandNTC / widerstand1));
 
 	// ermittle die Temperatur in Kelvin
-	T = TKelvin - kelvintemp;                    // ermittle die Temperatur in °C
+	T = TKelvin - kelvintemp;                    // ermittle die Temperatur in ï¿½C
 
 	return T;
 }
