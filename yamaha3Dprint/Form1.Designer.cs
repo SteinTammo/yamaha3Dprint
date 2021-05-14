@@ -55,6 +55,8 @@
             this.Cmd_YamahaMove = new System.Windows.Forms.Button();
             this.CmdReadControllino = new System.Windows.Forms.Button();
             this.Lbl_Progressbar = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // CmdReadGCode
@@ -199,17 +201,6 @@
             // cBoxYamaha
             // 
             this.cBoxYamaha.FormattingEnabled = true;
-            this.cBoxYamaha.Items.AddRange(new object[] {
-            "COM1",
-            "COM2",
-            "COM3",
-            "COM4",
-            "COM5",
-            "COM6",
-            "COM7",
-            "COM8",
-            "COM9",
-            "COM10"});
             this.cBoxYamaha.Location = new System.Drawing.Point(60, 114);
             this.cBoxYamaha.Name = "cBoxYamaha";
             this.cBoxYamaha.Size = new System.Drawing.Size(121, 21);
@@ -218,17 +209,6 @@
             // cBoxControllino
             // 
             this.cBoxControllino.FormattingEnabled = true;
-            this.cBoxControllino.Items.AddRange(new object[] {
-            "COM1",
-            "COM2",
-            "COM3",
-            "COM4",
-            "COM5",
-            "COM6",
-            "COM7",
-            "COM8",
-            "COM9",
-            "COM10"});
             this.cBoxControllino.Location = new System.Drawing.Point(663, 114);
             this.cBoxControllino.Name = "cBoxControllino";
             this.cBoxControllino.Size = new System.Drawing.Size(121, 21);
@@ -323,6 +303,7 @@
             this.CmdReadControllino.TabIndex = 27;
             this.CmdReadControllino.Text = "Read";
             this.CmdReadControllino.UseVisualStyleBackColor = true;
+            this.CmdReadControllino.Click += new System.EventHandler(this.CmdReadControllino_Click);
             // 
             // Lbl_Progressbar
             // 
@@ -334,12 +315,32 @@
             this.Lbl_Progressbar.Text = "(leer)";
             this.Lbl_Progressbar.Visible = false;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(968, 57);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 39);
+            this.button1.TabIndex = 29;
+            this.button1.Text = "Unload Filament";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(968, 12);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 39);
+            this.button2.TabIndex = 30;
+            this.button2.Text = "Load Filament";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
             // Yamaha3DPrint
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(1240, 537);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.Lbl_Progressbar);
             this.Controls.Add(this.CmdReadControllino);
             this.Controls.Add(this.Cmd_YamahaMove);
@@ -369,6 +370,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Yamaha3DPrint";
             this.Text = "Yamaha3DPrint";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -401,6 +403,8 @@
         private System.Windows.Forms.Button Cmd_YamahaMove;
         private System.Windows.Forms.Button CmdReadControllino;
         private System.Windows.Forms.Label Lbl_Progressbar;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
     }
 }
 

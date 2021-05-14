@@ -25,6 +25,7 @@ private:
 	bool newPostion;
 	bool setDruckbett;
 	bool setExtruderheizen;
+  bool newTemp;
 	AccelStepper mystepper;
 	ResponsiveAnalogRead analog1;
 	FilterOnePole lowpassFilterDruckbett;
@@ -46,4 +47,3 @@ public:
 	void SetZero();
 
 };
-

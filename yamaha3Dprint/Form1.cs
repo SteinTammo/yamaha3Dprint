@@ -19,7 +19,6 @@ namespace yamaha3Dprint
     {
         string[] fileContent = null;
         string filePath;
-        bool[] SerialConnection;
         int commandcounter;
         public Serial YamahaSerial;
         public Serial ControllinoSerial;
@@ -94,7 +93,7 @@ namespace yamaha3Dprint
                 yamaha = new Yamaha(this);
                 arduino = new Arduino(this);
                 yamaha.Connect(cBoxYamaha.Text, 9600);
-                arduino.Connect(cBoxControllino.Text, 56000);
+                arduino.Connect(cBoxControllino.Text, 57600);
                 LblConnectDevice.Text = "Connected";
                 LblConnectDevice.Visible = true;
                 CmdReadYamaha.Visible = true;
@@ -174,8 +173,13 @@ namespace yamaha3Dprint
                 }));
                 i.ExecuteCommand(yamaha, arduino);                             
             }
-        }      
-        
+        }
+        private void Form1_FormClosing(Object sender, FormClosingEventArgs e)
+        {
+            yamaha.SetPosition(0, 0, 0, 0);
+            yamaha.Move(0);
+            arduino.Move(0);
+        }
 
         private void CmdReadYamaha_Click(object sender, EventArgs e)
         {
@@ -216,6 +220,6 @@ namespace yamaha3Dprint
             {
                 TeBox_SerialControllino.AppendText(arduino.Read() + Environment.NewLine);
             }));
-        }        
+        }
     }
 }

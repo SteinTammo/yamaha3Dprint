@@ -61,6 +61,7 @@
     <Compile Include="Commands\G1MoveExtruderPositiv.cs" />
     <Compile Include="Commands\G92.cs" />
     <Compile Include="Commands\M73.cs" />
+    <Compile Include="M104.cs" />
     <Compile Include="Position.cs" />
     <Compile Include="Yamaha.cs" />
     <Compile Include="Comunication.cs" />

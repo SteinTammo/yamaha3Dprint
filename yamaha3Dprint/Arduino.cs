@@ -64,6 +64,11 @@ namespace yamaha3Dprint
             Write("G1F&" + flow + "&");
             WaitForOk(1);
         }
+        internal void SetTemp(int Temp)
+        {
+            Write("M104&" + Temp + "&");
+            WaitForOk(1);
+        }
         internal string Read()
         {
             string recieve = ReadLine();

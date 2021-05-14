@@ -246,6 +246,16 @@ namespace yamaha3Dprint
                 behandelt = true;
                 // Accelarationchange 
             }
+            if (line.StartsWith("M104"))
+            {
+                behandelt = true;
+                var parameters = line.Split(' ');
+                if(parameters[0].StartsWith("M104") && parameters[1].StartsWith("S"))
+                {
+                    var Temp = M104.Parse(parameters[1]);
+                    commands.Add(Temp);
+                }
+            }
             if (line.StartsWith("M73"))
             {
                 var parameters = line.Split(' ');

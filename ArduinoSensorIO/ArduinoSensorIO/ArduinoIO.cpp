@@ -15,12 +15,13 @@ ArduinoIO::ArduinoIO()
 	this->setDruckbett = false;
 	this->setExtruderheizen = false;
 	this->previousMillis = 0;
-	this->filterFrequency = 0.1;
+	this->filterFrequency = 0.33;
 	this->turn = false;
+  this->newTemp=false;
 	mystepper = AccelStepper(1, pulsePin, dirPin);
 	mystepper.setPinsInverted(true, false, false);
 	analog1 = ResponsiveAnalogRead(ExtruderTempPin, true);
-	lowpassFilterExtruder=FilterOnePole(LOWPASS, filterFrequency);
+	lowpassFilterExtruder = FilterOnePole(LOWPASS, filterFrequency);
 	lowpassFilterDruckbett = FilterOnePole(LOWPASS, filterFrequency);
 
 }
@@ -67,11 +68,11 @@ void ArduinoIO::Checkfinish(bool move)
 void ArduinoIO::ExtruderTemperaturRegelung()
 {
 	this -> aktuelleExtruderTemperatur = GetExtruderTemperatur();
-	if (zielExtruderTemperatur >= aktuelleExtruderTemperatur + 2)
+	if (zielExtruderTemperatur >= aktuelleExtruderTemperatur-2)
 	{
 		digitalWrite(ExtruderHeizPin, HIGH);
 	}
-	if (zielExtruderTemperatur <= aktuelleExtruderTemperatur - 2)
+	if (zielExtruderTemperatur <= aktuelleExtruderTemperatur+2)
 	{
 		digitalWrite(ExtruderHeizPin, LOW);
 	}
@@ -107,8 +108,18 @@ void ArduinoIO::Run()
 	inBewegung = mystepper.isRunning();
 	Checkfinish(inBewegung);
 	ExtruderTemperaturRegelung();
+  if(this->newTemp==true)
+  {
+    if(this->zielExtruderTemperatur <= this->aktuelleExtruderTemperatur+4 && this->zielExtruderTemperatur >= this->aktuelleExtruderTemperatur-4)
+    {      
+      SetOk();
+      newTemp=false;
+    }
+  }
 	lowpassFilterExtruder.input(analogRead(ExtruderTempPin));
 	lowpassFilterDruckbett.input(analogRead(DruckbettTempPin));
+ double bitwertNTC = (double)lowpassFilterExtruder.output();
+ Serial.println(GetExtruderTemperatur());
 }
 
 void ArduinoIO::UpdateSerial()
@@ -153,7 +164,6 @@ void ArduinoIO::NewCommand(String choise, String data)
 		Serial.println(analogRead(DruckbettTempPin));
 	}
 }
-
 void ArduinoIO::SetZero()
 {
 	mystepper.setCurrentPosition(0);
@@ -164,6 +174,7 @@ void ArduinoIO::SetZero()
 void ArduinoIO::SetExtruderTemperatur(float Temperatur)
 {
 	this->zielExtruderTemperatur = Temperatur;
+  this->newTemp=true;
 }
 
 double ArduinoIO::GetExtruderTemperatur()
@@ -192,6 +203,7 @@ double ArduinoIO::GetExtruderTemperatur()
 
 	// ermittle die Temperatur in Kelvin
 	T = TKelvin - kelvintemp;                    // ermittle die Temperatur in �C
-
+  T= -21.72*log(bitwertNTC)+186.04;
+  // T = 2*pow(10,-10)*pow(T,5)-4*pow(10,-7)*pow(T,4)+0,0003*pow(T,3)-0.0948*pow(T,2)+16.273*T-940.67;
 	return T;
 }
