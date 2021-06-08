@@ -241,6 +241,11 @@ namespace yamaha3Dprint
                     
                 }
             }
+            if (line.StartsWith("G2"))
+            {
+                var parameters = line.Split(' ');
+                if(parameters[0].StartsWith("G2") && pa)
+            }
             if (line.StartsWith("M204"))
             {
                 behandelt = true;

@@ -7,7 +7,7 @@ ArduinoIO::ArduinoIO()
 	this->dirPin = 3;		// Richtungspin
 	this->enblPin = 4;		// Anschalten des Drivers
 	this->ExtruderHeizPin = 5;
-	this->ExtruderTempPin = 0;
+	this->ExtruderTempPin = A0;
 	this->aktuelleExtruderTemperatur = 0;
 	this->DruckbettTempPin = 1;
 	this->zielExtruderTemperatur = 40;
@@ -15,7 +15,7 @@ ArduinoIO::ArduinoIO()
 	this->setDruckbett = false;
 	this->setExtruderheizen = false;
 	this->previousMillis = 0;
-	this->filterFrequency = 0.33;
+	this->filterFrequency = 3;
 	this->turn = false;
   this->newTemp=false;
 	mystepper = AccelStepper(1, pulsePin, dirPin);
@@ -26,11 +26,11 @@ ArduinoIO::ArduinoIO()
 
 }
 
-void ArduinoIO::SetSpeed(float speed)
+void ArduinoIO::SetSpeed(float speeed)
 {
 	float umrechnung;
-	umrechnung = speed / 60*409;
-	mystepper.setSpeed(umrechnung);
+	umrechnung = speeed / (60*409);
+	mystepper.setSpeed(speeed);
 	delay(100);
 	SetOk();
 }
@@ -93,7 +93,7 @@ void ArduinoIO::Initialisieren()
 	digitalWrite(dirPin, LOW);
 	digitalWrite(SetExtruderFanPin, LOW);
 	Serial.begin(57600);
-	mystepper.setMaxSpeed(20000);
+	mystepper.setMaxSpeed(50000);
 	mystepper.setAcceleration(5000 * 409);
 }
 
@@ -119,6 +119,9 @@ void ArduinoIO::Run()
 	lowpassFilterExtruder.input(analogRead(ExtruderTempPin));
 	lowpassFilterDruckbett.input(analogRead(DruckbettTempPin));
  double bitwertNTC = (double)lowpassFilterExtruder.output();
+ double v = (double)analogRead(A0)/1024*5;
+ Serial.print(v);
+ Serial.print("    ");
  Serial.println(GetExtruderTemperatur());
 }
 
@@ -200,10 +203,9 @@ double ArduinoIO::GetExtruderTemperatur()
 
 	// berechne den Widerstandswert vom NTC
 	TKelvin = 1 / ((1 / Tn) + (1.0 / bWert) * log(widerstandNTC / widerstand1));
-
+  double v = bitwertNTC/1024*5;
 	// ermittle die Temperatur in Kelvin
 	T = TKelvin - kelvintemp;                    // ermittle die Temperatur in �C
-  T= -21.72*log(bitwertNTC)+186.04;
-  // T = 2*pow(10,-10)*pow(T,5)-4*pow(10,-7)*pow(T,4)+0,0003*pow(T,3)-0.0948*pow(T,2)+16.273*T-940.67;
-	return T;
+  T= 2.4295*pow(v,3)+0.9599*pow(v,2)+228*v-257.99;
+  return T;
 }
