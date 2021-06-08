@@ -57,8 +57,10 @@
     <Compile Include="Commands\G1MoveZ.cs" />
     <Compile Include="Commands\G1SetFlow.cs" />
     <Compile Include="Commands\G1MoveCollectionPositiv.cs" />
+    <Compile Include="Commands\G2.cs" />
     <Compile Include="Commands\G28.cs" />
     <Compile Include="Commands\G1MoveExtruderPositiv.cs" />
+    <Compile Include="Commands\G3.cs" />
     <Compile Include="Commands\G92.cs" />
     <Compile Include="Commands\M73.cs" />
     <Compile Include="M104.cs" />

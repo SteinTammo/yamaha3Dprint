@@ -244,7 +244,20 @@ namespace yamaha3Dprint
             if (line.StartsWith("G2"))
             {
                 var parameters = line.Split(' ');
-                if(parameters[0].StartsWith("G2") && pa)
+                if (parameters[0].StartsWith("G2") && parameters[1].StartsWith("X"))
+                {
+                    var Temp = G2.Parse($"{parameters[1]} {parameters[2]} {parameters[3]} {parameters[4]} {parameters[5]}");
+                    commands.Add(Temp);
+                }
+            }
+            if (line.StartsWith("G3"))
+            {
+                var parameters = line.Split(' '); 
+                if (parameters[0].StartsWith("G3") && parameters[1].StartsWith("X"))
+                {
+                    var Temp = G3.Parse($"{parameters[1]} {parameters[2]} {parameters[3]} {parameters[4]} {parameters[5]}");
+                    commands.Add(Temp);
+                }
             }
             if (line.StartsWith("M204"))
             {
