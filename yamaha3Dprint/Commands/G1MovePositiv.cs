@@ -47,11 +47,8 @@ namespace yamaha3Dprint.Commands
             }
             yamaha.Move(0);
             yamaha.WaitForOk(2);
-            if(this.e!=null)
-            {
-                //arduino.Move(0);
-            }
             yamaha.SendCount = 0;
+            arduino.Move(0);
         }
     }
 }

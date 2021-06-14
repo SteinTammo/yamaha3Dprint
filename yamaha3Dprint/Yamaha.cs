@@ -24,7 +24,7 @@ namespace yamaha3Dprint
         {
             this.yamaha3DPrintform = yamaha3DPrint;
             serialPort = new SerialPort();
-            CurrentSpeed = 100;
+            CurrentSpeed = 15;
             CurrentPosition = new Position(0, 0, 100);
         }
 
@@ -155,7 +155,8 @@ namespace yamaha3Dprint
 
         internal void Move(int index)
         {
-            SendCommand("@MOVE P,P"+index+",S="+this.CurrentSpeed);            
+            SendCommand("@MOVE P,P"+index+",S="+this.CurrentSpeed);
+            SendCount++;
         }
         
         public void SendCommand(string data)

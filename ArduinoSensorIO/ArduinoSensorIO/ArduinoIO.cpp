@@ -10,7 +10,7 @@ ArduinoIO::ArduinoIO()
 	this->ExtruderTempPin = A0;
 	this->aktuelleExtruderTemperatur = 0;
 	this->DruckbettTempPin = 1;
-	this->zielExtruderTemperatur = 40;
+	this->zielExtruderTemperatur = 20;
 	this->newPostion = false;
 	this->setDruckbett = false;
 	this->setExtruderheizen = false;
@@ -29,7 +29,7 @@ ArduinoIO::ArduinoIO()
 void ArduinoIO::SetSpeed(float speeed)
 {
 	float umrechnung;
-	umrechnung = speeed / (60*409);
+	umrechnung = speeed/60*100;
 	mystepper.setSpeed(speeed);
 	delay(100);
 	SetOk();
@@ -120,9 +120,9 @@ void ArduinoIO::Run()
 	lowpassFilterDruckbett.input(analogRead(DruckbettTempPin));
  double bitwertNTC = (double)lowpassFilterExtruder.output();
  double v = (double)analogRead(A0)/1024*5;
- Serial.print(v);
- Serial.print("    ");
- Serial.println(GetExtruderTemperatur());
+ //Serial.print(v);
+ //Serial.print("    ");
+ //Serial.println(GetExtruderTemperatur());
 }
 
 void ArduinoIO::UpdateSerial()

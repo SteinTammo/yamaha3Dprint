@@ -16,6 +16,8 @@ namespace yamaha3Dprint.Commands
         {
             yamaha.SetPosition(0,z,"z");
             yamaha.Move(0);
+            yamaha.WaitForOk(yamaha.SendCount);
+            yamaha.SendCount = 0;
         }
 
         public static G1MoveZ Parse(string parameters)

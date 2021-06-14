@@ -21,7 +21,7 @@ namespace yamaha3Dprint.Commands
             yamaha.Move(0);
             yamaha.WaitForOk(yamaha.SendCount);
             yamaha.SendCount = 0;
-            arduino.WaitForOk(1);
+            arduino.Move(0);
         }
         //G1 X60.0 E9.0 F1000.0
         public static G1MoveXE Parse(string parameters)

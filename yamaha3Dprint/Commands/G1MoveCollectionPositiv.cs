@@ -13,6 +13,7 @@ namespace yamaha3Dprint.Commands
         public override void ExecuteCommand(Yamaha yamaha, Arduino arduino)
         {
             int i = 0;
+            int j = 0;
             double? extruder = 0;
             if(G1MovePositiv.Count==0)
             {
@@ -23,6 +24,7 @@ namespace yamaha3Dprint.Commands
                 yamaha.SetPosition(i,move.x,move.y);
                 extruder = extruder + move.e;
                 i++;
+                j++;
                 if(i==7)
                 {
                     arduino.Move(1);
@@ -31,9 +33,12 @@ namespace yamaha3Dprint.Commands
                     i = 0;
                     extruder = 0;
                 }
-                arduino.Move(1);
-                yamaha.ExecuteMoves(i);
-                arduino.Move(0);
+                if(i!=0 && j==G1MovePositiv.Count-1)
+                {
+                    arduino.Move(1);
+                    yamaha.ExecuteMoves(i);
+                    arduino.Move(0);
+                }
             }
         }
     }

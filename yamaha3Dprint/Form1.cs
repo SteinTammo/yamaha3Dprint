@@ -176,9 +176,9 @@ namespace yamaha3Dprint
         }
         private void Form1_FormClosing(Object sender, FormClosingEventArgs e)
         {
+            arduino.Move(0);
             yamaha.SetPosition(0, 0, 0, 0);
             yamaha.Move(0);
-            arduino.Move(0);
         }
 
         private void CmdReadYamaha_Click(object sender, EventArgs e)
