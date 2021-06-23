@@ -43,7 +43,10 @@ namespace yamaha3Dprint
             }
             serialPort.Open();
             serialPort.DiscardInBuffer();
-
+        }
+        public void DiscardInBuffer()
+        {
+            serialPort.DiscardInBuffer();
         }
 
         internal void ExecuteMoves(int MoveCount)
@@ -78,7 +81,7 @@ namespace yamaha3Dprint
         public void SetFlow(double flow)
         {
 
-            CurrentSpeed = (int)(-2*Math.Pow(10, -20) * Math.Pow(flow, 5) + 6 * Math.Pow(10, -16) * Math.Pow(flow, 4) - 7 * Math.Pow(10, -12) * Math.Pow(flow, 3) + 6 * Math.Pow(10, -8) * Math.Pow(flow, 2) + 0.0068 * flow + 0.097);
+            CurrentSpeed = (int)(0.0072 * flow - 0.8359);
             
             if(CurrentSpeed>=100)
             {
@@ -86,7 +89,10 @@ namespace yamaha3Dprint
                 CurrentSpeed = 100;
             }
         }
-
+        public Position GetCurrentPosition()
+        {
+            return CurrentPosition;
+        }
 
         public Position SetPosition(int index, double x, double y, double z)
         {            
@@ -155,14 +161,33 @@ namespace yamaha3Dprint
 
         internal void Move(int index)
         {
-            SendCommand("@MOVE P,P"+index+",S="+this.CurrentSpeed);
+            SendCommand("@MOVE L,P"+index+",S="+this.CurrentSpeed);
+            SendCount++;
+        }
+        internal void MoveC(int anzPunkte)
+        {
+            string sendcommand="";
+            
+            sendcommand = "@MOVE C,P0,P1,S = " + this.CurrentSpeed;
+            
+            //else
+            //{
+            //    sendcommand = "@MOVE C,P0,P1";
+            //    for(int i=0;i<anzPunkte;i++)
+            //    {
+
+            //    }
+            //    sendcommand = sendcommand + "S=" + this.CurrentSpeed;
+            //}
+            SendCommand(sendcommand);
             SendCount++;
         }
         
         public void SendCommand(string data)
         {
             serialPort.Write(data);
-            serialPort.Write(eol, 0, 2);     
+            serialPort.Write(eol, 0, 2);
+            Console.WriteLine(data);
         }
         public Position SetPosition(int index, double x, double y)
         {

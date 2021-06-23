@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO.Ports;
+using System.Threading;
 
 namespace yamaha3Dprint
 {
@@ -10,7 +11,7 @@ namespace yamaha3Dprint
 
         public int CurrentSpeed { get; private set; }
         public int OkCount { get; private set; }
-
+        public double Flowrate { get; private set; }
         public Arduino(Yamaha3DPrint yamaha3DPrint)
         {
             this.yamaha3DPrint = yamaha3DPrint;
@@ -18,11 +19,34 @@ namespace yamaha3Dprint
             CurrentSpeed = 100;
         }
 
+        public void MoveExtruder(double e)
+        {
+            double time;
+            time = e / (Flowrate/60)*1000;
+            if(time<0)
+            {
+                time = time * (-1);
+            }
+            if(e>0)
+            {
+                //Move(1);
+                //Thread.Sleep((int)time);
+                //Move(0);
+            }
+            else if(e<0)
+            {
+                //Move(-1);
+                //Thread.Sleep((int)time);
+                //Move(0);
+            }
+            
+        }
+
         internal void Move(double? e)
         {
             if(e!=null)
             {
-                Write("G1E&" + e + "&");
+                Write("G1E&" + 0 + "&");
             }
         }
         public float GetExtruderTemp()
@@ -61,7 +85,9 @@ namespace yamaha3Dprint
 
         internal void SetFlow(double flow)
         {
-            Write("G1F&" + flow + "&");
+            double floweffektiv = flow / 6;
+            Flowrate = floweffektiv;
+            Write("G1F&" + floweffektiv + "&");
             WaitForOk(1);
         }
         internal void SetTemp(int Temp)

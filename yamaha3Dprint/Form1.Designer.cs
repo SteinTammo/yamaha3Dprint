@@ -55,8 +55,9 @@
             this.Cmd_YamahaMove = new System.Windows.Forms.Button();
             this.CmdReadControllino = new System.Windows.Forms.Button();
             this.Lbl_Progressbar = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.Cmd_UnloadFilament = new System.Windows.Forms.Button();
+            this.Cmd_LoadFilament = new System.Windows.Forms.Button();
+            this.CmdStopPrint = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // CmdReadGCode
@@ -308,30 +309,42 @@
             // Lbl_Progressbar
             // 
             this.Lbl_Progressbar.AutoSize = true;
-            this.Lbl_Progressbar.Location = new System.Drawing.Point(857, 67);
+            this.Lbl_Progressbar.Location = new System.Drawing.Point(866, 67);
             this.Lbl_Progressbar.Name = "Lbl_Progressbar";
             this.Lbl_Progressbar.Size = new System.Drawing.Size(30, 13);
             this.Lbl_Progressbar.TabIndex = 28;
             this.Lbl_Progressbar.Text = "(leer)";
             this.Lbl_Progressbar.Visible = false;
             // 
-            // button1
+            // Cmd_UnloadFilament
             // 
-            this.button1.Location = new System.Drawing.Point(968, 57);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 39);
-            this.button1.TabIndex = 29;
-            this.button1.Text = "Unload Filament";
-            this.button1.UseVisualStyleBackColor = true;
+            this.Cmd_UnloadFilament.Location = new System.Drawing.Point(968, 57);
+            this.Cmd_UnloadFilament.Name = "Cmd_UnloadFilament";
+            this.Cmd_UnloadFilament.Size = new System.Drawing.Size(75, 39);
+            this.Cmd_UnloadFilament.TabIndex = 29;
+            this.Cmd_UnloadFilament.Text = "Unload Filament";
+            this.Cmd_UnloadFilament.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // Cmd_LoadFilament
             // 
-            this.button2.Location = new System.Drawing.Point(968, 12);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 39);
-            this.button2.TabIndex = 30;
-            this.button2.Text = "Load Filament";
-            this.button2.UseVisualStyleBackColor = true;
+            this.Cmd_LoadFilament.Location = new System.Drawing.Point(968, 12);
+            this.Cmd_LoadFilament.Name = "Cmd_LoadFilament";
+            this.Cmd_LoadFilament.Size = new System.Drawing.Size(75, 39);
+            this.Cmd_LoadFilament.TabIndex = 30;
+            this.Cmd_LoadFilament.Text = "Load Filament";
+            this.Cmd_LoadFilament.UseVisualStyleBackColor = true;
+            this.Cmd_LoadFilament.Click += new System.EventHandler(this.Cmd_LoadFilament_Click);
+            // 
+            // CmdStopPrint
+            // 
+            this.CmdStopPrint.Location = new System.Drawing.Point(700, 12);
+            this.CmdStopPrint.Name = "CmdStopPrint";
+            this.CmdStopPrint.Size = new System.Drawing.Size(75, 39);
+            this.CmdStopPrint.TabIndex = 32;
+            this.CmdStopPrint.Text = "Stop Print";
+            this.CmdStopPrint.UseVisualStyleBackColor = true;
+            this.CmdStopPrint.Visible = false;
+            this.CmdStopPrint.Click += new System.EventHandler(this.CmdStopPrint_Click);
             // 
             // Yamaha3DPrint
             // 
@@ -339,8 +352,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(1240, 537);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.CmdStopPrint);
+            this.Controls.Add(this.Cmd_LoadFilament);
+            this.Controls.Add(this.Cmd_UnloadFilament);
             this.Controls.Add(this.Lbl_Progressbar);
             this.Controls.Add(this.CmdReadControllino);
             this.Controls.Add(this.Cmd_YamahaMove);
@@ -403,8 +417,9 @@
         private System.Windows.Forms.Button Cmd_YamahaMove;
         private System.Windows.Forms.Button CmdReadControllino;
         private System.Windows.Forms.Label Lbl_Progressbar;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button Cmd_UnloadFilament;
+        private System.Windows.Forms.Button Cmd_LoadFilament;
+        private System.Windows.Forms.Button CmdStopPrint;
     }
 }
 

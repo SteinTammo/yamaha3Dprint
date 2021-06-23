@@ -11,6 +11,8 @@ namespace yamaha3Dprint.Commands
             yamaha.Move(0); 
             yamaha.SetPosition(0, 0.0, 0.0, 98.0);
             yamaha.Move(0);
+            yamaha.WaitForOk(4);
+            yamaha.SendCount = 0;
         }
 
         public static G28 Parse(string parameter)

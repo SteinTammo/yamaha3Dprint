@@ -26,26 +26,30 @@ namespace yamaha3Dprint
         public Yamaha yamaha;
         public Arduino arduino;
         Task printTask;
-        public void WriteYamaha( string value)
+        CancellationTokenSource source;
+        public void WriteYamaha(string value)
         {
-            TeBox_SerialYamaha.AppendText(value + Environment.NewLine);            
+            TeBox_SerialYamaha.AppendText(value + Environment.NewLine);
         }
         public void WriteControllino(string value)
         {
             TeBox_SerialYamaha.AppendText(value + Environment.NewLine);
         }
-        
+
         public Yamaha3DPrint()
         {
             InitializeComponent();
             filePath = string.Empty;
             Lbl_Gcode.Visible = false;
             string[] names = SerialPort.GetPortNames();
-            for(int i = 0; i<names.Length;i++)
+            for (int i = 0; i < names.Length; i++)
             {
                 cBoxYamaha.Items.Add(names[i]);
                 cBoxControllino.Items.Add(names[i]);
             }
+            source = new CancellationTokenSource();
+            cBoxYamaha.Text = "COM8";
+            cBoxControllino.Text = "COM5";
         }
         public void Readfile()
         {
@@ -60,8 +64,26 @@ namespace yamaha3Dprint
                 {
                     //Get the path of specified file
                     filePath = openFileDialog.FileName;
-                    fileContent = File.ReadAllLines(filePath);
+                    string pathwithoutname = Path.ChangeExtension(filePath,null);
+                    Process cmd = new Process();
+                    cmd.StartInfo.FileName = "cmd.exe";
+                    cmd.StartInfo.RedirectStandardInput = true;
+                    cmd.StartInfo.RedirectStandardOutput = true;
+                    cmd.StartInfo.CreateNoWindow = true;
+                    cmd.StartInfo.UseShellExecute = false;
+                    cmd.Start();
+                    string arcwelderpath = @"C:\Users\stein\Downloads\Yamaha3DPrint\yamaha3Dprint\ArcWelder.exe";
+                    string outputpath = pathwithoutname + "_processed.gcode";
+                    cmd.StandardInput.WriteLine(arcwelderpath + " "+ "-m=5000 " + filePath + " " + outputpath);
+                    cmd.StandardInput.Flush();
+                    cmd.StandardInput.Close();
+                    cmd.WaitForExit();
+                    Console.WriteLine(cmd.StandardOutput.ReadToEnd());
+                    fileContent = File.ReadAllLines(outputpath);
+                    filePath = outputpath;
                 }
+
+                
             }
         }
         private void CmdReadGCode_Click(object sender, EventArgs e)
@@ -100,17 +122,17 @@ namespace yamaha3Dprint
                 CmdSendControllino.Visible = true;
                 CmdSendYamaha.Visible = true;
                 CmdReadControllino.Visible = true;
-            }                 
+            }
         }
 
         private void CmdSendYamaha_Click(object sender, EventArgs e)
-        {            
+        {
             yamaha.SendCommand(TeBox_SendYamaha.Text);
             TeBox_SerialYamaha.AppendText(TeBox_SendYamaha.Text + Environment.NewLine);
         }
 
         private void CmdSendControllino_Click(object sender, EventArgs e)
-        {            
+        {
             arduino.Write(TeBox_SendControllino.Text);
         }
 
@@ -129,7 +151,10 @@ namespace yamaha3Dprint
             progressBarDruck.Maximum = 100;
             progressBarDruck.Step = 1;
             progressBarDruck.Value = 0;
-            printTask = Task.Run(()=>Print());
+            source = new CancellationTokenSource();
+            var token = source.Token;
+            printTask = Task.Run(() => Print(token),token);            
+            CmdStopPrint.Visible = true;            
         }
         public void UpdateProgessbar(int percentage)
         {
@@ -140,9 +165,11 @@ namespace yamaha3Dprint
 
             LblDruckStatus.Text = "Verbleibende Druckzeit laut Slicer: " + time + "min";
         }
-        public void Print()
+        public void Print(CancellationToken token)
         {
-            if(filePath=="")
+
+            yamaha.DiscardInBuffer();
+            if (filePath == "")
             {
                 LblDruckStatus.Invoke(new Action(() =>
                 {
@@ -158,9 +185,10 @@ namespace yamaha3Dprint
                 progressBarDruck.Maximum = commands.Count();
                 LblDruckStatus.Text = "printing...";
                 LblDruckStatus.Visible = true;
-                Lbl_Progressbar.Text = "0 von "+ commands.Count()+ " Commands";
+                Lbl_Progressbar.Text = "0 von " + commands.Count() + " Commands";
                 Lbl_Progressbar.Visible = true;
             }));
+            int j = 0;
             foreach (var i in commands)
             {
                 Console.WriteLine(i);
@@ -171,7 +199,27 @@ namespace yamaha3Dprint
                     Lbl_Progressbar.Text = commandcounter + " von " + commands.Count();
                     TeBox_SerialYamaha.AppendText(i.ToString() + Environment.NewLine);
                 }));
-                i.ExecuteCommand(yamaha, arduino);                             
+                i.ExecuteCommand(yamaha, arduino);
+                j++;
+                if(j==73)
+                {
+
+                }
+                if (token.IsCancellationRequested)
+                {
+                    progressBarDruck.Invoke(new Action(() =>
+                    {
+                        progressBarDruck.Maximum = 100;
+                        progressBarDruck.Step = 1;
+                        progressBarDruck.Value = 0;
+
+                    }));
+                    arduino.Move(0);
+                    yamaha.SetPosition(0, 0, 0, 0);
+                    yamaha.Move(0);
+                    yamaha.WaitForOk(2);
+                    return;
+                }
             }
         }
         private void Form1_FormClosing(Object sender, FormClosingEventArgs e)
@@ -189,7 +237,7 @@ namespace yamaha3Dprint
 
         private void progressBarDruck_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Command "+ commandcounter + " von "+ progressBarDruck.Maximum);
+            MessageBox.Show("Command " + commandcounter + " von " + progressBarDruck.Maximum);
         }
 
         private void Cmd_YamahaMove_Click(object sender, EventArgs e)
@@ -207,11 +255,11 @@ namespace yamaha3Dprint
             {
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
-                yamaha.SendCommand("@MOVE L,P0,P1,P2,P3,P4,P5,P6,P7,S="+i);               
+                yamaha.SendCommand("@MOVE L,P0,P1,P2,P3,P4,P5,P6,P7,S=" + i);
                 yamaha.WaitForOk(1);
                 stopwatch.Stop();
                 TeBox_SerialYamaha.AppendText(i + stopwatch.Elapsed.ToString() + Environment.NewLine);
-            }            
+            }
         }
 
         private void CmdReadControllino_Click(object sender, EventArgs e)
@@ -220,6 +268,28 @@ namespace yamaha3Dprint
             {
                 TeBox_SerialControllino.AppendText(arduino.Read() + Environment.NewLine);
             }));
+        }
+
+        private void Cmd_LoadFilament_Click(object sender, EventArgs e)
+        {
+            if (Cmd_LoadFilament.Text == "Load Filament")
+            {
+                arduino.SetTemp(215);
+                arduino.SetFlow(800);
+                arduino.Move(1);
+                Cmd_LoadFilament.Text = "Stop Loading";
+            }
+            else if (Cmd_LoadFilament.Text == "Stop Loading")
+            {
+                arduino.Move(0);
+                Cmd_LoadFilament.Text = "Load Filament";
+            }
+        }
+
+        private void CmdStopPrint_Click(object sender, EventArgs e)
+        {
+            source.Cancel();
+            CmdStopPrint.Visible = false;
         }
     }
 }

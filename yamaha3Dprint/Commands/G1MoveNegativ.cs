@@ -18,7 +18,12 @@ namespace yamaha3Dprint.Commands
 
         public override void ExecuteCommand(Yamaha yamaha, Arduino arduino)
         {
-           
+            var position = yamaha.SetPosition(0, x, y);
+            arduino.Move(e);
+            yamaha.Move(0);
+            yamaha.WaitForOk(2);
+            yamaha.SendCount = 0;
+            arduino.Move(0);
         }
 
         public static G1MoveNegativ Parse(string parameters)

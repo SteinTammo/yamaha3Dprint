@@ -187,7 +187,7 @@ namespace yamaha3Dprint
                     //G1 X109.128 Y42.788
                     if (parameters[1].StartsWith("X") && parameters[2].StartsWith("Y"))
                     {
-                        var move = G1MovePositiv.Parse($"{parameters[0]} {parameters[1]} {parameters[2]}" + " 0");
+                        var move = G1MovePositiv.Parse($"{parameters[0]} {parameters[1]} {parameters[2]}");
                         commands.Add(move);
                         behandelt = true;
                     }
@@ -222,6 +222,7 @@ namespace yamaha3Dprint
                         commands.Add(setflow);
                         var move = G1MoveY.Parse($"{parameters[0]} {parameters[1]}");
                         commands.Add(move);
+                        behandelt = true;
                     }
                 }
                 if (parameters.Length == 2)
@@ -245,7 +246,7 @@ namespace yamaha3Dprint
             {
                 var parameters = line.Split(' ');
                 if (parameters[0].StartsWith("G2 ") && parameters[1].StartsWith("X"))
-                {
+                {                    
                     var Temp = G2.Parse($"{parameters[1]} {parameters[2]} {parameters[3]} {parameters[4]} {parameters[5]}");
                     commands.Add(Temp);
                 }

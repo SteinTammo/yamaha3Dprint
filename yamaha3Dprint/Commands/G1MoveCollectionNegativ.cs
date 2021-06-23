@@ -10,8 +10,10 @@ namespace yamaha3Dprint.Commands
             G1MoveNegativ = g1MoveNegativ;
         }
         public override void ExecuteCommand(Yamaha yamaha, Arduino arduino)
-        {
+        {            
             int i = 0;
+            int j = 0;
+            double? extruder = 0;
             if (G1MoveNegativ.Count == 0)
             {
                 return;
@@ -19,18 +21,25 @@ namespace yamaha3Dprint.Commands
             foreach (var move in G1MoveNegativ)
             {
                 yamaha.SetPosition(i, move.x, move.y);
+                extruder = extruder + move.e;
                 i++;
-                if (i == 7)
+                j++;
+                if (i == 50)
                 {
                     arduino.Move(-1);
                     yamaha.ExecuteMoves(i);
+                    arduino.MoveExtruder(0);
                     i = 0;
-                    arduino.Move(0);
+                    extruder = 0;
+                }
+                if (i != 0 && j == G1MoveNegativ.Count)
+                {
+                    arduino.Move(-1);
+                    yamaha.ExecuteMoves(i);
+                    arduino.MoveExtruder(0);
+
                 }
             }
-            arduino.Move(-1);
-            yamaha.ExecuteMoves(i);
-            arduino.Move(0);
         }
     }
 }

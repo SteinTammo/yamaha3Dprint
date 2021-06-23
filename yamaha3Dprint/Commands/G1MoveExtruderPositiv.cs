@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Threading;
 using yamaha3Dprint.Commands;
 
 namespace yamaha3Dprint.Commands
@@ -15,8 +16,7 @@ namespace yamaha3Dprint.Commands
 
         public override void ExecuteCommand(Yamaha yamaha, Arduino arduino)
         {
-            //arduino.Move(e);
-            //arduino.WaitForOk(1);
+            arduino.MoveExtruder(this.e);
         }
 
         public static G1MoveExtruderPositiv Parse(string parameters)
