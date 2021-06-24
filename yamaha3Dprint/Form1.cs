@@ -72,9 +72,10 @@ namespace yamaha3Dprint
                     cmd.StartInfo.CreateNoWindow = true;
                     cmd.StartInfo.UseShellExecute = false;
                     cmd.Start();
-                    string arcwelderpath = @"C:\Users\stein\Downloads\Yamaha3DPrint\yamaha3Dprint\ArcWelder.exe";
+                    string arcwelderpath = @"ArcWelder.exe";
                     string outputpath = pathwithoutname + "_processed.gcode";
-                    cmd.StandardInput.WriteLine(arcwelderpath + " "+ "-m=5000 " + filePath + " " + outputpath);
+                    cmd.StandardInput.WriteLine(arcwelderpath + " -m=5000 \"" + filePath + "\" \"" + outputpath+"\"");
+                    Console.WriteLine(arcwelderpath + " -m=5000 \"" + filePath + "\" \"" + outputpath + "\"");
                     cmd.StandardInput.Flush();
                     cmd.StandardInput.Close();
                     cmd.WaitForExit();
