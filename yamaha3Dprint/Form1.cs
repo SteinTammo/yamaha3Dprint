@@ -80,6 +80,7 @@ namespace yamaha3Dprint
                     cmd.StandardInput.Close();
                     cmd.WaitForExit();
                     Console.WriteLine(cmd.StandardOutput.ReadToEnd());
+                    Thread.Sleep(1000);
                     fileContent = File.ReadAllLines(outputpath);
                     filePath = outputpath;
                 }

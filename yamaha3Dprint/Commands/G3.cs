@@ -37,8 +37,12 @@ namespace yamaha3Dprint.Commands
             else
             {
                 aktuelleposition = yamaha.GetCurrentPosition();
-                mittelpunkt = new Position(x + i, y + i, aktuelleposition.Z);
+                mittelpunkt = new Position(aktuelleposition.X + i, aktuelleposition.Y + i, aktuelleposition.Z);
                 neuePosition = GetNewPosition(aktuelleposition, mittelpunkt);
+                Console.WriteLine(aktuelleposition.X + " " + aktuelleposition.Y);
+                Console.WriteLine(neuePosition.X + " " + neuePosition.Y);
+                Console.WriteLine(x + " " + y);
+                Console.WriteLine(mittelpunkt.X + " " + mittelpunkt.Y);
                 yamaha.SetPosition(0, neuePosition.X, neuePosition.Y);
                 yamaha.SetPosition(1, x, y);                
                 arduino.Move(e);
@@ -52,16 +56,20 @@ namespace yamaha3Dprint.Commands
         {
             double[] Richtungsvektoralt = new double[2];
             double[] Richtungsvektornew = new double[2];
-            Richtungsvektoralt[0] = mittelpunkt.X - aktuell.X;
-            Richtungsvektoralt[1] = mittelpunkt.Y - aktuell.Y;
-            Richtungsvektornew[0] = mittelpunkt.X - x;
-            Richtungsvektornew[1] = mittelpunkt.Y - y;
-            double radius = Norm(Richtungsvektornew[0],Richtungsvektornew[0]);
+            Richtungsvektoralt[0] = aktuell.X - mittelpunkt.X;
+            Richtungsvektoralt[1] = aktuell.Y - mittelpunkt.Y;
+            Richtungsvektornew[0] = x - mittelpunkt.X;
+            Richtungsvektornew[1] = y - mittelpunkt.Y;
+            double radius = Norm(Richtungsvektornew[0],Richtungsvektornew[1]);
             double Winkel1 = Winkelberechnung(Richtungsvektoralt);
             double Winkel2 = Winkelberechnung(Richtungsvektornew);
-            double Winkelerg = (Winkel1 - Winkel2)/2;
-            double newpointx = Math.Cos(Winkelerg * Math.PI / 180) * radius + mittelpunkt.X;
-            double newpointy = Math.Sin(Winkelerg * Math.PI / 180) * radius + mittelpunkt.Y;
+            double Winkelerg = (Winkel1 - Winkel2) / 2;
+            if (Winkelerg>0)
+            {
+                Winkelerg += 180;
+            }
+            double newpointx = Math.Cos(Winkel1+Winkelerg * Math.PI / 180) * radius + mittelpunkt.X;
+            double newpointy = Math.Sin(Winkel1+Winkelerg * Math.PI / 180) * radius + mittelpunkt.Y;
             Position Mittelposition = new Position(newpointx,newpointy,aktuell.Z);
             return Mittelposition;
         }
