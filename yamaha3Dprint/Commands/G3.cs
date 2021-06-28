@@ -63,8 +63,19 @@ namespace yamaha3Dprint.Commands
             double radius = Norm(Richtungsvektornew[0],Richtungsvektornew[1]);
             double Winkel1 = Winkelberechnung(Richtungsvektoralt);
             double Winkel2 = Winkelberechnung(Richtungsvektornew);
-            double Winkelerg = (Winkel1 - Winkel2) / 2;
-            if (Winkelerg>0)
+            int quadrant1 = Quadranten(Richtungsvektoralt);
+            int quadrant2 = Quadranten(Richtungsvektornew);
+            double Winkelerg = Winkel1 - Winkel2;
+            bool otherside = GetOtherside(Winkel1, Winkel2,Winkelerg, quadrant1,quadrant2);
+            if (Winkelerg > 180)
+            {
+                Winkelerg -= 360.0;
+            }
+            if (Winkelerg < -180)
+            {
+                Winkelerg += 360;
+            }
+            if(otherside==true)
             {
                 Winkelerg += 180;
             }
@@ -73,6 +84,107 @@ namespace yamaha3Dprint.Commands
             Position Mittelposition = new Position(newpointx,newpointy,aktuell.Z);
             return Mittelposition;
         }
+
+        private bool GetOtherside(double winkel1, double winkel2,double winkelerg,int quadrant1, int quadrant2)
+        {
+            if (quadrant1 == 1 && quadrant2 == 1)
+            {
+                return winkel1 > winkel2;
+            }
+            else if (quadrant1 == 1 && quadrant2 == 2)
+            {
+                return false;
+            }
+            else if (quadrant1 == 1 && quadrant2 == 3)
+            {
+                if (Math.Abs(winkelerg) > 180)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            else if (quadrant1 == 1 && quadrant2 == 4)
+            {
+                return true;
+            }
+            else if (quadrant1 == 2 && quadrant2 == 1)
+            {
+                return true;
+            }
+            else if (quadrant1 == 2 && quadrant2 == 2)
+            {
+                return winkel1 > winkel2;
+            }
+            else if (quadrant1 == 2 && quadrant2 == 3)
+            {
+                return true;
+            }
+            else if (quadrant1 == 2 && quadrant2 == 4)
+            {
+                if (Math.Abs(winkelerg) > 180)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            else if (quadrant1 == 3 && quadrant2 == 1)
+            {
+                if (Math.Abs(winkelerg) > 180)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else if (quadrant1 == 3 && quadrant2 == 2)
+            {
+                return true;
+            }
+            else if (quadrant1 == 3 && quadrant2 == 3)
+            {
+                return winkel1 > winkel2;
+            }
+            else if (quadrant1 == 3 && quadrant2 == 4)
+            {
+                return false;
+            }
+            else if (quadrant1 == 4 && quadrant2 == 1)
+            {
+                return false;
+            }
+            else if (quadrant1 == 4 && quadrant2 == 2)
+            {
+                if (Math.Abs(winkelerg) > 180)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else if (quadrant1 == 4 && quadrant2 == 3)
+            {
+                return true;
+            }
+            else if (quadrant1 == 4 && quadrant2 == 4)
+            {
+                return winkel1 > winkel2;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public double Skalarprodukt(double x1, double y1, double x2, double y2)
         {
             return (x1 * x2 + y1 * y2);
