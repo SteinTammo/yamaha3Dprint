@@ -245,10 +245,11 @@ namespace yamaha3Dprint
             if (line.StartsWith("G2 "))
             {
                 var parameters = line.Split(' ');
-                if (parameters[0].StartsWith("G2 ") && parameters[1].StartsWith("X"))
+                if (parameters[0].StartsWith("G2") && parameters[1].StartsWith("X"))
                 {                    
                     var Temp = G2.Parse($"{parameters[1]} {parameters[2]} {parameters[3]} {parameters[4]} {parameters[5]}");
                     commands.Add(Temp);
+                    behandelt = true;
                 }
             }
             if (line.StartsWith("G3"))
@@ -258,6 +259,7 @@ namespace yamaha3Dprint
                 {
                     var Temp = G3.Parse($"{parameters[1]} {parameters[2]} {parameters[3]} {parameters[4]} {parameters[5]}");
                     commands.Add(Temp);
+                    behandelt = true;
                 }
             }
             if (line.StartsWith("M204"))
@@ -283,8 +285,17 @@ namespace yamaha3Dprint
                     var percentage = M73.Parse($"{parameters[0]} {parameters[1]} {parameters[2]}");
                     commands.Add(percentage);
                     behandelt = true;
+                }                
+            }
+            if(line.StartsWith("M190"))
+            {
+                var parameters = line.Split(' ');
+                if(parameters[0].StartsWith("M190") && parameters[1].StartsWith("S"))
+                {
+                    var Temp = M190.Parse(parameters[1]);
+                    commands.Add(Temp);
+                    behandelt = true;
                 }
-                
             }
             if (line.StartsWith("G28"))
             {

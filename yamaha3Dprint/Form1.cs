@@ -226,6 +226,10 @@ namespace yamaha3Dprint
         }
         private void Form1_FormClosing(Object sender, FormClosingEventArgs e)
         {
+            if(arduino == null && yamaha == null)
+            {
+                return;
+            }
             arduino.Move(0);
             yamaha.SetPosition(0, 0, 0, 0);
             yamaha.Move(0);
@@ -276,7 +280,7 @@ namespace yamaha3Dprint
         {
             if (Cmd_LoadFilament.Text == "Load Filament")
             {
-                arduino.SetTemp(215);
+                arduino.SetETemp(215);
                 arduino.SetFlow(800);
                 arduino.Move(1);
                 Cmd_LoadFilament.Text = "Stop Loading";
@@ -292,6 +296,11 @@ namespace yamaha3Dprint
         {
             source.Cancel();
             CmdStopPrint.Visible = false;
+        }
+
+        private void Cmd_Safe_Multiplier_Click(object sender, EventArgs e)
+        {
+            arduino.SetFlowMultiplier(double.Parse(TeBox_Flow_Multiplier.Text));
         }
     }
 }

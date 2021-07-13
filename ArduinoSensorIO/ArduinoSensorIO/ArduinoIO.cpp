@@ -7,10 +7,13 @@ ArduinoIO::ArduinoIO()
 	this->dirPin = 3;		// Richtungspin
 	this->enblPin = 4;		// Anschalten des Drivers
 	this->ExtruderHeizPin = 5;
+  this->DruckbettHeizPin =6;
 	this->ExtruderTempPin = A0;
 	this->aktuelleExtruderTemperatur = 0;
+  this->aktuelleDruckbettTemperatur = 0;
 	this->DruckbettTempPin = 1;
 	this->zielExtruderTemperatur = 20;
+  this->zielDruckbettTemperatur = 20;
 	this->newPostion = false;
 	this->setDruckbett = false;
 	this->setExtruderheizen = false;
@@ -21,6 +24,7 @@ ArduinoIO::ArduinoIO()
 	mystepper = AccelStepper(1, pulsePin, dirPin);
 	mystepper.setPinsInverted(true, false, false);
 	analog1 = ResponsiveAnalogRead(ExtruderTempPin, true);
+  analog2 = ResponsiveAnalogRead(DruckbettTempPin, true);
 	lowpassFilterExtruder = FilterOnePole(LOWPASS, filterFrequency);
 	lowpassFilterDruckbett = FilterOnePole(LOWPASS, filterFrequency);
 
@@ -78,6 +82,18 @@ void ArduinoIO::ExtruderTemperaturRegelung()
 	}
 }
 
+void ArduinoIO::DruckbettTemperaturRegelung()
+{
+  this->aktuelleDruckbettTemperatur = GetDruckbettTemperatur();
+  if (zielDruckbettTemperatur >= aktuelleDruckbettTemperatur-2)
+  {
+    digitalWrite(DruckbettHeizPin, HIGH);
+  }
+  if (zielDruckbettTemperatur <= aktuelleDruckbettTemperatur+2)
+  {
+    digitalWrite(DruckbettHeizPin, LOW);
+  }
+}
 void ArduinoIO::Initialisieren()
 {
 	pinMode(pulsePin, OUTPUT);
@@ -108,9 +124,10 @@ void ArduinoIO::Run()
 	inBewegung = mystepper.isRunning();
 	Checkfinish(inBewegung);
 	ExtruderTemperaturRegelung();
+  //DruckbettTemperaturRegelung();
   if(this->newTemp==true)
   {
-    if(this->zielExtruderTemperatur <= this->aktuelleExtruderTemperatur+4 && this->zielExtruderTemperatur >= this->aktuelleExtruderTemperatur-4)
+    if((this->zielExtruderTemperatur <= this->aktuelleExtruderTemperatur+4 && this->zielExtruderTemperatur >= this->aktuelleExtruderTemperatur-4) && (this->zielDruckbettTemperatur <= this->aktuelleDruckbettTemperatur+4 && this->zieldruckbettTemperatur >= this->aktuelleDruckbettTemperatur-4))
     {      
       SetOk();
       newTemp=false;
@@ -166,6 +183,10 @@ void ArduinoIO::NewCommand(String choise, String data)
 	{
 		Serial.println(analogRead(DruckbettTempPin));
 	}
+  else if(choise == "M190")
+  {
+    SetDruckbettTemperatur(data.toFloat());
+  }
 }
 void ArduinoIO::SetZero()
 {
@@ -176,36 +197,28 @@ void ArduinoIO::SetZero()
 }
 void ArduinoIO::SetExtruderTemperatur(float Temperatur)
 {
-	this->zielExtruderTemperatur = Temperatur;
+  this->zielExtruderTemperatur = Temperatur;
+  this->newTemp=true;
+}
+void ArduinoIO::SetDruckbettTemperatur(float Temperatur)
+{
+ this->zielDruckbettTemperatur = Temperatur;
   this->newTemp=true;
 }
 
 double ArduinoIO::GetExtruderTemperatur()
 {
-	double bWert = 4267;
-	double widerstand1 = 100000.0;
-	double widerstandNTC = 0;
-	double kelvintemp = 273.15;
-	double Tn = kelvintemp + 25;
-	double TKelvin = 0;
-	double T = 0;
-	double* tempfeld = new double[10];
-	double tempsumme=0;
-	/*for (int i = 0; i < 10; i++)
-	{
-		tempfeld[i] = analogRead(ExtruderTempPin);
-		delay(10);
-		tempsumme += tempfeld[i];
-	}
-	tempsumme = tempsumme / 10.0;*/
+	double T = 0;	
 	double bitwertNTC = (double)lowpassFilterExtruder.output();
-	widerstandNTC = widerstand1 * (bitwertNTC / 1024) / (1 - bitwertNTC / 1024);
-
-	// berechne den Widerstandswert vom NTC
-	TKelvin = 1 / ((1 / Tn) + (1.0 / bWert) * log(widerstandNTC / widerstand1));
   double v = bitwertNTC/1024*5;
-	// ermittle die Temperatur in Kelvin
-	T = TKelvin - kelvintemp;                    // ermittle die Temperatur in �C
+  T= 2.4295*pow(v,3)+0.9599*pow(v,2)+228*v-257.99;
+  return T;
+}
+double ArduinoIO::GetDruckbettTemperatur()
+{
+  double T = 0;  
+  double bitwertNTC = (double)lowpassFilterDruckbett.output();
+  double v = bitwertNTC/1024*5;
   T= 2.4295*pow(v,3)+0.9599*pow(v,2)+228*v-257.99;
   return T;
 }

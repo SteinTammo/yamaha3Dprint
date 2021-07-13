@@ -19,7 +19,7 @@ namespace yamaha3Dprint.Commands
             this.x = x;
             this.y = y;
             this.i = I;
-            this.i = J;
+            this.j = J;
             this.e = e;
         }
         public override void ExecuteCommand(Yamaha yamaha, Arduino arduino)

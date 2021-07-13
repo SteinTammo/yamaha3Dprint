@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Yamaha3DPrint));
             this.CmdReadGCode = new System.Windows.Forms.Button();
             this.Lbl_Gcode = new System.Windows.Forms.Label();
@@ -58,6 +59,13 @@
             this.Cmd_UnloadFilament = new System.Windows.Forms.Button();
             this.Cmd_LoadFilament = new System.Windows.Forms.Button();
             this.CmdStopPrint = new System.Windows.Forms.Button();
+            this.TeBox_Flow_Multiplier = new System.Windows.Forms.TextBox();
+            this.Cmd_Safe_Multiplier = new System.Windows.Forms.Button();
+            this.toolTipSaveMultiplier = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTipreadGcode = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTipConnectDevices = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTipStartPrint = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTipStopPrint = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // CmdReadGCode
@@ -67,6 +75,8 @@
             this.CmdReadGCode.Size = new System.Drawing.Size(83, 39);
             this.CmdReadGCode.TabIndex = 1;
             this.CmdReadGCode.Text = "Read GCode";
+            this.toolTipreadGcode.SetToolTip(this.CmdReadGCode, "Öffnet Fenster zum Einlesen der GCode-Datei, die vorher vom Prusaslicer erstellt " +
+        "wurde.");
             this.CmdReadGCode.UseVisualStyleBackColor = true;
             this.CmdReadGCode.Click += new System.EventHandler(this.CmdReadGCode_Click);
             // 
@@ -86,6 +96,7 @@
             this.CmdConnectDevice.Size = new System.Drawing.Size(96, 39);
             this.CmdConnectDevice.TabIndex = 3;
             this.CmdConnectDevice.Text = "Connect Devices ";
+            this.toolTipConnectDevices.SetToolTip(this.CmdConnectDevice, resources.GetString("CmdConnectDevice.ToolTip"));
             this.CmdConnectDevice.UseVisualStyleBackColor = true;
             this.CmdConnectDevice.Click += new System.EventHandler(this.CmdConnectDevice_Click);
             // 
@@ -222,6 +233,8 @@
             this.CmdStartPrint.Size = new System.Drawing.Size(75, 39);
             this.CmdStartPrint.TabIndex = 20;
             this.CmdStartPrint.Text = "Start Print";
+            this.toolTipStartPrint.SetToolTip(this.CmdStartPrint, "Startet den Druckvorgang. \r\nVorher muss ein gültiger GCode eingelesen und die Ger" +
+        "äte verbunden werden. \r\n");
             this.CmdStartPrint.UseVisualStyleBackColor = true;
             this.CmdStartPrint.Click += new System.EventHandler(this.CmdStartPrint_Click);
             // 
@@ -342,9 +355,31 @@
             this.CmdStopPrint.Size = new System.Drawing.Size(75, 39);
             this.CmdStopPrint.TabIndex = 32;
             this.CmdStopPrint.Text = "Stop Print";
+            this.toolTipStopPrint.SetToolTip(this.CmdStopPrint, "Stoppt den Druck und fährt auf die Home-Position");
             this.CmdStopPrint.UseVisualStyleBackColor = true;
             this.CmdStopPrint.Visible = false;
             this.CmdStopPrint.Click += new System.EventHandler(this.CmdStopPrint_Click);
+            // 
+            // TeBox_Flow_Multiplier
+            // 
+            this.TeBox_Flow_Multiplier.Location = new System.Drawing.Point(1119, 64);
+            this.TeBox_Flow_Multiplier.Name = "TeBox_Flow_Multiplier";
+            this.TeBox_Flow_Multiplier.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+            this.TeBox_Flow_Multiplier.Size = new System.Drawing.Size(84, 20);
+            this.TeBox_Flow_Multiplier.TabIndex = 34;
+            this.TeBox_Flow_Multiplier.Text = "0.1666";
+            // 
+            // Cmd_Safe_Multiplier
+            // 
+            this.Cmd_Safe_Multiplier.Location = new System.Drawing.Point(1119, 22);
+            this.Cmd_Safe_Multiplier.Name = "Cmd_Safe_Multiplier";
+            this.Cmd_Safe_Multiplier.Size = new System.Drawing.Size(84, 39);
+            this.Cmd_Safe_Multiplier.TabIndex = 33;
+            this.Cmd_Safe_Multiplier.Text = "Save Flowmultiplier";
+            this.toolTipSaveMultiplier.SetToolTip(this.Cmd_Safe_Multiplier, "Setze das Verhältnis von der Extrusionsmenge und der Bewegungsgeschwindigkeit des" +
+        " Extruders. ");
+            this.Cmd_Safe_Multiplier.UseVisualStyleBackColor = true;
+            this.Cmd_Safe_Multiplier.Click += new System.EventHandler(this.Cmd_Safe_Multiplier_Click);
             // 
             // Yamaha3DPrint
             // 
@@ -352,6 +387,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(1240, 537);
+            this.Controls.Add(this.TeBox_Flow_Multiplier);
+            this.Controls.Add(this.Cmd_Safe_Multiplier);
             this.Controls.Add(this.CmdStopPrint);
             this.Controls.Add(this.Cmd_LoadFilament);
             this.Controls.Add(this.Cmd_UnloadFilament);
@@ -420,6 +457,13 @@
         private System.Windows.Forms.Button Cmd_UnloadFilament;
         private System.Windows.Forms.Button Cmd_LoadFilament;
         private System.Windows.Forms.Button CmdStopPrint;
+        private System.Windows.Forms.TextBox TeBox_Flow_Multiplier;
+        private System.Windows.Forms.Button Cmd_Safe_Multiplier;
+        private System.Windows.Forms.ToolTip toolTipSaveMultiplier;
+        private System.Windows.Forms.ToolTip toolTipreadGcode;
+        private System.Windows.Forms.ToolTip toolTipConnectDevices;
+        private System.Windows.Forms.ToolTip toolTipStartPrint;
+        private System.Windows.Forms.ToolTip toolTipStopPrint;
     }
 }
 
