@@ -9,8 +9,9 @@ namespace yamaha3Dprint.Commands
         {
             G1MoveNegativ = g1MoveNegativ;
         }
+        // Für alle G1MoveNegativ befehle in der Liste werden für jede 50 Befehle die Punkte direkt hinteinander abgefahren. Danach werden erst die Oks gezählt
         public override void ExecuteCommand(Yamaha yamaha, Arduino arduino)
-        {            
+        {
             int i = 0;
             int j = 0;
             double? extruder = 0;

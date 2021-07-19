@@ -12,6 +12,22 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>C:\Users\Tammo Stein\PowerFolders\HiWi_Stein %28Martin David%29\Setup Yamaha\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,6 +48,18 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>7BD919A353284D63AF7D2F86F06BB91300634924</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>yamaha3Dprint_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -49,6 +77,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arduino.cs" />
+    <Compile Include="ArduinoHelp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ArduinoHelp.Designer.cs">
+      <DependentUpon>ArduinoHelp.cs</DependentUpon>
+    </Compile>
     <Compile Include="Commands\G1MoveCollectionNegativ.cs" />
     <Compile Include="Commands\G1MoveExtruderNegativ.cs" />
     <Compile Include="Commands\G1MoveNegativ.cs" />
@@ -63,16 +97,21 @@
     <Compile Include="Commands\G3.cs" />
     <Compile Include="Commands\G92.cs" />
     <Compile Include="Commands\M73.cs" />
-    <Compile Include="M104.cs" />
-    <Compile Include="M190.cs" />
-    <Compile Include="Position.cs" />
-    <Compile Include="Yamaha.cs" />
-    <Compile Include="Comunication.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="M104.cs" />
+    <Compile Include="M190.cs" />
+    <Compile Include="Position.cs" />
+    <Compile Include="Yamaha.cs" />
+    <Compile Include="Yamaha3DPrint.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Yamaha3DPrint.Designer.cs">
+      <DependentUpon>Yamaha3DPrint.cs</DependentUpon>
     </Compile>
     <Compile Include="Commands\G1MovePositiv.cs" />
     <Compile Include="gcode.cs" />
@@ -80,8 +119,14 @@
     <Compile Include="GcodeIO.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="ArduinoHelp.resx">
+      <DependentUpon>ArduinoHelp.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Yamaha3DPrint.resx">
+      <DependentUpon>Yamaha3DPrint.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -92,6 +137,37 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="Properties\DataSources\Arduino.datasource" />
+    <None Include="Properties\DataSources\ArduinoHelp.Command.datasource" />
+    <None Include="Properties\DataSources\ArduinoHelp.datasource" />
+    <None Include="Properties\DataSources\Form1.datasource" />
+    <None Include="Properties\DataSources\GcodeIO.datasource" />
+    <None Include="Properties\DataSources\Position.datasource" />
+    <None Include="Properties\DataSources\processGCode.datasource" />
+    <None Include="Properties\DataSources\Program.datasource" />
+    <None Include="Properties\DataSources\Yamaha.datasource" />
+    <None Include="Properties\DataSources\yamaha3Dprint.Commands.G1MoveCollectionNegativ.datasource" />
+    <None Include="Properties\DataSources\yamaha3Dprint.Commands.G1MoveCollectionPositiv.datasource" />
+    <None Include="Properties\DataSources\yamaha3Dprint.Commands.G1MoveExtruderNegativ.datasource" />
+    <None Include="Properties\DataSources\yamaha3Dprint.Commands.G1MoveExtruderPositiv.datasource" />
+    <None Include="Properties\DataSources\yamaha3Dprint.Commands.G1MoveNegativ.datasource" />
+    <None Include="Properties\DataSources\yamaha3Dprint.Commands.G1MovePositiv.datasource" />
+    <None Include="Properties\DataSources\yamaha3Dprint.Commands.G1MoveXE.datasource" />
+    <None Include="Properties\DataSources\yamaha3Dprint.Commands.G1MoveY.datasource" />
+    <None Include="Properties\DataSources\yamaha3Dprint.Commands.G1MoveZ.datasource" />
+    <None Include="Properties\DataSources\yamaha3Dprint.Commands.G1SetFlow.datasource" />
+    <None Include="Properties\DataSources\yamaha3Dprint.Commands.G2.datasource" />
+    <None Include="Properties\DataSources\yamaha3Dprint.Commands.G28.datasource" />
+    <None Include="Properties\DataSources\yamaha3Dprint.Commands.G3.datasource" />
+    <None Include="Properties\DataSources\yamaha3Dprint.Commands.G92.datasource" />
+    <None Include="Properties\DataSources\yamaha3Dprint.Commands.GcodeCommand.datasource" />
+    <None Include="Properties\DataSources\yamaha3Dprint.Commands.M104.datasource" />
+    <None Include="Properties\DataSources\yamaha3Dprint.Commands.M190.datasource" />
+    <None Include="Properties\DataSources\yamaha3Dprint.Commands.M73.datasource" />
+    <None Include="Properties\DataSources\Yamaha3DPrint.datasource" />
+    <None Include="Properties\DataSources\yamaha3Dprint.Properties.Resources.datasource" />
+    <None Include="Properties\DataSources\yamaha3Dprint.Properties.Settings.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -101,9 +177,22 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="yamaha3Dprint_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 und x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

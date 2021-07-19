@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="yamaha3Dprint.Arduino" Collapsed="true">
+    <Position X="39" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACBIAAAAAIAAAAAAAIgAAIAgECEACAQAAgAAAAEMAAA=</HashCode>
+      <FileName>Arduino.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="yamaha3Dprint.Serial" Collapsed="true">
+    <Position X="42.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAQAAAAAAAAQQAACAAEABAAAAQAAAAAgAAACAgAAAA=</HashCode>
+      <FileName>Comunication.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="yamaha3Dprint.Yamaha3DPrint" Collapsed="true">
+    <Position X="42.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACELWgIQKFEpRYIgBiLcASKAgAABEuAAAiZA4AEYAg=</HashCode>
+      <FileName>Form1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="yamaha3Dprint.processGCode" Collapsed="true">
+    <Position X="42.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAAAAAAAAgAAAAAAAAAAAFAAAAQAAAAAA=</HashCode>
+      <FileName>gcode.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="yamaha3Dprint.GcodeIO" Collapsed="true">
+    <Position X="40.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAQACAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GcodeIO.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="yamaha3Dprint.Program" Collapsed="true">
+    <Position X="39" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="yamaha3Dprint.Yamaha" Collapsed="true">
+    <Position X="40.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IBNAAAAAAIgAAAAMAAgGIIAAECUAAgEACgAAAAAAAAA=</HashCode>
+      <FileName>Yamaha.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="yamaha3Dprint.Commands.G1MoveCollectionNegativ" Collapsed="true">
+    <Position X="14" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAA=</HashCode>
+      <FileName>Commands\G1MoveCollectionNegativ.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="yamaha3Dprint.Commands.G1MoveCollectionPositiv" Collapsed="true">
+    <Position X="20.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Commands\G1MoveCollectionPositiv.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="yamaha3Dprint.Commands.G1MoveExtruderNegativ" Collapsed="true">
+    <Position X="27.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAgAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Commands\G1MoveExtruderNegativ.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="yamaha3Dprint.Commands.G1MoveExtruderPositiv" Collapsed="true">
+    <Position X="32" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAgAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Commands\G1MoveExtruderPositiv.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="yamaha3Dprint.Commands.G1MoveNegativ" Collapsed="true">
+    <Position X="0.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAgAAAAAAAAAAAAAAAAAAAAAAAAAAACAABgAAAAAAA=</HashCode>
+      <FileName>Commands\G1MoveNegativ.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="yamaha3Dprint.Commands.G1MovePositiv" Collapsed="true">
+    <Position X="7.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAgAAAAAAAAAAAAAAAAAAAAAAAAAAACAABgAAAAAAA=</HashCode>
+      <FileName>Commands\G1MovePositiv.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="yamaha3Dprint.Commands.G1MoveXE" Collapsed="true">
+    <Position X="16.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAgAAAAAAAAAAAAAAAAAAAAAAAAAAACAABAAAAAAAA=</HashCode>
+      <FileName>Commands\G1MoveXE.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="yamaha3Dprint.Commands.G1MoveY" Collapsed="true">
+    <Position X="23" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Commands\G1MoveY.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="yamaha3Dprint.Commands.G1MoveZ" Collapsed="true">
+    <Position X="29.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Commands\G1MoveZ.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="yamaha3Dprint.Commands.G1SetFlow" Collapsed="true">
+    <Position X="34.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAgAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Commands\G1SetFlow.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="yamaha3Dprint.Commands.G2" Collapsed="true">
+    <Position X="2.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BIAgAIAAAAAAEAAAAAACQAAAAAAAAAACJAFgAQAAQAA=</HashCode>
+      <FileName>Commands\G2.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="yamaha3Dprint.Commands.G28" Collapsed="true">
+    <Position X="9.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Commands\G28.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="yamaha3Dprint.Commands.G3" Collapsed="true">
+    <Position X="18.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BIAgAIAAAAAAEAAAAAACQAAAAAAACAACJAFgAQAAQAA=</HashCode>
+      <FileName>Commands\G3.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="yamaha3Dprint.Commands.G92" Collapsed="true">
+    <Position X="25.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Commands\G92.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="yamaha3Dprint.Commands.GcodeCommand" Collapsed="true">
+    <Position X="18.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Commands\GcodeCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="yamaha3Dprint.Commands.M73" Collapsed="true">
+    <Position X="36.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAhAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAA=</HashCode>
+      <FileName>Commands\M73.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="yamaha3Dprint.Commands.M104" Collapsed="true">
+    <Position X="5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>M104.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="yamaha3Dprint.Commands.M190" Collapsed="true">
+    <Position X="11.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>M190.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="yamaha3Dprint.Properties.Resources" Collapsed="true">
+    <Position X="40.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="yamaha3Dprint.Properties.Settings" Collapsed="true">
+    <Position X="39" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="yamaha3Dprint.Position" Collapsed="true">
+    <Position X="39" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYAE=</HashCode>
+      <FileName>Position.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

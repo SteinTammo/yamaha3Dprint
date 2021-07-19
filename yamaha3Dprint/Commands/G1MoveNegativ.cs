@@ -15,20 +15,27 @@ namespace yamaha3Dprint.Commands
             this.y = y;
             this.e = e;
         }
-
+        // setzt einen neuen Punkt mit den übergebenen Koordinaten und fährt diesen an. 
         public override void ExecuteCommand(Yamaha yamaha, Arduino arduino)
         {
-            var position = yamaha.SetPosition(0, x, y);
-            arduino.Move(e);
-            yamaha.Move(0);
-            yamaha.WaitForOk(2);
-            yamaha.SendCount = 0;
-            arduino.Move(0);
+            var position = yamaha.SetPosition(0, x, y); //Setze Punkt
+            arduino.Move(e);    //Bewege Extruder
+            yamaha.Move(0); //fahre zum neuen punkt
+            yamaha.WaitForOk(2); // warte bis der neue punkt angefahren ist
+            yamaha.SendCount = 0;   //setze oks zurück
+            arduino.Move(0);    // Schalte extruder ab
         }
-
+        // Liest den GcodeComand ein und wandelt ihn in parameter um und speichert diese für die Befehlsausführung
         public static G1MoveNegativ Parse(string parameters)
         {
+            //G1 X109.866 Y42.627 E - 0.18749
             var split = parameters.Split(' ');
+            //split beinhaltet als array die Zeichenfolgen die von ' ' abgetrennt sind.
+
+            //Split[0]=G1
+            //split[1]=X109.866
+            //Split[2]=Y42.627
+            //Split[3]=E - 0.18749
             if (split.Length != 3 && split.Length != 4 || !split[0].StartsWith("G1") || !split[1].StartsWith("X") || !split[2].StartsWith("Y"))
             {
                 throw new ArgumentException("Falsche Parameter: " + parameters);

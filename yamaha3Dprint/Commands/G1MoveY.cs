@@ -11,11 +11,14 @@ namespace yamaha3Dprint.Commands
         {
             this.y = y;
         }
-
+        
+        // Bewegt sich nur in Y Richtung mit gleichbleibendem X und Z
         public override void ExecuteCommand(Yamaha yamaha, Arduino arduino)
         {
             yamaha.SetPosition(0, y, "y");
             yamaha.Move(0);
+            yamaha.WaitForOk(yamaha.SendCount);
+            yamaha.SendCount = 0;
         }
 
         public static G1MoveY Parse(string parameters)

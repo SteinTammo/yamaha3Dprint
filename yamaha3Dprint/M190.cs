@@ -2,6 +2,7 @@
 
 namespace yamaha3Dprint.Commands
 {
+    // Setzt eine neue Druckbettzieltemperatur
     public class M190 : GcodeCommand
     {
         public readonly int Temp;

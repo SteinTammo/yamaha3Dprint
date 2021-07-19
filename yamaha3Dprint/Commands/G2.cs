@@ -3,6 +3,7 @@ using System.Globalization;
 
 namespace yamaha3Dprint.Commands
 {
+    // Hier wird probiert die Kreisbewegung G2 in circularbefehle zu überführen. Funktioniert noch nicht
     public class G2 : GcodeCommand
     {
         private double x;
@@ -14,7 +15,7 @@ namespace yamaha3Dprint.Commands
         Position mittelpunkt;
         Position neuePosition;
 
-        public G2(double x, double y, double I, double J,double e)
+        public G2(double x, double y, double I, double J, double e)
         {
             this.x = x;
             this.y = y;
@@ -51,7 +52,7 @@ namespace yamaha3Dprint.Commands
         public static G2 Parse(string data)
         {
             var split = data.Split(' ');
-            
+
             split[1] = split[1].Replace("X", "");
             split[2] = split[2].Replace("Y", "");
             split[3] = split[3].Replace("I", "");
@@ -62,8 +63,8 @@ namespace yamaha3Dprint.Commands
             double I = double.Parse(split[3], new CultureInfo("en-us"));
             double J = double.Parse(split[4], new CultureInfo("en-us"));
             double e = double.Parse(split[5], new CultureInfo("en-us"));
-            
-            return new G2(x,y,I,J,e);
+
+            return new G2(x, y, I, J, e);
         }
         public double Skalarprodukt(double x1, double y1, double x2, double y2)
         {

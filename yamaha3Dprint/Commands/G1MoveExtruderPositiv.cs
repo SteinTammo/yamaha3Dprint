@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Threading;
-using yamaha3Dprint.Commands;
 
 namespace yamaha3Dprint.Commands
 {
@@ -14,6 +12,7 @@ namespace yamaha3Dprint.Commands
             this.e = e;
         }
 
+        // Verfahre den Extruder um die Länge e in positive Richtung
         public override void ExecuteCommand(Yamaha yamaha, Arduino arduino)
         {
             arduino.MoveExtruder(this.e);

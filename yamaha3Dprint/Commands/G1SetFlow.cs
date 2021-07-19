@@ -10,6 +10,8 @@ namespace yamaha3Dprint.Commands
         {
             this.flow = flow;
         }
+
+        // Übermittelt die neuen Flow Einstellungen des GCodes an die Arduino und Yamaha klasse, die die Information in geschwindigkeitsänderungen des Roboters bzw Extruders übersetzt
         public static G1SetFlow Parse(string parameters)
         {
             var split = parameters.Split(' ');

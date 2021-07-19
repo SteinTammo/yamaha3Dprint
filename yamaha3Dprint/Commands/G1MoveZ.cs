@@ -11,10 +11,11 @@ namespace yamaha3Dprint.Commands
         {
             this.z = z;
         }
-
+         
+        // Bewegt sich nur in Z Richtung
         public override void ExecuteCommand(Yamaha yamaha, Arduino arduino)
         {
-            yamaha.SetPosition(0,z,"z");
+            yamaha.SetPosition(0, z, "z");
             yamaha.Move(0);
             yamaha.WaitForOk(yamaha.SendCount);
             yamaha.SendCount = 0;
@@ -28,7 +29,7 @@ namespace yamaha3Dprint.Commands
                 throw new ArgumentException("Falsche Parameter: " + parameters);
             }
             split[1] = split[1].Replace("Z", "");
-            double z = double.Parse(split[1], new CultureInfo("en-us"));          
+            double z = double.Parse(split[1], new CultureInfo("en-us"));
 
             return new G1MoveZ(z);
         }

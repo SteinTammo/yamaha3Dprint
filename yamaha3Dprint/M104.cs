@@ -2,6 +2,7 @@
 
 namespace yamaha3Dprint.Commands
 {
+    // Setzt eine neue Extruder Zieltemperatur
     public class M104 : GcodeCommand
     {
         public readonly int Temp;
@@ -13,10 +14,10 @@ namespace yamaha3Dprint.Commands
 
         public static M104 Parse(string v)
         {
-            int Temp =20;
-            if(v.StartsWith("S"))
+            int Temp = 20;
+            if (v.StartsWith("S"))
             {
-                v=v.Replace("S", "");
+                v = v.Replace("S", "");
                 Temp = Convert.ToInt32(v);
             }
             return new M104(Temp);

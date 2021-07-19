@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO.Ports;
-using System.Threading;
 
 namespace yamaha3Dprint
 {
@@ -31,68 +30,56 @@ namespace yamaha3Dprint
         public void MoveExtruder(double e)
         {
             double time;
-            time = e / (Flowrate/60)*1000;
-            if(time<0)
+            time = e / (Flowrate / 60) * 1000;
+            if (time < 0)
             {
                 time = time * (-1);
             }
-            if(e>0)
+            if (e > 0)
             {
                 //Move(1);
                 //Thread.Sleep((int)time);
                 //Move(0);
             }
-            else if(e<0)
+            else if (e < 0)
             {
                 //Move(-1);
                 //Thread.Sleep((int)time);
                 //Move(0);
             }
-            
+
         }
 
         // bewege Extruder. e>0 nach vorn e<0 nach hinten
         internal void Move(double? e)
         {
-            if(e!=null)
+            if (e != null)
             {
                 Write("G1E&" + e + "&");
             }
-        }
-        // lese Extrudertemperatur vom arduino
-        public float GetExtruderTemp()
-        {
-            float temp=0;
-            for(int i=0;i<10;i++)
-            {
-                Write("GETTEMP&0&");
-                string read;
-                do
-                {
-                    read = ReadLine();
-                }
-                while (read == "");
-                read.Replace(@"\", "");
-                read.Replace("r", "");
-                    
-                temp += float.Parse(read);
-            }
-            temp /= 10;
-            return temp;
-        }
+        }        
 
         // öffnet den Seriellen Port mit dem Arduino
-        public void Connect(string portname, int bautrate)
+        public bool Connect(string portname, int bautrate)
         {
             if (serialPort.IsOpen)
             {
-                return;
+                return true;
             }
             serialPort.PortName = portname;
             serialPort.BaudRate = bautrate;
-            serialPort.ReadTimeout = 300;            
-            serialPort.Open();
-            serialPort.DiscardInBuffer();
+            serialPort.ReadTimeout = 300;
+            try
+            {
+                serialPort.Open();
+                serialPort.DiscardInBuffer();
+                return true;
+            }
+            catch (Exception M)
+            {
+                yamaha3DPrint.ConnectException(M);
+                return false;
+            }
         }
 
         // Setze Druckgeschwindigkeit
@@ -114,19 +101,21 @@ namespace yamaha3Dprint
             string recieve = ReadLine();
             return recieve;
         }
+
+        // probiere daten des Seriellen InBuffers auszulesen
         private string ReadLine()
         {
             var recieve = "";
             try
             {
-                recieve = serialPort.ReadLine();                
+                recieve = serialPort.ReadLine();
                 //Console.WriteLine(recieve);
             }
             catch (TimeoutException)
             {
                 //Console.WriteLine("nothing in Buffer: Readtimeout triggered");
             }
-            if(recieve!="")
+            if (recieve != "")
             {
                 yamaha3DPrint.TeBox_SerialArduinoRead.Invoke(new Action(() =>
                 {
@@ -150,15 +139,15 @@ namespace yamaha3Dprint
 
         // sende String an arduino und zeige diesen im Porgramm
         internal void Write(string text)
-        {            
-            yamaha3DPrint.TeBox_SerialControllino.Invoke(new Action(() =>
+        {
+            yamaha3DPrint.TeBox_SerialArduinoWrite.Invoke(new Action(() =>
             {
-                yamaha3DPrint.TeBox_SerialControllino.AppendText(text + Environment.NewLine);
+                yamaha3DPrint.TeBox_SerialArduinoWrite.AppendText(text + Environment.NewLine);
             }));
             serialPort.Write(text);
         }
 
-        //
+        // Setze den Flowmultiplier neu. Verhältnis der Extruderdrehzahl mit der Floweinstellung des GCodes. 
         public void SetFlowMultiplier(double multiplier)
         {
             FlowMultiplier = multiplier;

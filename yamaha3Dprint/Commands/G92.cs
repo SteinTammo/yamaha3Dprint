@@ -2,6 +2,7 @@
 
 namespace yamaha3Dprint.Commands
 {
+    // setzt die Koordinaten zurück. 
     public class G92 : GcodeCommand
     {
         public override void ExecuteCommand(Yamaha yamaha, Arduino arduino)
@@ -17,7 +18,7 @@ namespace yamaha3Dprint.Commands
             {
                 throw new ArgumentException("Falsche Parameter: " + parameter);
             }
-            return new G92(); 
+            return new G92();
         }
     }
 }

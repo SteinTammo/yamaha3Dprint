@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace yamaha3Dprint
+﻿namespace yamaha3Dprint
 {
     public class processGCode
     {
@@ -16,7 +10,7 @@ namespace yamaha3Dprint
             writeline[0] = "";
             writeline[1] = "";
             coordinates = new string[3];
-            coordinates[0]= "0.0";
+            coordinates[0] = "0.0";
             coordinates[1] = "0.0";
             coordinates[2] = "0.0";
         }
@@ -29,7 +23,7 @@ namespace yamaha3Dprint
                 if (content[i].StartsWith(";"))
                     content[i] = "";
                 int index = content[i].IndexOf(";");
-                if(index > 0)
+                if (index > 0)
                 {
                     content[i] = content[i].Substring(0, index);
                 }
@@ -38,7 +32,7 @@ namespace yamaha3Dprint
         }
 
         // create and modify write command for serial communication 
-        public string writeLines(string gcodeline,int i)
+        public string writeLines(string gcodeline, int i)
         {
             writeline[0] = "";
             writeline[1] = "";
@@ -47,15 +41,15 @@ namespace yamaha3Dprint
                 return writeline[0];
             }
             var parameters = gcodeline.Split(' ');
-            if (parameters[0]=="G1")
+            if (parameters[0] == "G1")
             {
-                G1(parameters,i);
+                G1(parameters, i);
             }
             return writeline[0];
         }
         public void G1(string[] Parameters, int i)
         {
-            if(Parameters.Length==4)
+            if (Parameters.Length == 4)
             {
                 Parameters[1] = Parameters[1].Replace("X", "");
                 Parameters[2] = Parameters[2].Replace("Y", "");
@@ -65,7 +59,7 @@ namespace yamaha3Dprint
                 Parameters[2] = Parameters[2].Remove(index2 + 3);
                 coordinates[0] = Parameters[1];
                 coordinates[1] = Parameters[2];
-                writeline[0] = "@P"+ i +"="+ coordinates[0] + " " + coordinates[1] + " " + coordinates[2] + " " + "0.0 0.0 0.0";
+                writeline[0] = "@P" + i + "=" + coordinates[0] + " " + coordinates[1] + " " + coordinates[2] + " " + "0.0 0.0 0.0";
             }
         }
     }

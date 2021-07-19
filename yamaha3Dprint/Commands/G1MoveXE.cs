@@ -34,7 +34,7 @@ namespace yamaha3Dprint.Commands
             split[1] = split[1].Replace("X", "");
             split[2] = split[2].Replace("E", "");
             double x = double.Parse(split[1], new CultureInfo("en-us"));
-            double e = double.Parse(split[2], new CultureInfo("en-us"));                        
+            double e = double.Parse(split[2], new CultureInfo("en-us"));
             return new G1MoveXE(x, e);
         }
     }

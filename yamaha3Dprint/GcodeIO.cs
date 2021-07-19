@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
 using yamaha3Dprint.Commands;
 
 namespace yamaha3Dprint
@@ -21,7 +20,8 @@ namespace yamaha3Dprint
             SimplifyCommands(commands);
             return commands;
         }
-
+        
+        // Stellt Collections zusammen, die alle gleichartigen Commands in einem Collection Command zusammenfasst, um mehr als einen Punkt auf einmal zu übertragen und die Zeit zwischen der Abfrage der Oks zu verlängern.
         private void SimplifyCommands(List<GcodeCommand> commands)
         {
             // Simplify Positiv
@@ -98,9 +98,12 @@ namespace yamaha3Dprint
 
                 }
             }
-            
+
         }
 
+        // Hier wird für jede Ziele in der eingelesenen GCode Datei überprüft welche Informationen enthalten sind. Bei relevanten Informationen werden jeweils Instanzen der jeweiligen Command Klasse erzeugt, an die die relevanten Informationen über eine Parse-Methode übertragen werden. 
+        // Die Parse-Methode gibt eine Instanz der Klasse zurück, die in der Liste commands gespeichert werden. Sie enthält am Ende alle Commands in richtiger Reihenfolge wie in der GCode Datei. Für den Druck werden dann alle Commands nacheinander abgearbeitet. 
+        // Es muss für jeden Command eine Fallunterscheidung durchgeführt werden, da es sehr viele verschiedene Variationen gibt. 
         private List<GcodeCommand> ReadLine(string line)
         {
             List<GcodeCommand> commands = new List<GcodeCommand>();
@@ -112,7 +115,7 @@ namespace yamaha3Dprint
                 if (index == 0)
                 {
                     line = string.Empty;
-                    behandelt=true;
+                    behandelt = true;
                 }
                 else
                 {
@@ -145,7 +148,7 @@ namespace yamaha3Dprint
                         if (parameters[3].StartsWith("E"))
                         {
                             //G1 X109.866 Y42.627 E - 0.18749
-                            if (parameters[3].IndexOf("-")!=-1)
+                            if (parameters[3].IndexOf("-") != -1)
                             {
                                 var move = G1MoveNegativ.Parse($"{parameters[0]} {parameters[1]} {parameters[2]} {parameters[3]}");
                                 commands.Add(move);
@@ -157,10 +160,10 @@ namespace yamaha3Dprint
                                 var move = G1MovePositiv.Parse($"{parameters[0]} {parameters[1]} {parameters[2]} {parameters[3]}");
                                 commands.Add(move);
                                 behandelt = true;
-                            }                            
+                            }
                         }
                     }
-                    if(parameters[1].StartsWith("X") && parameters[2].StartsWith("E") && parameters[3].StartsWith("F"))
+                    if (parameters[1].StartsWith("X") && parameters[2].StartsWith("E") && parameters[3].StartsWith("F"))
                     {
                         var setflow = G1SetFlow.Parse($"{parameters[0]} {parameters[3]}");
                         commands.Add(setflow);
@@ -169,9 +172,9 @@ namespace yamaha3Dprint
                         behandelt = true;
                     }
                 }
-                 //G1 Z0.400 F10800.000
-                 //G1 X109.128 Y42.788
-                 //G1 E-0.04000 F2100.00000
+                //G1 Z0.400 F10800.000
+                //G1 X109.128 Y42.788
+                //G1 E-0.04000 F2100.00000
                 if (parameters.Length == 3)
                 {
                     //G1 Z0.400 F10800.000
@@ -216,7 +219,7 @@ namespace yamaha3Dprint
                         }
                     }
                     //G1 Y-3.0 F1000.0
-                    if(parameters[1].StartsWith("Y") && parameters[2].StartsWith("F"))
+                    if (parameters[1].StartsWith("Y") && parameters[2].StartsWith("F"))
                     {
                         var setflow = G1SetFlow.Parse($"{parameters[0]} {parameters[2]}");
                         commands.Add(setflow);
@@ -227,26 +230,26 @@ namespace yamaha3Dprint
                 }
                 if (parameters.Length == 2)
                 {
-                    if(parameters[1].StartsWith("F"))
+                    if (parameters[1].StartsWith("F"))
                     {
                         var setflow = G1SetFlow.Parse($"{parameters[0]} {parameters[1]}");
                         commands.Add(setflow);
                         behandelt = true;
                     }
-                    if(parameters[1].StartsWith("Z"))
+                    if (parameters[1].StartsWith("Z"))
                     {
                         var movez = G1MoveZ.Parse($"{parameters[0]} {parameters[1]}");
                         commands.Add(movez);
                         behandelt = true;
                     }
-                    
+
                 }
             }
             if (line.StartsWith("G2 "))
             {
                 var parameters = line.Split(' ');
                 if (parameters[0].StartsWith("G2") && parameters[1].StartsWith("X"))
-                {                    
+                {
                     var Temp = G2.Parse($"{parameters[1]} {parameters[2]} {parameters[3]} {parameters[4]} {parameters[5]}");
                     commands.Add(Temp);
                     behandelt = true;
@@ -254,7 +257,7 @@ namespace yamaha3Dprint
             }
             if (line.StartsWith("G3"))
             {
-                var parameters = line.Split(' '); 
+                var parameters = line.Split(' ');
                 if (parameters[0].StartsWith("G3") && parameters[1].StartsWith("X"))
                 {
                     var Temp = G3.Parse($"{parameters[1]} {parameters[2]} {parameters[3]} {parameters[4]} {parameters[5]}");
@@ -271,7 +274,7 @@ namespace yamaha3Dprint
             {
                 behandelt = true;
                 var parameters = line.Split(' ');
-                if(parameters[0].StartsWith("M104") && parameters[1].StartsWith("S"))
+                if (parameters[0].StartsWith("M104") && parameters[1].StartsWith("S"))
                 {
                     var Temp = M104.Parse(parameters[1]);
                     commands.Add(Temp);
@@ -280,17 +283,17 @@ namespace yamaha3Dprint
             if (line.StartsWith("M73"))
             {
                 var parameters = line.Split(' ');
-                if(parameters[0].StartsWith("M73") && parameters[1].StartsWith("P") && parameters[2].StartsWith("R"))
+                if (parameters[0].StartsWith("M73") && parameters[1].StartsWith("P") && parameters[2].StartsWith("R"))
                 {
                     var percentage = M73.Parse($"{parameters[0]} {parameters[1]} {parameters[2]}");
                     commands.Add(percentage);
                     behandelt = true;
-                }                
+                }
             }
-            if(line.StartsWith("M190"))
+            if (line.StartsWith("M190"))
             {
                 var parameters = line.Split(' ');
-                if(parameters[0].StartsWith("M190") && parameters[1].StartsWith("S"))
+                if (parameters[0].StartsWith("M190") && parameters[1].StartsWith("S"))
                 {
                     var Temp = M190.Parse(parameters[1]);
                     commands.Add(Temp);
@@ -310,7 +313,7 @@ namespace yamaha3Dprint
                 commands.Add(setzero);
                 behandelt = true;
             }
-            if(!behandelt)
+            if (!behandelt)
             {
                 Console.WriteLine(line);
             }

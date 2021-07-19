@@ -3,6 +3,7 @@ using System.Globalization;
 
 namespace yamaha3Dprint.Commands
 {
+    // Hier wird probiert die Kreisbewegung G3 in circularbefehle zu überführen. Funktioniert noch nicht
     public class G3 : GcodeCommand
     {
         private double x;
@@ -13,7 +14,7 @@ namespace yamaha3Dprint.Commands
         Position aktuelleposition;
         Position mittelpunkt;
         Position neuePosition;
-
+        
         public G3(double x, double y, double i, double j, double e)
         {
             this.x = x;
@@ -25,9 +26,9 @@ namespace yamaha3Dprint.Commands
 
         public override void ExecuteCommand(Yamaha yamaha, Arduino arduino)
         {
-            if(Math.Sqrt(Math.Pow(i,2)+Math.Pow(j,2))<1)
+            if (Math.Sqrt(Math.Pow(i, 2) + Math.Pow(j, 2)) < 1)
             {
-                yamaha.SetPosition(0,x,y);
+                yamaha.SetPosition(0, x, y);
                 arduino.Move(e);
                 yamaha.Move(0);
                 yamaha.WaitForOk(2);
@@ -44,7 +45,7 @@ namespace yamaha3Dprint.Commands
                 Console.WriteLine(x + " " + y);
                 Console.WriteLine(mittelpunkt.X + " " + mittelpunkt.Y);
                 yamaha.SetPosition(0, neuePosition.X, neuePosition.Y);
-                yamaha.SetPosition(1, x, y);                
+                yamaha.SetPosition(1, x, y);
                 arduino.Move(e);
                 yamaha.MoveC(2);
                 yamaha.WaitForOk(3);
@@ -60,13 +61,13 @@ namespace yamaha3Dprint.Commands
             Richtungsvektoralt[1] = aktuell.Y - mittelpunkt.Y;
             Richtungsvektornew[0] = x - mittelpunkt.X;
             Richtungsvektornew[1] = y - mittelpunkt.Y;
-            double radius = Norm(Richtungsvektornew[0],Richtungsvektornew[1]);
+            double radius = Norm(Richtungsvektornew[0], Richtungsvektornew[1]);
             double Winkel1 = Winkelberechnung(Richtungsvektoralt);
             double Winkel2 = Winkelberechnung(Richtungsvektornew);
             int quadrant1 = Quadranten(Richtungsvektoralt);
             int quadrant2 = Quadranten(Richtungsvektornew);
             double Winkelerg = Winkel1 - Winkel2;
-            bool otherside = GetOtherside(Winkel1, Winkel2,Winkelerg, quadrant1,quadrant2);
+            bool otherside = GetOtherside(Winkel1, Winkel2, Winkelerg, quadrant1, quadrant2);
             if (Winkelerg > 180)
             {
                 Winkelerg -= 360.0;
@@ -75,17 +76,17 @@ namespace yamaha3Dprint.Commands
             {
                 Winkelerg += 360;
             }
-            if(otherside==true)
+            if (otherside == true)
             {
                 Winkelerg += 180;
             }
-            double newpointx = Math.Cos(Winkel1+Winkelerg * Math.PI / 180) * radius + mittelpunkt.X;
-            double newpointy = Math.Sin(Winkel1+Winkelerg * Math.PI / 180) * radius + mittelpunkt.Y;
-            Position Mittelposition = new Position(newpointx,newpointy,aktuell.Z);
+            double newpointx = Math.Cos(Winkel1 + Winkelerg * Math.PI / 180) * radius + mittelpunkt.X;
+            double newpointy = Math.Sin(Winkel1 + Winkelerg * Math.PI / 180) * radius + mittelpunkt.Y;
+            Position Mittelposition = new Position(newpointx, newpointy, aktuell.Z);
             return Mittelposition;
         }
 
-        private bool GetOtherside(double winkel1, double winkel2,double winkelerg,int quadrant1, int quadrant2)
+        private bool GetOtherside(double winkel1, double winkel2, double winkelerg, int quadrant1, int quadrant2)
         {
             if (quadrant1 == 1 && quadrant2 == 1)
             {

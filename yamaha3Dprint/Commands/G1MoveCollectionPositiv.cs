@@ -3,7 +3,8 @@
 namespace yamaha3Dprint.Commands
 {
     public class G1MoveCollectionPositiv : GcodeCommand
-    {
+    { 
+        // Für alle G1MoveNegativ befehle in der Liste werden für jede 50 Befehle die Punkte direkt hinteinander abgefahren. Danach werden erst die Oks gezählt
         public List<G1MovePositiv> G1MovePositiv { get; }
         public G1MoveCollectionPositiv(List<G1MovePositiv> g1MovePositiv)
         {
@@ -15,17 +16,17 @@ namespace yamaha3Dprint.Commands
             int i = 0;
             int j = 0;
             double? extruder = 0;
-            if(G1MovePositiv.Count==0)
+            if (G1MovePositiv.Count == 0)
             {
                 return;
             }
             foreach (var move in G1MovePositiv)
             {
-                yamaha.SetPosition(i,move.x,move.y);
+                yamaha.SetPosition(i, move.x, move.y);
                 extruder = extruder + move.e;
                 i++;
                 j++;
-                if(i==50)
+                if (i == 50)
                 {
                     arduino.Move(1);
                     yamaha.ExecuteMoves(i);
@@ -33,12 +34,12 @@ namespace yamaha3Dprint.Commands
                     i = 0;
                     extruder = 0;
                 }
-                if(i!=0 && j==G1MovePositiv.Count)
+                if (i != 0 && j == G1MovePositiv.Count)
                 {
                     arduino.Move(1);
                     yamaha.ExecuteMoves(i);
                     arduino.Move(0);
-                    
+
                 }
             }
         }
