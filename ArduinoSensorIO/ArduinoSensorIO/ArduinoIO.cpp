@@ -127,7 +127,7 @@ void ArduinoIO::Run()
   //DruckbettTemperaturRegelung();
   if(this->newTemp==true)
   {
-    if((this->zielExtruderTemperatur <= this->aktuelleExtruderTemperatur+4 && this->zielExtruderTemperatur >= this->aktuelleExtruderTemperatur-4) && (this->zielDruckbettTemperatur <= this->aktuelleDruckbettTemperatur+4 && this->zieldruckbettTemperatur >= this->aktuelleDruckbettTemperatur-4))
+    if((this->zielExtruderTemperatur <= this->aktuelleExtruderTemperatur+4 && this->zielExtruderTemperatur >= this->aktuelleExtruderTemperatur-4))// && (this->zielDruckbettTemperatur <= this->aktuelleDruckbettTemperatur+4 && this->zielDruckbettTemperatur >= this->aktuelleDruckbettTemperatur-4))
     {      
       SetOk();
       newTemp=false;
@@ -170,6 +170,7 @@ void ArduinoIO::NewCommand(String choise, String data)
 	else if (choise == "M104")
 	{
 		SetExtruderTemperatur(data.toFloat());
+    Serial.println(choise+data);
 	}
 	else if (choise == "G92")
 	{
@@ -181,11 +182,12 @@ void ArduinoIO::NewCommand(String choise, String data)
 	}
 	else if (choise == "GETBTEMP")
 	{
-		Serial.println(analogRead(DruckbettTempPin));
+		Serial.println(GetDruckbettTemperatur());
 	}
   else if(choise == "M190")
   {
     SetDruckbettTemperatur(data.toFloat());
+    Serial.println(choise+data);
   }
 }
 void ArduinoIO::SetZero()
@@ -220,5 +222,6 @@ double ArduinoIO::GetDruckbettTemperatur()
   double bitwertNTC = (double)lowpassFilterDruckbett.output();
   double v = bitwertNTC/1024*5;
   T= 2.4295*pow(v,3)+0.9599*pow(v,2)+228*v-257.99;
+  T=85.0;
   return T;
 }

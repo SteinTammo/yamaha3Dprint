@@ -133,6 +133,7 @@ namespace yamaha3Dprint
                     TeBox_LoadFilament.Visible = true;
                     Cmd_LoadFilament.Visible = true;
                     Cmd_UnloadFilament.Visible = true;
+                    progressBarDruck.Visible = true;
                 }
                 // wenn nicht Instanzen wieder Löschen.
                 else
@@ -163,6 +164,7 @@ namespace yamaha3Dprint
         {
             TeBox_ReadYamaha.Text = "";
             TeBox_SendYamaha.Text = "";
+            TeBoxSendYamaha.Text = "";
         }
 
         private void CmdClearSerialControllino_Click(object sender, EventArgs e)
@@ -259,6 +261,8 @@ namespace yamaha3Dprint
             {
                 return;
             }
+            arduino.SetETempWithoutOk(0);
+            arduino.SetBTempWithoutOk(0);
             arduino.Move(0);
             yamaha.SetPosition(0, 0, 0, 0);
             yamaha.Move(0);
@@ -347,6 +351,22 @@ namespace yamaha3Dprint
         {
             ArduinoHelp AH = new ArduinoHelp();
             AH.ShowDialog();
+        }
+
+        private void Cmd_UnloadFilament_Click(object sender, EventArgs e)
+        {
+            if (Cmd_UnloadFilament.Text == "Unload Filament")
+            {
+                arduino.SetETemp(Convert.ToInt32(TeBox_LoadFilament.Text));
+                arduino.SetFlow(800);
+                arduino.Move(-1);
+                Cmd_UnloadFilament.Text = "Stop Unloading";
+            }
+            else if (Cmd_UnloadFilament.Text == "Stop Unloading")
+            {
+                arduino.Move(0);
+                Cmd_UnloadFilament.Text = "Unload Filament";
+            }
         }
     }
 }

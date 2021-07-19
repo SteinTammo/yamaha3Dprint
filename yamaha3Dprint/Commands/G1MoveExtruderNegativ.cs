@@ -14,7 +14,7 @@ namespace yamaha3Dprint.Commands
         // Verfahre den Extruder um die Länge e in negative Richtung
         public override void ExecuteCommand(Yamaha yamaha, Arduino arduino)
         {
-            arduino.MoveExtruder(e);
+            //arduino.MoveExtruder(e);
         }
         public static G1MoveExtruderNegativ Parse(string parameters)
         {

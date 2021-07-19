@@ -75,6 +75,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.Cmd_Clear_Programmablauf = new System.Windows.Forms.Button();
             this.Cmd_HelpArduino = new System.Windows.Forms.Button();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // CmdReadGCode
@@ -335,7 +336,7 @@
             // Lbl_Progressbar
             // 
             this.Lbl_Progressbar.AutoSize = true;
-            this.Lbl_Progressbar.Location = new System.Drawing.Point(902, 67);
+            this.Lbl_Progressbar.Location = new System.Drawing.Point(821, 83);
             this.Lbl_Progressbar.Name = "Lbl_Progressbar";
             this.Lbl_Progressbar.Size = new System.Drawing.Size(30, 13);
             this.Lbl_Progressbar.TabIndex = 28;
@@ -351,6 +352,7 @@
             this.Cmd_UnloadFilament.Text = "Unload Filament";
             this.Cmd_UnloadFilament.UseVisualStyleBackColor = true;
             this.Cmd_UnloadFilament.Visible = false;
+            this.Cmd_UnloadFilament.Click += new System.EventHandler(this.Cmd_UnloadFilament_Click);
             // 
             // Cmd_LoadFilament
             // 
@@ -426,7 +428,7 @@
             this.TeBox_LoadFilament.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
             this.TeBox_LoadFilament.Size = new System.Drawing.Size(74, 20);
             this.TeBox_LoadFilament.TabIndex = 36;
-            this.TeBox_LoadFilament.Text = "0";
+            this.TeBox_LoadFilament.Text = "230";
             this.TeBox_LoadFilament.Visible = false;
             // 
             // Lbl_Temperatur_LoadFIlament
@@ -456,9 +458,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(13, 685);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(83, 13);
+            this.label3.Size = new System.Drawing.Size(54, 13);
             this.label3.TabIndex = 39;
-            this.label3.Text = "Programmablauf";
+            this.label3.Text = "Programm";
             // 
             // Cmd_Clear_Programmablauf
             // 
@@ -480,12 +482,23 @@
             this.Cmd_HelpArduino.UseVisualStyleBackColor = true;
             this.Cmd_HelpArduino.Click += new System.EventHandler(this.Cmd_HelpArduino_Click);
             // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(886, 117);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(164, 17);
+            this.checkBox1.TabIndex = 43;
+            this.checkBox1.Text = "Print without heated print bed";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
             // Yamaha3DPrint
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(1294, 717);
+            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.Cmd_HelpArduino);
             this.Controls.Add(this.Cmd_HelpSetup);
             this.Controls.Add(this.Cmd_Clear_Programmablauf);
@@ -582,6 +595,7 @@
         private System.Windows.Forms.Button Cmd_Clear_Programmablauf;
         private System.Windows.Forms.Button Cmd_HelpSetup;
         private System.Windows.Forms.Button Cmd_HelpArduino;
+        public System.Windows.Forms.CheckBox checkBox1;
     }
 }
 

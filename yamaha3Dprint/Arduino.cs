@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO.Ports;
+using System.Threading;
 
 namespace yamaha3Dprint
 {
@@ -17,12 +18,14 @@ namespace yamaha3Dprint
             this.yamaha3DPrint = yamaha3DPrint;
             serialPort = new SerialPort();
             CurrentSpeed = 100;
-            FlowMultiplier = 1 / 6;
+            FlowMultiplier = 0.1666;
         }
 
         internal void SetBTemp(int Temp)
         {
-            Write("M104&" + Temp + "&");
+            if (yamaha3DPrint.checkBox1.Checked)
+                return;
+            Write("M190&" + Temp + "&");
             WaitForOk(1);
         }
 
@@ -37,17 +40,17 @@ namespace yamaha3Dprint
             }
             if (e > 0)
             {
-                //Move(1);
-                //Thread.Sleep((int)time);
-                //Move(0);
+                Move(1);
+                Thread.Sleep((int)time);
+                Move(0);
             }
             else if (e < 0)
             {
-                //Move(-1);
-                //Thread.Sleep((int)time);
-                //Move(0);
+                Move(-1);
+                Thread.Sleep((int)time);
+                Move(0);
             }
-
+            
         }
 
         // bewege Extruder. e>0 nach vorn e<0 nach hinten
@@ -95,6 +98,14 @@ namespace yamaha3Dprint
         {
             Write("M104&" + Temp + "&");
             WaitForOk(1);
+        }
+        internal void SetETempWithoutOk(int Temp)
+        {
+            Write("M104&" + Temp + "&");
+        }
+        internal void SetBTempWithoutOk(int Temp)
+        {
+            Write("M190" + Temp + "&");
         }
         internal string Read()
         {

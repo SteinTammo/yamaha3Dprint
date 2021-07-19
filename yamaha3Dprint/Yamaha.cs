@@ -230,8 +230,11 @@ namespace yamaha3Dprint
         // Wartet auf Oks vom Roboter. Jeder Befehl erzeugt eine Reaktion vom Roboter. Für die hier genutzten Befehle wird jeweils ein "OK" zurückgegeben. 
         // mit dem zählen der Oks wird überprüft ob der Befehl erfolgreich durchgeführt wird. 
         public bool WaitForOk(int OkCounts)
-        {
-            yamaha3DPrintform.TeBox_ReadYamaha.AppendText("WaitForOks: Count:" + (OkCounts - OkCount) + Environment.NewLine);
+        {            
+            yamaha3DPrintform.TeBox_ReadYamaha.Invoke(new Action(() =>
+            {
+                yamaha3DPrintform.TeBox_ReadYamaha.AppendText("WaitForOks: Count:" + (OkCounts - OkCount) + Environment.NewLine);
+            }));
             while (OkCounts != OkCount)
             {
                 if (ReadLine() == "OK\r")
