@@ -8,9 +8,18 @@
         public double Z { get; }
         public Position(double x, double y, double z)
         {
-            this.X = x;
-            this.Y = y;
-            this.Z = z;
+            if(y<0)
+            {
+                this.Y = 0;
+                this.X = x;
+                this.Z = z;
+            }
+            else
+            {
+                this.X = x;
+                this.Y = y;
+                this.Z = z;
+            }
         }
     }
 }

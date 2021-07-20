@@ -171,6 +171,15 @@ namespace yamaha3Dprint
                         commands.Add(move);
                         behandelt = true;
                     }
+                    //G1 Y-2.0 X179 F2400
+                    if (parameters[1].StartsWith("Y") && parameters[2].StartsWith("X") && parameters[3].StartsWith("F"))
+                    {
+                        var setflow = G1SetFlow.Parse($"{parameters[0]} {parameters[3]}");
+                        commands.Add(setflow);
+                        var move = G1MovePositiv.Parse($"{parameters[0]} {parameters[2]} {parameters[1]}");
+                        commands.Add(move);
+                        behandelt = true;
+                    }
                 }
                 //G1 Z0.400 F10800.000
                 //G1 X109.128 Y42.788
@@ -224,6 +233,15 @@ namespace yamaha3Dprint
                         var setflow = G1SetFlow.Parse($"{parameters[0]} {parameters[2]}");
                         commands.Add(setflow);
                         var move = G1MoveY.Parse($"{parameters[0]} {parameters[1]}");
+                        commands.Add(move);
+                        behandelt = true;
+                    }
+                    //G1 X170 F1000
+                    if (parameters[1].StartsWith("X") && parameters[2].StartsWith("F"))
+                    {
+                        var setflow = G1SetFlow.Parse($"{parameters[0]} {parameters[2]}");
+                        commands.Add(setflow);
+                        var move = G1MoveX.Parse($"{parameters[0]} {parameters[1]}");
                         commands.Add(move);
                         behandelt = true;
                     }
@@ -313,7 +331,14 @@ namespace yamaha3Dprint
                 commands.Add(setzero);
                 behandelt = true;
             }
-            if (!behandelt)
+            if (line.StartsWith("M106"))
+            {
+                var parameters = line.Split(' ');
+                var setfanspeed = M106.Parse($"{parameters[0]} {parameters[1]}");
+                commands.Add(setfanspeed);
+                behandelt = true;
+            }
+            if (!behandelt && line != "")
             {
                 Console.WriteLine(line);
             }

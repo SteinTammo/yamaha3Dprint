@@ -37,7 +37,7 @@ namespace yamaha3Dprint
             // button1
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button1.Location = new System.Drawing.Point(403, 323);
+            this.button1.Location = new System.Drawing.Point(402, 351);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
@@ -54,7 +54,8 @@ namespace yamaha3Dprint
             this.TeBoxHelp.Location = new System.Drawing.Point(12, 12);
             this.TeBoxHelp.Multiline = true;
             this.TeBoxHelp.Name = "TeBoxHelp";
-            this.TeBoxHelp.Size = new System.Drawing.Size(863, 305);
+            this.TeBoxHelp.ReadOnly = true;
+            this.TeBoxHelp.Size = new System.Drawing.Size(862, 333);
             this.TeBoxHelp.TabIndex = 1;
             this.TeBoxHelp.Text = resources.GetString("TeBoxHelp.Text");
             // 
@@ -62,9 +63,10 @@ namespace yamaha3Dprint
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(888, 358);
+            this.ClientSize = new System.Drawing.Size(887, 386);
             this.Controls.Add(this.TeBoxHelp);
             this.Controls.Add(this.button1);
+            this.MaximizeBox = false;
             this.Name = "UseHelp";
             this.Text = "Help";
             this.ResumeLayout(false);

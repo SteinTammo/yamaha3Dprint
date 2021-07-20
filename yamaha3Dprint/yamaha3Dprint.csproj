@@ -13,7 +13,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>C:\Users\Tammo Stein\PowerFolders\HiWi_Stein %28Martin David%29\Setup Yamaha\</PublishUrl>
+    <PublishUrl>C:\Users\stein\Downloads\Yamaha3DPrint\yamaha3Dprint\Version 1.0\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -23,7 +23,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationRevision>5</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -96,7 +96,9 @@
     <Compile Include="Commands\G1MoveExtruderPositiv.cs" />
     <Compile Include="Commands\G3.cs" />
     <Compile Include="Commands\G92.cs" />
+    <Compile Include="Commands\M106.cs" />
     <Compile Include="Commands\M73.cs" />
+    <Compile Include="Commands\G1MoveX.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -36,6 +36,10 @@ namespace yamaha3Dprint
             cBoxYamaha.Text = "COM8";
             cBoxArduino.Text = "COM5";
         }
+        public void StopPrint()
+        {
+            arduino.Move(0);
+        }
         public void Readfile()
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
@@ -98,9 +102,8 @@ namespace yamaha3Dprint
                 Lbl_Gcode.Text = "Keine gültige Datei eingelesen";
                 return;
             }
-            Lbl_Gcode.Text = "Ready \nZeilenanzahl: " + fileContent.Length + "\nProcessing GCode";
+            Lbl_Gcode.Text = "Ready";
             progressBarDruck.Maximum = fileContent.Length;
-            Lbl_Gcode.Text += "\nGCodeProcesses";
         }
 
         //Methode zum Öffnen der seriellen Schnittstellen. Übergibt baudrate und Port und checkt ob die Schnittstelle aufgebaut werden kann. 
@@ -134,6 +137,8 @@ namespace yamaha3Dprint
                     Cmd_LoadFilament.Visible = true;
                     Cmd_UnloadFilament.Visible = true;
                     progressBarDruck.Visible = true;
+                    Cmd_Safe_Multiplier.Visible = true;
+                    TeBox_Flow_Multiplier.Visible=true;
                 }
                 // wenn nicht Instanzen wieder Löschen.
                 else

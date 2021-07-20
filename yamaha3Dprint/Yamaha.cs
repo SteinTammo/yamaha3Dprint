@@ -238,7 +238,13 @@ namespace yamaha3Dprint
             while (OkCounts != OkCount)
             {
                 if (ReadLine() == "OK\r")
+                {
+                    yamaha3DPrintform.TeBox_ReadYamaha.Invoke(new Action(() =>
+                    {
+                        yamaha3DPrintform.TeBox_ReadYamaha.AppendText("WaitForOks: Count:" + (OkCounts - OkCount) + Environment.NewLine);
+                    }));
                     OkCount++;
+                }
             }
             OkCount = 0;
             return true;
@@ -252,6 +258,10 @@ namespace yamaha3Dprint
             {
                 recieve = serialPort.ReadLine();
                 Console.Write(recieve);
+                if(recieve=="Stop executed\r")
+                {
+                    yamaha3DPrintform.StopPrint();
+                }
             }
             catch (TimeoutException)
             {

@@ -385,6 +385,7 @@
             this.TeBox_Flow_Multiplier.Size = new System.Drawing.Size(84, 20);
             this.TeBox_Flow_Multiplier.TabIndex = 34;
             this.TeBox_Flow_Multiplier.Text = "0.1666";
+            this.TeBox_Flow_Multiplier.Visible = false;
             // 
             // Cmd_Safe_Multiplier
             // 
@@ -396,6 +397,7 @@
             this.toolTipSaveMultiplier.SetToolTip(this.Cmd_Safe_Multiplier, "Setze das Verhältnis von der Extruderdrehzahl und der Floweinstellung des GCodes." +
         " ");
             this.Cmd_Safe_Multiplier.UseVisualStyleBackColor = true;
+            this.Cmd_Safe_Multiplier.Visible = false;
             this.Cmd_Safe_Multiplier.Click += new System.EventHandler(this.Cmd_Safe_Multiplier_Click);
             // 
             // Cmd_HelpSetup
@@ -485,6 +487,8 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
+            this.checkBox1.Checked = true;
+            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1.Location = new System.Drawing.Point(886, 117);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(164, 17);

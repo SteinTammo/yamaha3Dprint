@@ -27,7 +27,8 @@ private:
 	bool newPostion;
 	bool setDruckbett;
 	bool setExtruderheizen;
-  bool newTemp;
+  bool newETemp;
+  bool newBTemp;
 	AccelStepper mystepper;
   ResponsiveAnalogRead analog1;
   ResponsiveAnalogRead analog2;

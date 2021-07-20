@@ -146,9 +146,6 @@ Die voreingestellten Ports sollten stimmen. Wenn eine Fehlermeldung erscheint, b
     <value>Stellt serielle Verbindung mit dem Roboter und dem Arduino zur Kommunikation her. 
 Die voreingestellten Ports sollten stimmen. Wenn eine Fehlermeldung erscheint, bitte im Geräte-Manager nachschauen welche Ports übereinstimmen.</value>
   </data>
-  <metadata name="toolTipStartPrint.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>569, 15</value>
-  </metadata>
   <metadata name="toolTipStopPrint.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>710, 15</value>
   </metadata>

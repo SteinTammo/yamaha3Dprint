@@ -20,7 +20,8 @@ ArduinoIO::ArduinoIO()
 	this->previousMillis = 0;
 	this->filterFrequency = 3;
 	this->turn = false;
-  this->newTemp=false;
+  this->newBTemp=false;
+  this->newETemp=false;
 	mystepper = AccelStepper(1, pulsePin, dirPin);
 	mystepper.setPinsInverted(true, false, false);
 	analog1 = ResponsiveAnalogRead(ExtruderTempPin, true);
@@ -125,12 +126,20 @@ void ArduinoIO::Run()
 	Checkfinish(inBewegung);
 	ExtruderTemperaturRegelung();
   //DruckbettTemperaturRegelung();
-  if(this->newTemp==true)
+  if(this->newETemp==true)
   {
-    if((this->zielExtruderTemperatur <= this->aktuelleExtruderTemperatur+4 && this->zielExtruderTemperatur >= this->aktuelleExtruderTemperatur-4))// && (this->zielDruckbettTemperatur <= this->aktuelleDruckbettTemperatur+4 && this->zielDruckbettTemperatur >= this->aktuelleDruckbettTemperatur-4))
+    if((this->zielExtruderTemperatur <= this->aktuelleExtruderTemperatur+4 && this->zielExtruderTemperatur >= this->aktuelleExtruderTemperatur-4))
     {      
       SetOk();
-      newTemp=false;
+      newETemp=false;
+    }
+  }
+  if(this->newBTemp==true)
+  {
+    if((this->zielDruckbettTemperatur <= this->aktuelleDruckbettTemperatur+4 && this->zielDruckbettTemperatur >= this->aktuelleDruckbettTemperatur-4))
+    {      
+      SetOk();
+      newBTemp=false;
     }
   }
 	lowpassFilterExtruder.input(analogRead(ExtruderTempPin));
@@ -200,12 +209,12 @@ void ArduinoIO::SetZero()
 void ArduinoIO::SetExtruderTemperatur(float Temperatur)
 {
   this->zielExtruderTemperatur = Temperatur;
-  this->newTemp=true;
+  this->newETemp=true;
 }
 void ArduinoIO::SetDruckbettTemperatur(float Temperatur)
 {
  this->zielDruckbettTemperatur = Temperatur;
-  this->newTemp=true;
+  this->newBTemp=true;
 }
 
 double ArduinoIO::GetExtruderTemperatur()

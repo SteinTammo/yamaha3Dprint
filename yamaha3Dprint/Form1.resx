@@ -119,16 +119,20 @@
   </resheader>
   <data name="TeBoxHelp.Text" xml:space="preserve">
     <value>1. Schalten Sie den Roboter ein.
-2. Aktivieren Sie die Motoren des Roboters mit dem grünen Knopf.
+2. Aktivieren Sie die Motoren des Roboters mit dem grünen Knopf "Servo Ein".
 3. Stellen Sie die Stromversorgung des Schaltkastens und die Verbindung mit dem Arduino sicher. 
 4. Starten Sie die VIP+ Software auf dem Desktop.
-5. Erstellen Sie einen neuen Controller und verwenden Sie die  Port 7. Die übrigen Einstellungen können Sie so belassen.
+5. Erstellen Sie in VIP+ einen neuen Controller und verwenden Sie den Port 7. Die übrigen Einstellungen können Sie so belassen.
 6. Die Software signalisert ein erfolgreiches Verbinden durch eine veränderte Ansicht.
 7. Klicken Sie auf Connect Devices. Normalerweise sollten die Ports schon richtig auf Port 8 und Port 5 eingestellt sein.
 Das Programm signalisiert Ihnen mögliche Probleme oder eine erfolgreiche Verbindung.
-8. Lesen Sie die GCode Datei über den Button Read GCode ein.
-9. Starten Sie den Druck über Start Print.
-10. Brechen Sie ihn gegebenenfalls mit Stop Print wieder ab. 
+8. Erstellen Sie die GCode Datei Ihres Modells mit dem auf dem Computer installierten Prusaslicer. 
+9. Lesen Sie die GCode Datei über den Button Read GCode ein.
+10. Starten Sie den Druck über Start Print.
+11. Brechen Sie ihn gegebenenfalls mit Stop Print wieder ab. 
+
+Das Programm ist so konzipiert, dass die Druckeigenschaften durch den Slicer einstellbar sind. 
+Für eine Druckoptimierung nehmen Sie daher Änderungen in den Slicereinstellungen vor.  
 
 Für Fragen und Anregungen bitte Tammo Stein oder Martin David kontaktieren.
 Bugs und Feature-Requests gerne unter https://github.com/SteinTammo/yamaha3Dprint im Bereich Issues vermerken. </value>

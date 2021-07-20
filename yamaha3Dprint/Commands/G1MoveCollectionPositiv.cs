@@ -28,21 +28,17 @@ namespace yamaha3Dprint.Commands
                 j++;
                 if (i == 50)
                 {
-                    //arduino.MoveExtruder(0.1);
                     arduino.Move(1);
                     yamaha.ExecuteMoves(i);
                     arduino.Move(0);
-                    //arduino.MoveExtruder(-0.2);
                     i = 0;
                     extruder = 0;
                 }
                 if (i != 0 && j == G1MovePositiv.Count)
-                {
-                    //arduino.MoveExtruder(0.1);
+                {                    
                     arduino.Move(1);
                     yamaha.ExecuteMoves(i);
-                    arduino.Move(0);
-                    //arduino.MoveExtruder(-0.2);
+                    arduino.Move(0);                   
 
                 }
             }
